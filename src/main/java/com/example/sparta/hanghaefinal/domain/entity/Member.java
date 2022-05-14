@@ -36,6 +36,8 @@ public class Member {
         this.provider = provider;
         this.roles = Collections.singletonList(Role.ROLE_MEMBER);
         this.emailAuth = emailAuth;
+
+
     }
 
     public void addRole(Role role) {
