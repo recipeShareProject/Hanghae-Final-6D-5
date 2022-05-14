@@ -20,7 +20,7 @@ public class BoardResponseDto extends Timestamped {
     private LocalDateTime modifiedAt;
     private ArrayList<String> imagePath;
     private List<Review> reviews;
-    private int view;
+    private int viewCount;
     private boolean bookmark;
 
     public BoardResponseDto(Board entity) {
@@ -28,7 +28,7 @@ public class BoardResponseDto extends Timestamped {
         this.title = entity.getTitle();
         this.contents = entity.getContents();
         this.nickname = entity.getNickname();
-        this.view = entity.getView();
+        this.viewCount = entity.getViewCount();
         this.bookmark = entity.isBookmark();
         this.reviews = entity.getReviewList();
         this.createdAt = entity.getCreatedAt();

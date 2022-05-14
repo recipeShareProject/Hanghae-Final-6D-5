@@ -24,7 +24,7 @@ public class Board extends Timestamped {
     private String title;
     private String contents;
     private String nickname;
-    private int view = 0;
+    private int viewCount = 0;
     private boolean bookmark;
 
     @JsonBackReference
@@ -45,12 +45,12 @@ public class Board extends Timestamped {
 
     @Builder
     public Board(String title, String contents, String nickname,
-                 List<Review> reviewList, int view, boolean bookmark) {
+                 List<Review> reviewList, int viewCount, boolean bookmark) {
         this.title = title;
         this.contents = contents;
         this.nickname = nickname;
         this.reviewList = reviewList;
-        this.view = view;
+        this.viewCount = viewCount;
         this.bookmark = isBookmark();
     }
 

@@ -15,7 +15,7 @@ public class BoardSaveRequestDto {
     private String title;
     private String contents;
     private String nickname;
-    private int view;
+    private int viewCount;
     private boolean bookmark;
     private List<MultipartFile> images = new ArrayList<>();
 }
