@@ -44,7 +44,7 @@ spring:
   social:
     kakao:
       client_id: 6c59b4dda916bc7b5a99d658afc58a07
-      redirect: http://13.125.207.199/login/oauth2/code/kakao
+      redirect: http://localhost:8080/login/oauth2/code/kakao
       url:
         login: https://kauth.kakao.com/oauth/authorize
         token: https://kauth.kakao.com/oauth/token
