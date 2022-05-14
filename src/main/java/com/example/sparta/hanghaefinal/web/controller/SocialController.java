@@ -67,6 +67,7 @@ public class SocialController {
     }
 
     // 인증 완료 후 리다이렉트 페이지
+    // 나중에 수정
     @GetMapping(value = "/login/oauth2/code/{provider}")
     public ModelAndView redirectKakao(ModelAndView mav, @RequestParam String code, @PathVariable String provider) {
         mav.addObject("code", code);
