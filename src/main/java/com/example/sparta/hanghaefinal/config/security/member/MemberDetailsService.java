@@ -1,8 +1,8 @@
 package com.example.sparta.hanghaefinal.config.security.member;
 
 import com.example.sparta.hanghaefinal.advice.exception.MemberNotFoundException;
-import com.example.sparta.hanghaefinal.domain.entity.Member;
-import com.example.sparta.hanghaefinal.domain.repository.MemberRepository;
+import com.example.sparta.hanghaefinal.domain.entity.member.Member;
+import com.example.sparta.hanghaefinal.domain.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
