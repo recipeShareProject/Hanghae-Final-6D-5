@@ -1,9 +1,8 @@
-package com.example.sparta.hanghaefinal.domain.auth.Profile;
+package com.example.sparta.hanghaefinal.security.oauth;
 
 import java.util.Map;
 
 public abstract class OAuth2UserInfo {
-
     protected Map<String, Object> attributes;
 
     public OAuth2UserInfo(Map<String, Object> attributes) {

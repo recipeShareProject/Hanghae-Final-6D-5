@@ -1,9 +1,10 @@
-package com.example.sparta.hanghaefinal.domain.auth.Profile;
+package com.example.sparta.hanghaefinal.security.oauth;
 
 import java.util.Map;
 
-public class GoogleOAuth2UserProfile extends OAuth2UserInfo{
-    public GoogleOAuth2UserProfile(Map<String, Object> attributes) {
+public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
+
+    public GoogleOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
     }
 

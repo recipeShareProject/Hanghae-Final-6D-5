@@ -24,7 +24,7 @@ public class Board extends Timestamped {
     private String title;
     private String contents;
     private String nickname;
-    private int viewCount = 0;
+    private int viewCount;
     private boolean bookmark;
 
     @JsonBackReference

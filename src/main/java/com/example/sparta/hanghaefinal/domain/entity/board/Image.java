@@ -11,6 +11,7 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
+@Table(name = "board_image")
 @Entity
 public class Image extends Timestamped {
     @Id
