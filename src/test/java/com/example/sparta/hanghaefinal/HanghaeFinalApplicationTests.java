@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class HanghaeFinalApplicationTests {
 
-    @Test
+//    @Test
     void contextLoads() {
     }
 
