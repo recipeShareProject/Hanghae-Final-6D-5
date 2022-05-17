@@ -4,6 +4,8 @@ package com.example.sparta.hanghaefinal.domain.entity.user;
 import com.example.sparta.hanghaefinal.audit.AuditListener;
 import com.example.sparta.hanghaefinal.audit.Auditable;
 import com.example.sparta.hanghaefinal.audit.TimeEntity;
+import com.example.sparta.hanghaefinal.domain.entity.comment.Comments;
+import com.example.sparta.hanghaefinal.domain.entity.community.Posts;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +15,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Setter
 @Getter
@@ -36,6 +41,10 @@ public class User implements Auditable {
 
     private String imageUrl;
 
+    private Double longitude;
+
+    private Double latitude;
+
     @Column(nullable = false)
     private Boolean emailVerified = false;
 
@@ -50,6 +59,12 @@ public class User implements Auditable {
 
     @Embedded
     private TimeEntity timeEntity;
+
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Posts> postList;
+
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Comments> commentList;
 
     @Builder(builderClassName= "social", builderMethodName = "socialBuilder")
     private User(String name, @Email String email, String imageUrl, @NotNull AuthProvider provider, String providerId) {
@@ -74,4 +89,10 @@ public class User implements Auditable {
         this.name = name;
         this.imageUrl = imageUrl;
     }
+
+    public void addComment(Comments comment){
+        this.commentList.add(comment);
+    }
+
+    public void addPost(Posts post) {this.postList.add(post);}
 }

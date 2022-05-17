@@ -1,6 +1,6 @@
-package com.example.sparta.hanghaefinal.dto;
+package com.example.sparta.hanghaefinal.domain.dto.comment;
 
-import com.example.sparta.hanghaefinal.domain.Comments;
+import com.example.sparta.hanghaefinal.domain.entity.comment.Comments;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

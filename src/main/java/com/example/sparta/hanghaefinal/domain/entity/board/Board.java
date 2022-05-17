@@ -20,9 +20,11 @@ public class Board extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
-
+//    요리 이름
     private String title;
+//    조리법
     private String contents;
+
     private String nickname;
     private int viewCount;
     private boolean bookmark;

@@ -1,6 +1,6 @@
-package com.example.sparta.hanghaefinal.dto;
+package com.example.sparta.hanghaefinal.domain.dto.comment;
 
-import com.example.sparta.hanghaefinal.domain.Comments;
+import com.example.sparta.hanghaefinal.domain.entity.comment.Comments;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class CommentResponseDto {
     public static CommentResponseDto convertCommentToDto(Comments comment) {
         return comment.isRemoved() == true ?
                 new CommentResponseDto(comment.getCommentId(), "삭제된 댓글입니다.", null) :
-                new CommentResponseDto(comment.getCommentId(), comment.getContent(), comment.getUser().getNickname());
+                new CommentResponseDto(comment.getCommentId(), comment.getContent(), comment.getUser().getName());
     }
 
 }

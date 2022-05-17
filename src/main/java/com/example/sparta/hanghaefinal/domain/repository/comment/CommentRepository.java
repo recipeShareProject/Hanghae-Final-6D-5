@@ -1,6 +1,6 @@
-package com.example.sparta.hanghaefinal.repository;
+package com.example.sparta.hanghaefinal.domain.repository.comment;
 
-import com.example.sparta.hanghaefinal.domain.Comments;
+import com.example.sparta.hanghaefinal.domain.entity.comment.Comments;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

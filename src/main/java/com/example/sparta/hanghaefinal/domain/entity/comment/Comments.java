@@ -1,5 +1,8 @@
-package com.example.sparta.hanghaefinal.domain;
+package com.example.sparta.hanghaefinal.domain.entity.comment;
 
+import com.example.sparta.hanghaefinal.config.Timestamped;
+import com.example.sparta.hanghaefinal.domain.entity.community.Posts;
+import com.example.sparta.hanghaefinal.domain.entity.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
@@ -34,7 +37,7 @@ public class Comments extends Timestamped {
     private String content;
 
     @ManyToOne
-    private Users user;
+    private User user;
 
     private boolean isRemoved= false;
 
@@ -45,8 +48,8 @@ public class Comments extends Timestamped {
 
 
     //== 연관관계 편의 메서드 ==//
-    public void confirmWriter(Users writer) {
-        this.writer = writer;
+    public void confirmWriter(User writer) {
+        this.user = writer;
         writer.addComment(this);
     }
 
