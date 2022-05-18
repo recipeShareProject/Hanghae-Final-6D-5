@@ -1,6 +1,7 @@
 package com.example.sparta.hanghaefinal.domain.dto.community;
 
 import com.example.sparta.hanghaefinal.domain.entity.community.Posts;
+import com.example.sparta.hanghaefinal.domain.entity.community.Tag;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,7 @@ public class PostRequestDto {
     @NotNull
     private String expiredAt;
 
-    private List<String> tag;
+    private List<Tag> tags;
 //    좌표를 여기서 받아야하는가
     @NotNull
     private String location;
@@ -50,7 +51,7 @@ public class PostRequestDto {
     this.title = post.getTitle();
     this.content = post.getContent();
     this.imagePath = post.getImage();
-    this.tag = post.getTag();
+    this.tags = post.getTags();
     this.expiredAt = post.getExpiredAt().toString();
     this.category = post.getCategory();
     this.location = post.getLocation();
