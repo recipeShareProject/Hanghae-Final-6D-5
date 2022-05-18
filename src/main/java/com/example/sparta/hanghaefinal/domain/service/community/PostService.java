@@ -45,7 +45,7 @@ public class PostService {
 
         Pageable pageRequest = PageRequest.of(pagingCnt, 10, Sort.by("createdAt").descending());
 //        위치반경 내 필터링 하여 게시글 목록 불러오기(확실치 않음)--> 쿼리 에러뜨네;;
-        Page<Posts> posts = postRepository.findPostsToUser(longitude, latitude);
+        Page<Posts> posts = postRepository.findPostsToUser(longitude, latitude, pageRequest);
 //        Page<Posts> posts = postRepository.findAll(pageRequest);
         List<PostThumbnailDto> responseDto = new ArrayList<>();
         for (Posts post : posts) {

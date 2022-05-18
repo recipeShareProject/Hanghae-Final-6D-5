@@ -50,7 +50,7 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String category;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "posts")
     @Column
     List<Tag> tags = new ArrayList<>();
 

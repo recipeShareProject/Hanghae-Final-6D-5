@@ -1,17 +1,18 @@
 package com.example.sparta.hanghaefinal.domain.entity.community;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
 
 @Entity
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String tag;
 
-    private List<String> tags = new ArrayList<>();
+    @JsonBackReference
+    @JoinColumn(name = "postId")
+    @ManyToOne
+    private Posts posts;
 }
