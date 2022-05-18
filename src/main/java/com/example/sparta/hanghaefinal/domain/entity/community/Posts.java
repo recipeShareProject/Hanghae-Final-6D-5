@@ -50,8 +50,9 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String category;
 
+    @OneToMany(mappedBy = "post")
     @Column
-    List<String> tag = new ArrayList<>();
+    List<Tag> tags = new ArrayList<>();
 
     @Column(nullable = false)
     private Double latitude;
@@ -78,7 +79,7 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(String title, String content, String image, String category, Double longitude, Double latitude, LocalDateTime expiredAt, ArrayList<String> tag){
+    public Posts(String title, String content, String image, String category, Double longitude, Double latitude, LocalDateTime expiredAt, List<Tag> tags){
         this.title = title;
         this.content = content;
         this.image = image;
@@ -86,7 +87,7 @@ public class Posts extends Timestamped {
         this.longitude = longitude;
         this.latitude = latitude;
         this.expiredAt = expiredAt;
-        this.tag = tag;
+        this.tags = tags;
     }
 
     public void update(PostRequestDto requestDto){
