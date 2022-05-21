@@ -23,19 +23,25 @@ public class Board extends Timestamped {
 //    요리 이름
     private String title;
 //    조리법
-    private String contents;
+    private String quantity;
 
-    private String nickname;
-    private int viewCount;
-    private boolean bookmark;
+    private String nation;
 
-    @JsonBackReference
-    @OneToMany(
-            mappedBy = "board",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private List<Image> images = new ArrayList<>();
+    private String cookingTime;
+
+    @ManyToOne
+    private User writer;
+
+    private int viewCount = 0;
+    private boolean bookmark = false;
+
+//    @JsonBackReference
+//    @OneToMany(
+//            mappedBy = "board",
+//            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+//            orphanRemoval = true
+//    )
+//    private List<Image> images = new ArrayList<>();
 
     @JsonIgnoreProperties({"board"})
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -46,35 +52,39 @@ public class Board extends Timestamped {
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @Builder
-    public Board(String title, String contents, String nickname,
+    public Board(String title, String quantity, String nation, String cookingTime,
                  List<Review> reviewList, int viewCount, boolean bookmark) {
         this.title = title;
-        this.contents = contents;
-        this.nickname = nickname;
+        this.quantity = quantity;
+        this.nation = nation;
+        this.cookingTime = cookingTime;
         this.reviewList = reviewList;
         this.viewCount = viewCount;
         this.bookmark = isBookmark();
     }
 
-    public static Board createBoard(String title, String contents, String nickname) {
+    public static Board createBoard(String title, String quantity, String nation, String cookingTime) {
         return Board.builder()
                 .title(title)
-                .contents(contents)
-                .nickname(nickname)
+                .quantity(quantity)
+                .nation(nation)
+                .cookingTime(cookingTime)
                 .build();
     }
 
-
-    public void update(String title, String contents) {
-        this.title = title;
-        this.contents = contents;
+//    뭘 업데이트하는지 생각 좀;;
+    public void update(BoardRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.quantity = requestDto.getQuantity();
+        this.nation = requestDto.getNation();
+        this.cookingTime = requestDto.getCookingTime();
     }
 
-    public void addImage(Image image) {
-        this.images.add(image);
-        if (image.getBoard() != this) {
-            image.setBoard(this);
-        }
-    }
+//    public void addImage(Image image) {
+//        this.images.add(image);
+//        if (image.getBoard() != this) {
+//            image.setBoard(this);
+//        }
+//    }
 
 }

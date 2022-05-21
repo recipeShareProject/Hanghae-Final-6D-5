@@ -7,7 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
+//@Data
 public class ReviewResponse extends Timestamped {
     private Board board;
     private Long id;

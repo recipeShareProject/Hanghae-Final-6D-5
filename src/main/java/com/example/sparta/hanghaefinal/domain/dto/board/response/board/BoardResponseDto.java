@@ -2,6 +2,8 @@ package com.example.sparta.hanghaefinal.domain.dto.board.response.board;
 
 import com.example.sparta.hanghaefinal.config.Timestamped;
 import com.example.sparta.hanghaefinal.domain.entity.board.Board;
+import com.example.sparta.hanghaefinal.domain.entity.board.Ingredient;
+import com.example.sparta.hanghaefinal.domain.entity.board.RecipeProcess;
 import com.example.sparta.hanghaefinal.domain.entity.review.Review;
 import lombok.Data;
 
@@ -14,24 +16,25 @@ import java.util.List;
 public class BoardResponseDto extends Timestamped {
     private Long id;
     private String title;
-    private String contents;
-    private String nickname;
+    private String writer;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private ArrayList<String> imagePath;
     private List<Review> reviews;
+    private List<RecipeProcess> process;
+    private List<Ingredient> ingredient;
     private int viewCount;
-    private boolean bookmark;
+//    private boolean bookmark;
 
-    public BoardResponseDto(Board entity) {
-        this.id = entity.getId();
-        this.title = entity.getTitle();
-        this.contents = entity.getContents();
-        this.nickname = entity.getNickname();
-        this.viewCount = entity.getViewCount();
-        this.bookmark = entity.isBookmark();
-        this.reviews = entity.getReviewList();
-        this.createdAt = entity.getCreatedAt();
-        this.modifiedAt = entity.getModifiedAt();
+//    재료, 과정을 어떻게 넣어야 할까?
+    public BoardResponseDto(Board board) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.writer = board.getWriter().getName();
+        this.viewCount = board.getViewCount();
+//        this.bookmark = entity.isBookmark();
+        this.reviews = board.getReviewList();
+        this.createdAt = board.getCreatedAt();
+        this.modifiedAt = board.getModifiedAt();
+//        this.process = ;
     }
 }

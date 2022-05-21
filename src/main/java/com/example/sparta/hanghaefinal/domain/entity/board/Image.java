@@ -57,19 +57,19 @@ public class Image extends Timestamped {
     }
 
     private String image;
-
-    public void setBoard(Board board) {
-        this.board = board;
-        if (!board.getImages().contains(this)) {
-            board.getImages().add(this);
-        }
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
-        if (!review.getImages().contains(this)) {
-            review.getImages().add(this);
-        }
-    }
+//
+//    public void setBoard(Board board) {
+//        this.board = board;
+//        if (!board.getImages().contains(this)) {
+//            board.getImages().add(this);
+//        }
+//    }
+//
+//    public void setReview(Review review) {
+//        this.review = review;
+//        if (!review.getImages().contains(this)) {
+//            review.getImages().add(this);
+//        }
+//    }
 
 }

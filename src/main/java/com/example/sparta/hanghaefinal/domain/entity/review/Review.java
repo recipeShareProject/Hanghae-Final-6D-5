@@ -26,13 +26,13 @@ public class Review extends Timestamped {
     private String contents;
     private String nickname;
 
-    @JsonBackReference
-    @OneToMany(
-            mappedBy = "review",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private List<Image> images = new ArrayList<>();
+//    @JsonBackReference
+//    @OneToMany(
+//            mappedBy = "review",
+//            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+//            orphanRemoval = true
+//    )
+//    private List<String> images = new ArrayList<>();
 
     @JsonBackReference
     @ManyToOne
@@ -58,12 +58,12 @@ public class Review extends Timestamped {
         this.contents = contents;
     }
 
-    public void addImage(Image image) {
-        this.images.add(image);
-        if (image.getReview() != this) {
-            image.setReview(this);
-        }
-    }
+//    public void addImage(Image image) {
+//        this.images.add(image);
+//        if (image.getReview() != this) {
+//            image.setReview(this);
+//        }
+//    }
 
 
 }
