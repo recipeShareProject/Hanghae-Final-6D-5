@@ -1,6 +1,6 @@
-package com.example.sparta.hanghaefinal.dto;
+package com.example.sparta.hanghaefinal.domain.dto.community;
 
-import com.example.sparta.hanghaefinal.domain.Posts;
+import com.example.sparta.hanghaefinal.domain.entity.community.Posts;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

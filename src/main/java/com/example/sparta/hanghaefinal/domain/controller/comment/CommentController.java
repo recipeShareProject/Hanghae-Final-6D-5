@@ -1,13 +1,14 @@
-package com.example.sparta.hanghaefinal.controller;
-
+package com.example.sparta.hanghaefinal.domain.controller.comment;
 
 import com.example.sparta.hanghaefinal.domain.Success;
-import com.example.sparta.hanghaefinal.dto.CommentRequestDto;
-import com.example.sparta.hanghaefinal.dto.CommentUpdateDto;
-import com.example.sparta.hanghaefinal.service.CommentService;
+import com.example.sparta.hanghaefinal.domain.dto.comment.CommentRequestDto;
+import com.example.sparta.hanghaefinal.domain.dto.comment.CommentUpdateDto;
+import com.example.sparta.hanghaefinal.domain.entity.user.User;
+import com.example.sparta.hanghaefinal.domain.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class CommentController {
 
     @PostMapping("/api/comment/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Success> commentSave(@PathVariable("postId") Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal Users user){
+    public ResponseEntity<Success> commentSave(@PathVariable("postId") Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal User user){
         commentService.save(postId, requestDto);
         return new ResponseEntity<>(new Success(true, "댓글 달기 성공"), HttpStatus.OK);
     }

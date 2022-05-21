@@ -1,4 +1,4 @@
-package com.example.sparta.hanghaefinal.dto;
+package com.example.sparta.hanghaefinal.domain.dto.community;
 
 
 import lombok.Builder;

@@ -1,13 +1,14 @@
-package com.example.sparta.hanghaefinal.service;
-
+package com.example.sparta.hanghaefinal.domain.service.community;
 
 import com.example.sparta.hanghaefinal.advice.RestException;
-import com.example.sparta.hanghaefinal.domain.Posts;
-import com.example.sparta.hanghaefinal.dto.PostRequestDto;
-import com.example.sparta.hanghaefinal.dto.PostResponseDto;
-import com.example.sparta.hanghaefinal.dto.PostThumbnailDto;
-import com.example.sparta.hanghaefinal.dto.PostUpdateDto;
-import com.example.sparta.hanghaefinal.repository.PostRepository;
+import com.example.sparta.hanghaefinal.domain.dto.community.PostRequestDto;
+import com.example.sparta.hanghaefinal.domain.dto.community.PostResponseDto;
+import com.example.sparta.hanghaefinal.domain.dto.community.PostThumbnailDto;
+import com.example.sparta.hanghaefinal.domain.dto.community.PostUpdateDto;
+import com.example.sparta.hanghaefinal.domain.entity.community.Posts;
+import com.example.sparta.hanghaefinal.domain.entity.user.User;
+import com.example.sparta.hanghaefinal.domain.repository.community.PostRepository;
+import com.example.sparta.hanghaefinal.domain.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Scheduled(cron="0 0 00 * * *")
     public void updateExpired(){
@@ -63,11 +65,11 @@ public class PostService {
     }
 
     @Transactional
-    public void save(PostRequestDto requestDto, String nickname) {
+    public void save(PostRequestDto requestDto, String username) {
 //        유저 DB 확인 후 수정
-//        Users result = userRepository.findByUsername(nickname).orElseThrow(
-//                () -> new RestException(HttpStatus.NOT_FOUND, "해당 username이 존재하지 않습니다.")
-//        );
+        User result = userRepository.findByName(username).orElseThrow(
+                () -> new RestException(HttpStatus.NOT_FOUND, "해당 username이 존재하지 않습니다.")
+        );
         Posts post = Posts.builder()
                 .content(requestDto.getContent())
                 .image(requestDto.getImagePath())
@@ -76,6 +78,7 @@ public class PostService {
                 .title(requestDto.getTitle())
                 .build();
         postRepository.save(post);
+        result.addPost(post);
     }
 
     @Transactional
@@ -84,13 +87,13 @@ public class PostService {
     }
 
     @Transactional
-    public void modify(Long postId, PostRequestDto requestDto, String nickname) {
+    public void modify(Long postId, PostRequestDto requestDto, String username) {
 
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
 
-        if (post.getUser().getUsername().equals(nickname)) {
+        if (post.getUser().getName().equals(username)) {
             post.update(requestDto);
         } else {
             throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
@@ -98,12 +101,12 @@ public class PostService {
     }
 
     @Transactional
-    public void modify(Long postId, PostUpdateDto requestDto, String nickname) {
+    public void modify(Long postId, PostUpdateDto requestDto, String username) {
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
 
-        if (post.getUser().getUsername().equals(nickname)) {
+        if (post.getUser().getName().equals(username)) {
             post.update(requestDto.getCategory());
         } else {
             throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");

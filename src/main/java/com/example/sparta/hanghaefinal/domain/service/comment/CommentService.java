@@ -1,13 +1,12 @@
-package com.example.sparta.hanghaefinal.service;
-
+package com.example.sparta.hanghaefinal.domain.service.comment;
 
 import com.example.sparta.hanghaefinal.advice.RestException;
-import com.example.sparta.hanghaefinal.domain.Comments;
-import com.example.sparta.hanghaefinal.domain.Posts;
-import com.example.sparta.hanghaefinal.dto.CommentRequestDto;
-import com.example.sparta.hanghaefinal.dto.CommentUpdateDto;
-import com.example.sparta.hanghaefinal.repository.CommentRepository;
-import com.example.sparta.hanghaefinal.repository.PostRepository;
+import com.example.sparta.hanghaefinal.domain.dto.comment.CommentRequestDto;
+import com.example.sparta.hanghaefinal.domain.dto.comment.CommentUpdateDto;
+import com.example.sparta.hanghaefinal.domain.entity.comment.Comments;
+import com.example.sparta.hanghaefinal.domain.entity.community.Posts;
+import com.example.sparta.hanghaefinal.domain.repository.comment.CommentRepository;
+import com.example.sparta.hanghaefinal.domain.repository.community.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

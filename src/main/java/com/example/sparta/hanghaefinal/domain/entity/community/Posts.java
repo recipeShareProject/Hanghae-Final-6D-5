@@ -1,6 +1,9 @@
-package com.example.sparta.hanghaefinal.domain;
+package com.example.sparta.hanghaefinal.domain.entity.community;
 
-import com.example.sparta.hanghaefinal.dto.PostRequestDto;
+import com.example.sparta.hanghaefinal.config.Timestamped;
+import com.example.sparta.hanghaefinal.domain.dto.community.PostRequestDto;
+import com.example.sparta.hanghaefinal.domain.entity.comment.Comments;
+import com.example.sparta.hanghaefinal.domain.entity.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
@@ -67,7 +70,7 @@ public class Posts extends Timestamped {
     private List<Comments> commentList = new ArrayList<>();
 
     @ManyToOne
-    private Users user;
+    private User user;
 
     public void addComment(Comments comment) {
         this.commentList.add(comment);
