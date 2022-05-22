@@ -1,14 +1,15 @@
 package com.hanghae.justpotluck.domain.community.entity;
 
-import com.hanghae.justpotluck.global.config.Timestamped;
-import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
-import com.hanghae.justpotluck.domain.comment.entity.Comments;
-import com.hanghae.justpotluck.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.hanghae.justpotluck.domain.comment.entity.Comments;
+import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
+import com.hanghae.justpotluck.domain.user.entity.User;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -26,7 +27,7 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
@@ -43,9 +44,16 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private String image;
+//    @Column
+//    private String image;
 
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "board",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<PostImage> imageList = new ArrayList<>();
 
     @Column(nullable = false)
     private String category;
@@ -79,10 +87,9 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(String title, String content, String image, String category, Double longitude, Double latitude, LocalDateTime expiredAt, List<Tag> tags){
+    public Posts(String title, String content,String category, Double longitude, Double latitude, LocalDateTime expiredAt, List<Tag> tags){
         this.title = title;
         this.content = content;
-        this.image = image;
         this.category = category;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -93,7 +100,6 @@ public class Posts extends Timestamped {
     public void update(PostRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.image = requestDto.getImagePath();
         this.category = requestDto.getCategory();
         this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
     }
