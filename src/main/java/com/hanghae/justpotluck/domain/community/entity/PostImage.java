@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.community.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,8 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "post_image")
 @Entity
-public class PostImage {
+public class PostImage extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_image_id")
@@ -19,7 +19,7 @@ public class PostImage {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "posts")
+    @JoinColumn(name = "post_id")
     private Posts posts;
 
     private String imageUrl;

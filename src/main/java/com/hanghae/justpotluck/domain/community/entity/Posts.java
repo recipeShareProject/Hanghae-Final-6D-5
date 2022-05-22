@@ -7,7 +7,6 @@ import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.config.Timestamped;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,12 +28,12 @@ import static javax.persistence.CascadeType.ALL;
 @DynamicInsert
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Posts extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "postId")
+    @Column(name = "post_id")
     private Long postId;
 
     @Column(nullable = false)
@@ -49,7 +48,7 @@ public class Posts extends Timestamped {
 
     @JsonBackReference
     @OneToMany(
-            mappedBy = "board",
+            mappedBy = "posts",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
@@ -71,6 +70,7 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String location;
 
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Column(nullable = false)
     private LocalDateTime expiredAt;
@@ -79,6 +79,7 @@ public class Posts extends Timestamped {
     private List<Comments> commentList = new ArrayList<>();
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public void addComment(Comments comment) {
@@ -87,7 +88,8 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(String title, String content,String category, Double longitude, Double latitude, LocalDateTime expiredAt, List<Tag> tags){
+    public Posts(User user, String title, String content,String category, Double longitude, Double latitude, LocalDateTime expiredAt, List<Tag> tags){
+        this.user = user;
         this.title = title;
         this.content = content;
         this.category = category;
@@ -95,6 +97,15 @@ public class Posts extends Timestamped {
         this.latitude = latitude;
         this.expiredAt = expiredAt;
         this.tags = tags;
+    }
+
+    public static Posts createPost(PostRequestDto requestDto, User user) {
+        return Posts.builder()
+                .title(requestDto.getTitle())
+                .category(requestDto.getCategory())
+                .content(requestDto.getContent())
+                .user(user)
+                .build();
     }
 
     public void update(PostRequestDto requestDto){

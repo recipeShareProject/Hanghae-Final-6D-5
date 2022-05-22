@@ -28,14 +28,16 @@ public class Board extends Timestamped {
 //    조리법
 //    private String contents;
     private String quantity;
-    private List<RecipeProcess> process;
-    private FoodCategory category;
+
+//    @ManyToOne
+//    private FoodCategory category;
 //    private String nickname;
     private int viewCount;
     private boolean bookmark;
     private String cookingTime;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @JsonBackReference
@@ -45,8 +47,9 @@ public class Board extends Timestamped {
             orphanRemoval = true
     )
     private List<Image> imageList = new ArrayList<>();
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeProcess> processList;
-    private List<Ingredient> ingredientList;
+//    private List<Ingredient> ingredientList;
 
     @JsonIgnoreProperties({"board"})
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -58,15 +61,15 @@ public class Board extends Timestamped {
 
     @Builder
     public Board(String title, User user,
-                 List<Review> reviewList, FoodCategory category, String cookingTime,
-                 List<RecipeProcess> processList, List<Ingredient> ingredientList, int viewCount, List<Bookmark> bookmarkList) {
+                 List<Review> reviewList, String cookingTime,
+                 List<RecipeProcess> processList, int viewCount, List<Bookmark> bookmarkList) {
         this.title = title;
         this.cookingTime = cookingTime;
         this.user = user;
         this.reviewList = reviewList;
         this.processList = processList;
-        this.ingredientList = ingredientList;
-        this.category = category;
+//        this.ingredientList = ingredientList;
+//        this.category = category;
         this.viewCount = viewCount;
         this.bookmarkList = bookmarkList;
     }
@@ -74,19 +77,18 @@ public class Board extends Timestamped {
     public static Board createBoard(BoardSaveRequestDto requestDto, User user) {
         return Board.builder()
                 .title(requestDto.getTitle())
-                .processList(requestDto.getProcessList())
-                .ingredientList(requestDto.getIngredientList())
-                .category(requestDto.getCategory())
+//                .processList(requestDto.getProcessList())
+//                .ingredientList(requestDto.getIngredientList())
                 .cookingTime(requestDto.getCookingTime())
-                .user(user)
+//                .user(user)
                 .build();
     }
 
     public void update(BoardUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.quantity = requestDto.getQuantity();
-        this.category = requestDto.getCategory();
-        this.ingredientList = requestDto.getIngredient();
+//        this.category = requestDto.getCategory();
+//        this.ingredientList = requestDto.getIngredient();
         this.processList = requestDto.getProcessList();
     }
 

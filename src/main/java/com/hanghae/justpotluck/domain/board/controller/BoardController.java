@@ -7,12 +7,10 @@ import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateRespon
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
-import com.hanghae.justpotluck.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -37,7 +35,7 @@ public class BoardController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/board")
-    public ResponseEntity<BoardSaveResponse> saveBoard(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody BoardSaveRequestDto requestDto) throws Exception {
+    public ResponseEntity<BoardSaveResponse> saveBoard(@ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
         log.info("게시글 업로드 성공");
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }
