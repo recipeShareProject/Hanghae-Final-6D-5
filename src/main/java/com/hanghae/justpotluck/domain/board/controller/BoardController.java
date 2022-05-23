@@ -36,7 +36,7 @@ public class BoardController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/board")
     public ResponseEntity<BoardSaveResponse> saveBoard(@ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
-        log.info("게시글 업로드 성공");
+
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }
 

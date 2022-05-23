@@ -1,12 +1,12 @@
 package com.hanghae.justpotluck.domain.board.entity;
 
-import com.hanghae.justpotluck.global.config.Timestamped;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.user.entity.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -79,8 +79,8 @@ public class Board extends Timestamped {
                 .title(requestDto.getTitle())
 //                .processList(requestDto.getProcessList())
 //                .ingredientList(requestDto.getIngredientList())
+                .user(user)
                 .cookingTime(requestDto.getCookingTime())
-//                .user(user)
                 .build();
     }
 

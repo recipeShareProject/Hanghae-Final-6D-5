@@ -1,6 +1,5 @@
 package com.hanghae.justpotluck.domain.board.service;
 
-import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardOneResponse;
@@ -9,12 +8,15 @@ import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateRespon
 import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.board.entity.Image;
-import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
+import com.hanghae.justpotluck.domain.user.entity.User;
+import com.hanghae.justpotluck.domain.user.repository.UserRepository;
+import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -24,12 +26,15 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardImageRepository boardImageRepository;
     private final BookmarkRepository bookmarkRepository;
+
+    private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
     private final UserUtil userUtil;
 
