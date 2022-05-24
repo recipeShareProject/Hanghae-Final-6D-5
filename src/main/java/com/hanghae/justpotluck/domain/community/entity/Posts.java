@@ -16,7 +16,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +56,9 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String category;
 
-    @OneToMany(mappedBy = "posts")
-    @Column
-    List<Tag> tags = new ArrayList<>();
+//    @OneToMany(mappedBy = "posts")
+//    @Column
+    ArrayList<String> tags = new ArrayList<>();
 
     @Column(nullable = false)
     private Double latitude;
@@ -72,7 +71,7 @@ public class Posts extends Timestamped {
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private LocalDateTime expiredAt;
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
@@ -88,23 +87,23 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(User user, String title, String content,String category, Double longitude, Double latitude, LocalDateTime expiredAt, List<Tag> tags){
+    public Posts(User user, String title, String content,String category, Double longitude, Double latitude, ArrayList<String> tags){
         this.user = user;
         this.title = title;
         this.content = content;
         this.category = category;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.expiredAt = expiredAt;
+//        this.expiredAt = expiredAt;
         this.tags = tags;
     }
 
-    public static Posts createPost(PostRequestDto requestDto, User user) {
+    public static Posts createPost(PostRequestDto requestDto) {
         return Posts.builder()
                 .title(requestDto.getTitle())
                 .category(requestDto.getCategory())
                 .content(requestDto.getContent())
-                .user(user)
+//                .user(user)
                 .build();
     }
 
@@ -112,7 +111,7 @@ public class Posts extends Timestamped {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
-        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+//        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
     }
 
     public void update(String category) {

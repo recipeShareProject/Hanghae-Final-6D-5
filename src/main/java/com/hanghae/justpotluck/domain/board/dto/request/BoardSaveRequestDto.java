@@ -13,9 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardSaveRequestDto {
     private String title;
-//    private List<RecipeProcess> processList;
-//    private List<Ingredient> ingredientList;
+    private ArrayList<String> processList;
+    //    private List<Ingredient> ingredientList;
 //    private FoodCategory category;
+    private String category;
 //    private User user;
 //    private String nickname;
     private String cookingTime;

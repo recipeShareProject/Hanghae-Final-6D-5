@@ -33,7 +33,7 @@ public class PostResponseDto {
         this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
-        this.expiredAt = post.getExpiredAt();
+//        this.expiredAt = post.getExpiredAt();
         this.commentList = post.getCommentList();
     }
 

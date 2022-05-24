@@ -1,7 +1,6 @@
 package com.hanghae.justpotluck.domain.community.dto.request;
 
 import com.hanghae.justpotluck.domain.community.entity.Posts;
-import com.hanghae.justpotluck.domain.community.entity.Tag;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,13 +39,13 @@ public class PostRequestDto {
     private String category;
 
     // 이 데이터를 어떻게 받아야하는가? 좀 찾아보자
-    @NotNull
+//    @NotNull
     private String expiredAt;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tag> tags;
+    private ArrayList<String> tags;
     //    좌표를 여기서 받아야하는가
-    @NotNull
+//    @NotNull
     private String location;
 
     private List<MultipartFile> images = new ArrayList<>();

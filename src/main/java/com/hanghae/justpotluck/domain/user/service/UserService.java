@@ -30,4 +30,17 @@ public class UserService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_MEMBER)
         );
     }
+
+//    @Transactional
+//    public User update(UserUpdateRequest userUpdateRequest) {
+//        User user = userUtil.findCurrentUser();
+//        // 닉네임 중복 확인
+//        if (userRepository.existsByNickname(userUpdateRequest.getNickname())) {
+//            throw new CustomException(ErrorCode.ALREADY_NICKNAME_EXISTS);
+//        }
+//
+//        user.update(userUpdateRequest);
+//        return user;
+//    }
+
 }

@@ -76,7 +76,7 @@ public class PostService {
     @Transactional
     public PostSaveReponse savePost(PostRequestDto requestDto) {
 //        유저 DB 확인 후 수정
-        User user = userUtil.findCurrentUser();
+//        User user = userUtil.findCurrentUser();
 //        User result = userRepository.findByName(username).orElseThrow(
 //                () -> new RestException(HttpStatus.NOT_FOUND, "해당 username이 존재하지 않습니다.")
 //        );
@@ -86,7 +86,7 @@ public class PostService {
 //                .expiredAt(LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")))
 //                .title(requestDto.getTitle())
 //                .build();
-        Posts posts = postRepository.save(Posts.createPost(requestDto, user));
+        Posts posts = postRepository.save(Posts.createPost(requestDto));
         List<String> postImages = uploadPostImages(requestDto, posts);
         return new PostSaveReponse(requestDto.getPostId(), postImages);
     }

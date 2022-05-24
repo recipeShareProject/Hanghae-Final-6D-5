@@ -51,7 +51,7 @@ public class PostController {
     }
 
     @PostMapping("/api/community")
-    public ResponseEntity<Success> savePost(@ModelAttribute @Valid PostRequestDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
+    public ResponseEntity<Success> savePost(@ModelAttribute @Valid PostRequestDto requestDto, Errors errors) {
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {
                 throw new RestException(HttpStatus.BAD_REQUEST, "잘못된 입력방법입니다.");

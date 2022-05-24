@@ -11,7 +11,6 @@ import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
-import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.global.util.UserUtil;
@@ -33,7 +32,6 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardImageRepository boardImageRepository;
     private final BookmarkRepository bookmarkRepository;
-
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
     private final UserUtil userUtil;
@@ -43,13 +41,18 @@ public class BoardService {
 
     @Transactional
     public BoardSaveResponse saveBoard(BoardSaveRequestDto requestDto) throws Exception {
-        User user = userUtil.findCurrentUser();
-        Board board = boardRepository.save(Board.createBoard(requestDto, user));
+//        User user = userUtil.findCurrentUser();
+        Board board = boardRepository.save(Board.createBoard(requestDto));
         List<String> boardImages = uploadBoardImages(requestDto, board);
 
-        return new BoardSaveResponse(board.getId(), boardImages);
+        return new BoardSaveResponse(board.getId(), requestDto.getProcessList(), requestDto.getCategory(), boardImages);
     }
 
+//    private List<String> uploadProcessList(BoardSaveRequestDto requestDto, Board board) {
+//        return requestDto.getProcessList().stream()
+//                .map(recipeProcess -> recipeProcess.toString())
+//                .collect(Collectors.toList());
+//    }
     private List<String> uploadBoardImages(BoardSaveRequestDto requestDto, Board board) {
         return requestDto.getImages().stream()
                 .map(image -> s3Uploader.upload(image, "board"))

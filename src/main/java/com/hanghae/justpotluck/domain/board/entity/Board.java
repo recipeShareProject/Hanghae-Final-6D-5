@@ -29,8 +29,9 @@ public class Board extends Timestamped {
 //    private String contents;
     private String quantity;
 
-//    @ManyToOne
+    //    @ManyToOne
 //    private FoodCategory category;
+    private String category;
 //    private String nickname;
     private int viewCount;
     private boolean bookmark;
@@ -47,8 +48,8 @@ public class Board extends Timestamped {
             orphanRemoval = true
     )
     private List<Image> imageList = new ArrayList<>();
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeProcess> processList;
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ArrayList<String> processList;
 //    private List<Ingredient> ingredientList;
 
     @JsonIgnoreProperties({"board"})
@@ -62,24 +63,25 @@ public class Board extends Timestamped {
     @Builder
     public Board(String title, User user,
                  List<Review> reviewList, String cookingTime,
-                 List<RecipeProcess> processList, int viewCount, List<Bookmark> bookmarkList) {
+                 ArrayList<String> processList, int viewCount, List<Bookmark> bookmarkList, String category) {
         this.title = title;
         this.cookingTime = cookingTime;
         this.user = user;
         this.reviewList = reviewList;
         this.processList = processList;
 //        this.ingredientList = ingredientList;
-//        this.category = category;
+        this.category = category;
         this.viewCount = viewCount;
         this.bookmarkList = bookmarkList;
     }
 
-    public static Board createBoard(BoardSaveRequestDto requestDto, User user) {
+    public static Board createBoard(BoardSaveRequestDto requestDto) {
         return Board.builder()
                 .title(requestDto.getTitle())
-//                .processList(requestDto.getProcessList())
+                .processList(requestDto.getProcessList())
+                .category(requestDto.getCategory())
 //                .ingredientList(requestDto.getIngredientList())
-                .user(user)
+//                .user(user)
                 .cookingTime(requestDto.getCookingTime())
                 .build();
     }
@@ -87,7 +89,7 @@ public class Board extends Timestamped {
     public void update(BoardUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.quantity = requestDto.getQuantity();
-//        this.category = requestDto.getCategory();
+        this.category = requestDto.getCategory();
 //        this.ingredientList = requestDto.getIngredient();
         this.processList = requestDto.getProcessList();
     }
