@@ -4,10 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -26,11 +23,11 @@ public class RecipeProcess {
     @Column
     private String process;
 
-    @Column
-    private String image;
+    @OneToOne
+    private Image image;
 
     @Builder
-    public RecipeProcess(Board board, Integer processNumber, String process, String image){
+    public RecipeProcess(Board board, Integer processNumber, String process, Image image){
         this.board = board;
         this.processNumber = processNumber;
         this.process = process;

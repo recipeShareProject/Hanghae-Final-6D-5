@@ -2,13 +2,11 @@ package com.example.sparta.hanghaefinal.domain.dto.board.response.board;
 
 import com.example.sparta.hanghaefinal.config.Timestamped;
 import com.example.sparta.hanghaefinal.domain.entity.board.Board;
-import com.example.sparta.hanghaefinal.domain.entity.board.Ingredient;
 import com.example.sparta.hanghaefinal.domain.entity.board.RecipeProcess;
 import com.example.sparta.hanghaefinal.domain.entity.review.Review;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 

@@ -24,7 +24,6 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     Page<Posts> findPostsToUser(@Param("longitude") Double longitude, @Param("latitude") Double latitude);
 
 
-
     List<Posts> findAllByExpiredAtBefore(LocalDateTime now);
 
     void deleteByPostId(Long postId);

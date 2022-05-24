@@ -21,5 +21,5 @@ public class BoardRequestDto {
     private List<String> amount;
 //    private int viewCount;
 //    private boolean bookmark;
-    private List<String> images = new ArrayList<>();
+    private List<MultipartFile> images = new ArrayList<>();
 }
