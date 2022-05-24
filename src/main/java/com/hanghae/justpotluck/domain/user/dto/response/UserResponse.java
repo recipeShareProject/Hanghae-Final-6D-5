@@ -21,10 +21,10 @@ public class UserResponse {
     @ApiModelProperty(value = "유저 식별자", example = "1")
     private Long id;
 
-    @ApiModelProperty(value = "유저 닉네임", example = "모아모아")
+    @ApiModelProperty(value = "유저 닉네임")
     private String name;
 
-    @ApiModelProperty(value = "유저 이메일", example = "kmw106933@naver.com")
+    @ApiModelProperty(value = "유저 이메일")
     private String email;
 
     @ApiModelProperty(value = "생성 시각", example = "")
