@@ -98,7 +98,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/error",
                         "/favicon.ico",
                         "/h2-console/**",
-                        "/api/** ")
+                        "/api/** ",
+                        "/ws-stompAlarm/**",
+                        "/ws-stompAlarm/sub/alarm/**")
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
                 .permitAll()

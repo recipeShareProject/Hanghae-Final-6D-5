@@ -1,6 +1,10 @@
 package com.hanghae.justpotluck.domain.review.service;
 
 
+import com.hanghae.justpotluck.domain.alarm.service.AlarmService;
+import com.hanghae.justpotluck.domain.community.repository.PostRepository;
+import com.hanghae.justpotluck.domain.user.entity.User;
+import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.domain.review.dto.request.ReviewSaveRequestDto;
 import com.hanghae.justpotluck.domain.review.dto.response.ReviewSaveResponse;
@@ -38,7 +42,16 @@ public class ReviewService {
         );
         Review review = reviewRepository.save(Review.createReview(requestDto.getContents(), requestDto.getNickname(), board));
         List<String> reviewImages = uploadReviewImages(requestDto, review);
+
+//        /* 알림 생성 */
+//        User user = userDetails.getUser();
+//        User postOwner = UserRepository.getById(
+//                PostRepository.getById(postId).getUser().getId()
+//        );
+//        AlarmService.generateNewReplyRecipeAlarm(User postOwner,User user, Board board);
+
         return new ReviewSaveResponse(requestDto.getBoardId(), review.getId(), reviewImages);
+
     }
 
     private List<String> uploadReviewImages(ReviewSaveRequestDto requestDto, Review review) {
@@ -104,5 +117,4 @@ public class ReviewService {
 
         reviewRepository.delete(review);
     }
-
 }
