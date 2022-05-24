@@ -1,30 +1,47 @@
 package com.example.sparta.hanghaefinal.domain.service.board;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
+import com.example.sparta.hanghaefinal.aws.S3Uploader;
+import com.example.sparta.hanghaefinal.domain.dto.board.request.BoardRequestDto;
 import com.example.sparta.hanghaefinal.domain.entity.board.Board;
+import com.example.sparta.hanghaefinal.domain.entity.board.Image;
 import com.example.sparta.hanghaefinal.domain.entity.board.RecipeProcess;
+import com.example.sparta.hanghaefinal.domain.repository.board.ImageRepository;
 import com.example.sparta.hanghaefinal.domain.repository.board.ProcessRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ProcessService {
 
     private final ProcessRepository processRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
-    public void saveRecipe(Board board, List<String> processes, List<String> images){
+    public void saveRecipe(BoardRequestDto requestDto, Board board){
+        List<String> processes = requestDto.getProcess();
+        List<MultipartFile> images = requestDto.getImages();
+                
         for (int i = 0; i < processes.size(); i++)
         {
-//            String image = uploadToAWS(images.get(i));
+            List<String> imagesUrl = uploadBoardImages(images, board);
 //            이미지 업로드후 url가져오기
             RecipeProcess process = RecipeProcess.builder()
                     .process(processes.get(i))
-                    .image(images.get(i))
+//                    .image(imagesUrl)
                     .board(board)
                     .processNumber(i+1)
                     .build();
@@ -33,55 +50,31 @@ public class ProcessService {
         }
     }
 
-//    public String uploadToAWS(MultipartFile file) {
-//        String key = UUID.randomUUID() + "_" + file.getOriginalFilename();
-//        try {
-//
-//            ObjectMetadata metadata = new ObjectMetadata();
-//            metadata.setContentType(file.getContentType());
-//            PutObjectRequest request = new PutObjectRequest(bucketName, key, file.getInputStream(), metadata);
-//            request.withCannedAcl(CannedAccessControlList.AuthenticatedRead); // 접근권한 체크
-//            PutObjectResult result = s3Client.putObject(request);
-//            return key;
-//        } catch (AmazonServiceException e) {
-//            // The call was transmitted successfully, but Amazon S3 couldn't process
-//            // it, so it returned an error response.
-//            log.error("uploadToAWS AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
-//        } catch (SdkClientException e) {
-//            // Amazon S3 couldn't be contacted for a response, or the client
-//            // couldn't parse the response from Amazon S3.
-//            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
-//        } catch (Exception e) {
-//            // Amazon S3 couldn't be contacted for a response, or the client
-//            // couldn't parse the response from Amazon S3.
-//            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
-//        }
-//
-//        return "";
-//    }
 
     @Transactional
     public void modifyRecipe(Board board, List<String> processes, List<String> images){
         deleteRecipe(board.getId());
+//        이미지 업로드 함수 구현 후 마무리
         saveRecipe(board, processes, images);
     }
 
     @Transactional
     public void deleteRecipe(Long boardId) {processRepository.deleteAllById(boardId);}
 
-    //    private List<String> uploadBoardImages(BoardRequestDto requestDto, Board board) {
-//        return requestDto.getImages().stream()
-//                .map(image -> s3Uploader.upload(image, "board"))
-//                .map(url -> saveBoardImage(board, url))
-//                .map(boardImage -> boardImage.getImageUrl())
-//                .collect(Collectors.toList());
-//    }
-//
-//    private Image saveBoardImage(Board board, String url) {
-//        return boardImageRepository.save(Image.builder()
-//                .imageUrl(url)
-//                .storeFileName(StringUtils.getFilename(url))
-//                .board(board)
-//                .build());
-//    }
+
+    private List<String> uploadBoardImages(List<MultipartFile> images, Board board) {
+        return images.stream()
+                .map(image -> s3Uploader.upload(image, "board"))
+                .map(url -> saveBoardImage(board, url))
+                .map(boardImage -> boardImage.getImageUrl())
+                .collect(Collectors.toList());
+    }
+
+    private Image saveBoardImage(Board board, String url) {
+        return ImageRepository.save(Image.builder()
+                .imageUrl(url)
+                .storeFileName(StringUtils.getFilename(url))
+                .board(board)
+                .build());
+    }
 }

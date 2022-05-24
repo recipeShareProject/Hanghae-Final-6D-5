@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardProcessRequest {
     private Long boardId;
+    private Integer processId;
     private String process;
     private String images;
 }

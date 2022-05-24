@@ -3,10 +3,14 @@ package com.example.sparta.hanghaefinal.domain.service.board;
 import com.example.sparta.hanghaefinal.advice.RestException;
 import com.example.sparta.hanghaefinal.aws.S3Uploader;
 import com.example.sparta.hanghaefinal.domain.dto.board.request.BoardRequestDto;
+import com.example.sparta.hanghaefinal.domain.dto.board.request.BoardSearchDto;
 import com.example.sparta.hanghaefinal.domain.dto.board.response.board.BoardResponseDto;
 import com.example.sparta.hanghaefinal.domain.entity.board.Board;
+import com.example.sparta.hanghaefinal.domain.entity.board.Bookmark;
+import com.example.sparta.hanghaefinal.domain.entity.board.Image;
 import com.example.sparta.hanghaefinal.domain.entity.user.User;
 import com.example.sparta.hanghaefinal.domain.repository.board.BoardRepository;
+import com.example.sparta.hanghaefinal.domain.repository.board.ImageRepository;
 import com.example.sparta.hanghaefinal.domain.repository.bookmark.BookmarkRepository;
 import com.example.sparta.hanghaefinal.domain.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +21,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -30,9 +38,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final BookmarkRepository bookmarkRepository;
-    private final S3Uploader s3Uploader;
 
-//    private final FileHandler fileHandler;
 
     @Transactional
     public List<BoardResponseDto> findAll(int pagingCnt){
@@ -46,15 +52,50 @@ public class BoardService {
         return responseDto;
     }
 
+//    추후에 수정 해야하는 쿼리 존재
 
     @Transactional
-    public void saveRecipe(Board board, String username){
+    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto){
+        String nation = requestDto.getNation();
+        List<String> include = requestDto.getInclude();
+        List<String> exclude = requestDto.getExclude();
+        String search = requestDto.getSearch();
 
-        User result = userRepository.findByName(username).orElseThrow(
+        List<Board> boards;
+
+        if (requestDto.getOrder() == "view"){
+            boards = boardRepository.findAllByIngredientsInAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByViewCountDesc(include, exclude, nation, search);
+        }
+        else if(requestDto.getOrder() == "cookingTime"){
+            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByCookingTimeDesc(include, exclude, nation, search);}
+        else{
+            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByMatchDesc(include, exclude, nation, search);}
+
+
+
+
+        List<BoardResponseDto> responseDto = new ArrayList<>();
+
+        for (Board board: boards){
+            BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+            responseDto.add(boardResponseDto);
+        }
+        return responseDto;
+    }
+
+
+    @Transactional
+    public void saveRecipe(BoardRequestDto requestDto, String username){
+        userRepository.findByName(username).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 username이 존재하지 않습니다.")
         );
+        Board board = Board.builder()
+                .cookingTime(requestDto.getCookingTime())
+                .nation(requestDto.getNation())
+                .quantity(requestDto.getQuantity())
+                .title(requestDto.getTitle())
+                .build();
         boardRepository.save(board);
-//        List<String> boardImages = uploadBoardImages(requestDto, board);
     }
 
 
@@ -71,28 +112,6 @@ public class BoardService {
             throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
         }
     }
-//    private void validateDeletedImages(BoardUpdateRequestDto requestDto) {
-//        boardImageRepository.findBySavedImageUrl(requestDto.getBoardId()).stream()
-//                .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))
-//                .forEach(url -> {
-//                    boardImageRepository.delete(url);
-//                    s3Uploader.deleteImage(url.getImageUrl());
-//                });
-//    }
-//    private void uploadBoardImages(BoardUpdateRequestDto requestDto, Board board) {
-//        requestDto.getImages()
-//                .stream()
-//                .forEach(file -> {
-//                    String url = s3Uploader.upload(file, "board");
-//                    saveBoardImage(board, url);
-//                });
-//    }
-//    private List<String> getSaveImages(BoardUpdateRequestDto requestDto) {
-//        return boardImageRepository.findBySavedImageUrl(requestDto.getBoardId())
-//                .stream()
-//                .map(image -> image.getImageUrl())
-//                .collect(Collectors.toList());
-//    }
 
 
     @Transactional
@@ -113,20 +132,20 @@ public class BoardService {
     @Transactional
     public void deleteRecipe(Long boardId) {boardRepository.deleteById(boardId);}
 
-//    @Transactional
-//    public boolean bookmarkBoard(Long boardId) {
-//        Board board = getBoard(boardId);
-//
-//        Optional<Bookmark> bookmark = bookmarkRepository.findByBoard(board);
-//
-//        if (bookmark.isEmpty()) {
-//            bookmarkRepository.save(Bookmark.createBookmark(board));
-//            return true;
-//        } else {
-//            bookmarkRepository.delete(bookmark.get());
-//            return false;
-//        }
-//    }
+    @Transactional
+    public boolean bookmarkBoard(Long boardId) {
+        Board board = getBoard(boardId);
+
+        Optional<Bookmark> bookmark = bookmarkRepository.findByBoard(board);
+
+        if (bookmark.isEmpty()) {
+            bookmarkRepository.save(Bookmark.createBookmark(board));
+            return true;
+        } else {
+            bookmarkRepository.delete(bookmark.get());
+            return false;
+        }
+    }
 
 
 
