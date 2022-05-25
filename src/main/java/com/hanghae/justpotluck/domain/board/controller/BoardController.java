@@ -2,10 +2,9 @@ package com.hanghae.justpotluck.domain.board.controller;
 
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
-import com.hanghae.justpotluck.domain.board.dto.response.board.BoardSaveResponse;
+import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
-import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +28,13 @@ public class BoardController {
 //        return boardService.saveBoard(requestDto, images);
 //    }
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<Board> getBoard(@PathVariable Long boardId) {
+    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardService.getBoard(boardId));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/board")
-    public ResponseEntity<BoardSaveResponse> saveBoard(@ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
+    public ResponseEntity<BoardResponseDto> saveBoard(@ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }

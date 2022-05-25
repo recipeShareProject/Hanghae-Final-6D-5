@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,28 +52,30 @@ public class Posts extends Timestamped {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<PostImage> imageList = new ArrayList<>();
+    private List<PostImage> images = new ArrayList<>();
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String category;
 
 //    @OneToMany(mappedBy = "posts")
 //    @Column
     ArrayList<String> tags = new ArrayList<>();
 
-    @Column(nullable = false)
-    private Double latitude;
+    //https 인증 받고 geolcation api
+    //    @Column(nullable = false)
+    private Double latitude = 0.0;
 
-    @Column(nullable = false)
-    private Double longitude;
+//    @Column(nullable = false)
 
-    @Column(nullable = false)
-    private String location;
+    private Double longitude = 0.0;
+
+    //    @Column(nullable = false)
+    private String location = "도화동";
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-//    @Column(nullable = false)
-    private LocalDateTime expiredAt;
+    @Column(nullable = false)
+    private LocalDateTime expiredAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
     private List<Comments> commentList = new ArrayList<>();
@@ -92,9 +95,8 @@ public class Posts extends Timestamped {
         this.title = title;
         this.content = content;
         this.category = category;
-        this.longitude = longitude;
-        this.latitude = latitude;
-//        this.expiredAt = expiredAt;
+//        this.longitude = longitude;
+//        this.latitude = latitude;
         this.tags = tags;
     }
 
@@ -111,7 +113,7 @@ public class Posts extends Timestamped {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
-//        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
     }
 
     public void update(String category) {

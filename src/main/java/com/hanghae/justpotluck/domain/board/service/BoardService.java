@@ -2,8 +2,7 @@ package com.hanghae.justpotluck.domain.board.service;
 
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
-import com.hanghae.justpotluck.domain.board.dto.response.board.BoardOneResponse;
-import com.hanghae.justpotluck.domain.board.dto.response.board.BoardSaveResponse;
+import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.entity.Bookmark;
@@ -40,12 +39,13 @@ public class BoardService {
 
 
     @Transactional
-    public BoardSaveResponse saveBoard(BoardSaveRequestDto requestDto) throws Exception {
+    public BoardResponseDto saveBoard(BoardSaveRequestDto requestDto) throws Exception {
 //        User user = userUtil.findCurrentUser();
         Board board = boardRepository.save(Board.createBoard(requestDto));
         List<String> boardImages = uploadBoardImages(requestDto, board);
+        List<String> boardImages2 = uploadBoardImages2(requestDto, board);
 
-        return new BoardSaveResponse(board.getId(), requestDto.getProcessList(), requestDto.getCategory(), boardImages);
+        return new BoardResponseDto(board, boardImages, boardImages2);
     }
 
 //    private List<String> uploadProcessList(BoardSaveRequestDto requestDto, Board board) {
@@ -54,11 +54,20 @@ public class BoardService {
 //                .collect(Collectors.toList());
 //    }
     private List<String> uploadBoardImages(BoardSaveRequestDto requestDto, Board board) {
-        return requestDto.getImages().stream()
+        return requestDto.getProcessImages().stream()
                 .map(image -> s3Uploader.upload(image, "board"))
                 .map(url -> saveBoardImage(board, url))
-                .map(boardImage -> boardImage.getImageUrl())
+                .map(image -> image.getImageUrl())
                 .collect(Collectors.toList());
+
+    }
+    private List<String> uploadBoardImages2(BoardSaveRequestDto requestDto, Board board) {
+        return requestDto.getCompleteImages().stream()
+                .map(CompleteImage -> s3Uploader.upload(CompleteImage, "complete"))
+                .map(url -> saveBoardImage(board, url))
+                .map(completeImage -> completeImage.getImageUrl())
+                .collect(Collectors.toList());
+
     }
 
     private Image saveBoardImage(Board board, String url) {
@@ -106,17 +115,27 @@ public class BoardService {
 
 
     @Transactional
-    public BoardOneResponse getOneBoard(Long boardId) {
-        return boardRepository.findOneBoardById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 없습니다.")
-        );
-    }
-
-    public Board getBoard(Long boardId) {
+    public Board getOneBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
         return board;
+    }
+
+    public BoardResponseDto getBoard(Long boardId) {
+
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 없습니다.")
+        );
+        List<String> boardImages = board.getProcessImages()
+                .stream()
+                .map(image ->image.getImageUrl())
+                .collect(Collectors.toList());
+        List<String> completeImages = board.getCompleteImages()
+                .stream()
+                .map(completeImage ->completeImage.getImageUrl())
+                .collect(Collectors.toList());
+        return new BoardResponseDto(board, boardImages, completeImages);
     }
 
     @Transactional
@@ -129,7 +148,7 @@ public class BoardService {
 
     @Transactional
     public boolean bookmarkBoard(Long boardId) {
-        Board board = getBoard(boardId);
+        Board board = getOneBoard(boardId);
 
         Optional<Bookmark> bookmark = bookmarkRepository.findByBoard(board);
 

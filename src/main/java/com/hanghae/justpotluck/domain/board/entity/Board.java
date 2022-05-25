@@ -35,7 +35,7 @@ public class Board extends Timestamped {
 //    private String nickname;
     private int viewCount;
     private boolean bookmark;
-    private String cookingTime;
+    private String cookTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -47,28 +47,39 @@ public class Board extends Timestamped {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<Image> imageList = new ArrayList<>();
+    private List<Image> processImages = new ArrayList<>();
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "board",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<CompleteImage> completeImages = new ArrayList<>();
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<String> processList;
+    @Column(columnDefinition = "TEXT")
+    private ArrayList<String> process;
 //    private List<Ingredient> ingredientList;
 
     @JsonIgnoreProperties({"board"})
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Review> reviewList;
 
+    //이제 리스트로 받을 필요 없음
+    //나중에 수정
     @JsonIgnoreProperties({"board"})
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @Builder
     public Board(String title, User user,
-                 List<Review> reviewList, String cookingTime,
-                 ArrayList<String> processList, int viewCount, List<Bookmark> bookmarkList, String category) {
+                 List<Review> reviewList, String cookTime, String quantity,
+                 ArrayList<String> process, int viewCount, List<Bookmark> bookmarkList, String category) {
         this.title = title;
-        this.cookingTime = cookingTime;
+        this.cookTime = cookTime;
         this.user = user;
         this.reviewList = reviewList;
-        this.processList = processList;
+        this.process = process;
+        this.quantity = quantity;
 //        this.ingredientList = ingredientList;
         this.category = category;
         this.viewCount = viewCount;
@@ -78,11 +89,12 @@ public class Board extends Timestamped {
     public static Board createBoard(BoardSaveRequestDto requestDto) {
         return Board.builder()
                 .title(requestDto.getTitle())
-                .processList(requestDto.getProcessList())
+                .process(requestDto.getProcess())
                 .category(requestDto.getCategory())
+                .quantity(requestDto.getQuantity())
 //                .ingredientList(requestDto.getIngredientList())
 //                .user(user)
-                .cookingTime(requestDto.getCookingTime())
+                .cookTime(requestDto.getCookTime())
                 .build();
     }
 
@@ -91,11 +103,11 @@ public class Board extends Timestamped {
         this.quantity = requestDto.getQuantity();
         this.category = requestDto.getCategory();
 //        this.ingredientList = requestDto.getIngredient();
-        this.processList = requestDto.getProcessList();
+        this.process = requestDto.getProcessList();
     }
 
     public void addImage(Image image) {
-        this.imageList.add(image);
+        this.processImages.add(image);
         if (image.getBoard() != this) {
             image.setBoard(this);
         }

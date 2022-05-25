@@ -17,4 +17,5 @@ public class BoardSaveResponse {
     private List<String> processList = new ArrayList<>();
     private String category;
     private List<String> imageUrl = new ArrayList<>();
+    private List<String> completeImageUrl = new ArrayList<>();
 }

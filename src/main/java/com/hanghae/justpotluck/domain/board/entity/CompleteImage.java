@@ -1,8 +1,7 @@
 package com.hanghae.justpotluck.domain.board.entity;
 
-import com.hanghae.justpotluck.global.config.Timestamped;
-import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,12 +10,12 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "board_image")
+@Table(name = "complete_board_image")
 @Entity
-public class Image extends Timestamped {
+public class CompleteImage extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
+    @Column(name = "complete_image_id")
     private Long id;
 
     @JsonBackReference
@@ -24,10 +23,10 @@ public class Image extends Timestamped {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "review_id")
-    private Review review;
+//    @JsonBackReference
+//    @ManyToOne
+//    @JoinColumn(name = "review_id")
+//    private Review review;
 
 
     private String imageUrl;
@@ -45,31 +44,14 @@ public class Image extends Timestamped {
 //    }
 
     @Builder
-    public Image(String imageUrl, String storeFileName, Board board) {
+    public CompleteImage(String imageUrl, String storeFileName, Board board) {
         this.imageUrl = imageUrl;
         this.storeFileName = storeFileName;
         this.board = board;
     }
 
-    public Image(Board board, String imageUrl) {
+    public CompleteImage(Board board, String imageUrl) {
         this.board = board;
         this.imageUrl = imageUrl;
     }
-
-//    private String image;
-
-    public void setBoard(Board board) {
-        this.board = board;
-        if (!board.getProcessImages().contains(this)) {
-            board.getProcessImages().add(this);
-        }
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
-        if (!review.getImages().contains(this)) {
-            review.getImages().add(this);
-        }
-    }
-
 }

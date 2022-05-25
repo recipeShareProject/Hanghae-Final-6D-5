@@ -45,7 +45,7 @@ public class PostController {
     }
 
     @GetMapping("/api/community/{postId}")
-    public PostResponseDto findPost(@PathVariable Long postId, @AuthenticationPrincipal User user) {
+    public PostResponseDto findPost(@PathVariable Long postId) {
 //        처리방법 생각해보기 (이미 로그인 없으면 못들어오는데 한 번 더 확인을 해야하는가?)
         return postService.findOne(postId);
     }

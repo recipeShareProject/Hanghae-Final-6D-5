@@ -39,8 +39,8 @@ public class PostImage extends Timestamped {
 
     public void setPosts(Posts posts) {
         this.posts = posts;
-        if (!posts.getImageList().contains(this)) {
-            posts.getImageList().add(this);
+        if (!posts.getImages().contains(this)) {
+            posts.getImages().add(this);
         }
     }
 }

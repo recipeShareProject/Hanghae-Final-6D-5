@@ -13,14 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardSaveRequestDto {
     private String title;
-    private ArrayList<String> processList;
+    private ArrayList<String> process;
+    private String quantity;
     //    private List<Ingredient> ingredientList;
 //    private FoodCategory category;
     private String category;
 //    private User user;
 //    private String nickname;
-    private String cookingTime;
+    private String cookTime;
     private int viewCount;
     private boolean bookmark;
-    private List<MultipartFile> images = new ArrayList<>();
+    private List<MultipartFile> processImages = new ArrayList<>();
+    private List<MultipartFile> completeImages = new ArrayList<>();
 }
