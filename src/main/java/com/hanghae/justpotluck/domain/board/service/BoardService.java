@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.board.service;
 
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
+import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -137,6 +139,36 @@ public class BoardService {
                 .map(completeImage ->completeImage.getImageUrl())
                 .collect(Collectors.toList());
         return new BoardResponseDto(board, boardImages, completeImages);
+    }
+
+//    원하는 것 검색하는 기능
+    @Transactional
+    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto){
+        String nation = requestDto.getNation();
+        List<String> include = requestDto.getInclude();
+        List<String> exclude = requestDto.getExclude();
+        String search = requestDto.getSearch();
+
+        List<Board> boards;
+
+        if (requestDto.getOrder() == "view"){
+            boards = boardRepository.findAllByIngredientsInAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByViewCountDesc(include, exclude, nation, search);
+        }
+        else if(requestDto.getOrder() == "cookTime"){
+            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByCookingTimeDesc(include, exclude, nation, search);}
+        else{
+            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByMatchDesc(include, exclude, nation, search);}
+
+
+
+
+        List<BoardResponseDto> responseDto = new ArrayList<>();
+
+        for (Board board: boards){
+            BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+            responseDto.add(boardResponseDto);
+        }
+        return responseDto;
     }
 
     @Transactional
