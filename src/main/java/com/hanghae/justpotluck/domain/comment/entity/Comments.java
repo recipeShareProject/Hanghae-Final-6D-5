@@ -74,7 +74,7 @@ public class Comments extends Timestamped {
 
 
     //== 수정 ==//
-    public void updateContent(String content) {
+    public void updateContent(String content, User user) {
         this.comment = content;
     }
     //== 삭제 ==//

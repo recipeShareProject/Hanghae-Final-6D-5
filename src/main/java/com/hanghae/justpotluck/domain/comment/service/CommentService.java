@@ -39,27 +39,31 @@ public class CommentService {
     }
 
     public void saveReComment(Long postId, Long commentId, CommentRequestDto requestDto){
-      Posts post = postRepository.findByPostId(postId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
-      Comments parent = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 commentId가 존재하지 않습니다."));
+        User user = userUtil.findCurrentUser();
+        Posts post = postRepository.findByPostId(postId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
+        Comments parent = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 commentId가 존재하지 않습니다."));
 
-      Comments comment = Comments.builder()
+        Comments comment = Comments.builder()
                 .comment(requestDto.getComment())
                 .post(post)
                 .parent(parent)
+                .user(user)
                 .build();
-      comment.confirmParent(parent);
+        comment.confirmParent(parent);
 
-      commentRepository.save(comment);
+        commentRepository.save(comment);
     }
 
     public void modify(Long postId, Long commentId, CommentUpdateDto requestDto){
+        User user = userUtil.findCurrentUser();
         Comments comment = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
-        comment.updateContent(requestDto.getComment());
+        comment.updateContent(requestDto.getComment(), user);
     }
 
     public void remove(Long id) throws Exception {
+        User user = userUtil.findCurrentUser();
         Comments comment = commentRepository.findByCommentId(id).orElseThrow(() -> new Exception("댓글이 없습니다."));
         comment.remove();
         List<Comments> removableCommentList = comment.findRemovableList();

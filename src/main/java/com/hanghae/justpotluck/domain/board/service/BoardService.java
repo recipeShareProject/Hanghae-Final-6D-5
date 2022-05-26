@@ -86,13 +86,14 @@ public class BoardService {
 
     @Transactional
     public BoardUpdateResponse updateBoard(Long boardId, BoardUpdateRequestDto requestDto) {
+        User user = userUtil.findCurrentUser();
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
         validateDeletedImages(requestDto);
         uploadBoardImages(requestDto, board);
         List<String> saveImages = getSaveImages(requestDto);
-        board.update(requestDto);
+        board.update(requestDto, user);
         return new BoardUpdateResponse(board.getId(), saveImages);
     }
 
@@ -178,9 +179,6 @@ public class BoardService {
         else{
             boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByMatchDesc(include, exclude, category, search);}
 
-
-
-
         List<BoardResponseDto> responseDto = new ArrayList<>();
 
         for (Board board: boards){
@@ -192,6 +190,7 @@ public class BoardService {
 
     @Transactional
     public void deleteBoard(Long boardId) {
+        User user = userUtil.findCurrentUser();
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 

@@ -20,6 +20,7 @@ public class BoardUpdateRequestDto {
     //    private FoodCategory category;
     private String category;
     private ArrayList<String> process;
+    private List<String> ingredients = new ArrayList<>();
     private List<String> saveImageUrl = new ArrayList<>();
     private List<MultipartFile> images = new ArrayList<>();
 //    private List<Ingredient> ingredient;

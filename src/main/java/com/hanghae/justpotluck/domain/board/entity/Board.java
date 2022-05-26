@@ -72,6 +72,7 @@ public class Board extends Timestamped {
     @Builder
     public Board(String title, User user,
                  List<Review> reviewList, String cookTime, String quantity,
+                 ArrayList<String> ingredients,
                  ArrayList<String> process, int viewCount, String category) {
         this.title = title;
         this.cookTime = cookTime;
@@ -79,7 +80,7 @@ public class Board extends Timestamped {
         this.reviewList = reviewList;
         this.process = process;
         this.quantity = quantity;
-//        this.ingredientList = ingredientList;
+        this.ingredients = ingredients;
         this.category = category;
         this.viewCount = viewCount;
 //        this.bookmarkList = bookmarkList;
@@ -91,13 +92,13 @@ public class Board extends Timestamped {
                 .process(requestDto.getProcess())
                 .category(requestDto.getCategory())
                 .quantity(requestDto.getQuantity())
-//                .ingredientList(requestDto.getIngredientList())
+                .ingredients(requestDto.getIngredients())
                 .user(user)
                 .cookTime(requestDto.getCookTime())
                 .build();
     }
 
-    public void update(BoardUpdateRequestDto requestDto) {
+    public void update(BoardUpdateRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.quantity = requestDto.getQuantity();
         this.category = requestDto.getCategory();

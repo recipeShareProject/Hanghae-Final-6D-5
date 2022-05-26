@@ -30,13 +30,12 @@ public class UserController {
         return userPrincipal.getUsername();
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/user/logout")
     public ResponseEntity<Boolean> logout(HttpServletRequest request) {
         return ResponseEntity.ok(userService.logout(request));
     }
 
-
-    @PatchMapping("/user/me/update")
+    @PatchMapping("/user/me/edit")
     public ResponseEntity<UserResponse> update(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
         return ResponseEntity.ok(UserResponse.toUserResponse(userService.update(userUpdateRequest)));
     }

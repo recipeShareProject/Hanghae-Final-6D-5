@@ -63,6 +63,7 @@ public class ReviewService {
 
     @Transactional
     public ReviewUpdateResponse updateReview(ReviewUpdateRequestDto requestDto) {
+        User user = userUtil.findCurrentUser();
         Review review = reviewRepository.findById(requestDto.getReviewId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 댓글이 없습니다.")
         );
@@ -102,10 +103,10 @@ public class ReviewService {
 
     @Transactional
     public void deleteReview(Long reviewId) {
+        User user = userUtil.findCurrentUser();
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new IllegalArgumentException("해당 댓글이 없습니다.")
         );
-
         reviewRepository.delete(review);
     }
 
