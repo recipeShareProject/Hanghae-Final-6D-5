@@ -28,7 +28,6 @@ public class BoardResponseDto extends Timestamped {
     private List<Review> reviews;
     private String quantity;
     private int viewCount;
-//    private List<Bookmark> bookmarkList;
 
     public BoardResponseDto(Board entity, List<String> processImages, List<String> completeImages) {
         this.id = entity.getId();
