@@ -25,7 +25,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     @Setter
     private Map<String, Object> attributes;
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 

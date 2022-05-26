@@ -13,6 +13,9 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AlarmService {
     private final AlarmRepository alarmRepository;
@@ -29,9 +32,9 @@ public class AlarmService {
     }
 
     /* 게시물에 댓글이 등록되었을 경우 알림 보내기 */
-    public void generateNewReplyRecipeAlarm(User postOwner, User user, Board board) {
+    public static void generateNewReplyRecipeAlarm(User postOwner, User user, Board board) {
         Alarm alarm = Alarm.builder()
-                .userId(postOwner.getId())
+                .userName(postOwner.getName())
                 .type(AlarmType.recipe_comment)
                 .postId(board.getId())
                 .isRead(false)
@@ -129,5 +132,30 @@ public class AlarmService {
                     .build();
         }
         return alarmDto;
+    }
+    public List<AlarmResponseDto> getAlamList(User user) {
+        String userName = user.getName();
+
+
+        List<Alarm> alarmListPage = alarmRepository
+                .findAllByUserIdOrderByIdDesc(userName).getContent();
+
+        List<AlarmResponseDto> alarmResponseDtoList = new ArrayList<>();
+
+        for (Alarm alarm : alarmListPage) {
+            /* 게시물에 새로운 댓글이 등록되었을 때 */
+            if (alarm.getType().equals(AlarmType.recipe_comment)) {
+                AlarmResponseDto alarmDto = AlarmResponseDto.builder()
+                        .alarmId(alarm.getId())
+                        .type(alarm.getType().toString())
+                        .message(alarm.getAlarmMessage())
+                        .isRead(alarm.getIsRead())
+                        .postId(alarm.getPostId())
+                        .build();
+                alarmResponseDtoList.add(alarmDto);
+            }
+
+        }
+    return alarmResponseDtoList;
     }
 }

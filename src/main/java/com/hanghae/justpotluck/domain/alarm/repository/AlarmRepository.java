@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
-    Page<Alarm> findAllByUserIdOrderByIdDesc(Long userId, Pageable pageable);
+    Page<Alarm> findAllByUserIdOrderByIdDesc(String userName);
 
     void deleteAllByPostId(Long postId);
 }

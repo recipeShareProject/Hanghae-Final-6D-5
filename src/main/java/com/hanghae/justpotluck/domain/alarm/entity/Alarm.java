@@ -18,7 +18,7 @@ public class Alarm extends Timestamped {
     private Long id;
 
     @Column
-    private Long userId; // 알람 받는 대상
+    private String userName; // 알람 받는 대상
 
     @Column(name="sender_nickname")
     private String senderNickName;
