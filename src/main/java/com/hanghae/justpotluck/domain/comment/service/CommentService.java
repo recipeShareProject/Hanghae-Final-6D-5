@@ -25,7 +25,7 @@ public class CommentService {
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
 
         Comments comment = Comments.builder()
-                .content(requestDto.getContent())
+                .comment(requestDto.getComment())
                 .post(post)
                 .parent(null)
                 .build();
@@ -38,7 +38,7 @@ public class CommentService {
       Comments parent = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 commentId가 존재하지 않습니다."));
 
       Comments comment = Comments.builder()
-                .content(requestDto.getContent())
+                .comment(requestDto.getComment())
                 .post(post)
                 .parent(parent)
                 .build();
@@ -51,7 +51,7 @@ public class CommentService {
         Comments comment = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
-        comment.updateContent(requestDto.getContent());
+        comment.updateContent(requestDto.getComment());
     }
 
     public void remove(Long id) throws Exception {

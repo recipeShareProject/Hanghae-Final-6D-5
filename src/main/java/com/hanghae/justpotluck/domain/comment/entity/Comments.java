@@ -35,8 +35,8 @@ public class Comments extends Timestamped {
     @JoinColumn(name = "parent_id")
     private Comments parent;
 
-    @Column(nullable = false)
-    private String content;
+//    @Column(nullable = false)
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -75,7 +75,7 @@ public class Comments extends Timestamped {
 
     //== 수정 ==//
     public void updateContent(String content) {
-        this.content = content;
+        this.comment = content;
     }
     //== 삭제 ==//
     public void remove() {
@@ -84,10 +84,10 @@ public class Comments extends Timestamped {
 
 
     @Builder
-    public Comments(Posts post, Comments parent, String content) {
+    public Comments(Posts post, Comments parent, String comment) {
         this.post = post;
         this.parent = parent;
-        this.content = content;
+        this.comment = comment;
         this.isRemoved = false;
     }
 

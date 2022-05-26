@@ -81,7 +81,8 @@ public class PostController {
 
 
     //나눔 완료
-    @PutMapping("/api/post/{postId}")
+    // patch로 하고 uri를 새로운걸로
+    @PatchMapping("/api/community/{postId}/complete")
     public ResponseEntity<Success> completedPost(@PathVariable("postId") Long postId, @RequestBody PostUpdateDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {

@@ -22,7 +22,7 @@ public class CommentRequestDto {
     @ApiModelProperty(value = "댓글", notes = "댓글을 입력해주세요", required = true, example = "my comment")
     @NotBlank(message = "댓글을 입력해주세요.")
     @Size(max = 100)
-    private String content;
+    private String comment;
 
     @ApiModelProperty(value = "게시글 아이디", notes = "게시글 아이디를 입력해주세요", example = "7")
     @NotNull(message = "게시글 아이디를 입력해주세요.")
@@ -34,7 +34,7 @@ public class CommentRequestDto {
 
     @Builder
     CommentRequestDto(Comments comment){
-        this.content = comment.getContent();
+        this.comment = comment.getComment();
         this.postId = comment.getPost().getPostId();
         this.parentId = comment.getParent().getCommentId();
     }
