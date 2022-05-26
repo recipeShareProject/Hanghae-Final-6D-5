@@ -3,14 +3,10 @@ package com.example.sparta.hanghaefinal.domain.service.board;
 import com.example.sparta.hanghaefinal.advice.RestException;
 import com.example.sparta.hanghaefinal.aws.S3Uploader;
 import com.example.sparta.hanghaefinal.domain.dto.board.request.BoardRequestDto;
-import com.example.sparta.hanghaefinal.domain.dto.board.request.BoardSearchDto;
 import com.example.sparta.hanghaefinal.domain.dto.board.response.board.BoardResponseDto;
 import com.example.sparta.hanghaefinal.domain.entity.board.Board;
-import com.example.sparta.hanghaefinal.domain.entity.board.Bookmark;
-import com.example.sparta.hanghaefinal.domain.entity.board.Image;
 import com.example.sparta.hanghaefinal.domain.entity.user.User;
 import com.example.sparta.hanghaefinal.domain.repository.board.BoardRepository;
-import com.example.sparta.hanghaefinal.domain.repository.board.ImageRepository;
 import com.example.sparta.hanghaefinal.domain.repository.bookmark.BookmarkRepository;
 import com.example.sparta.hanghaefinal.domain.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +34,9 @@ public class BoardService {
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final S3Uploader s3Uploader;
 
+//    private final FileHandler fileHandler;
 
     @Transactional
     public List<BoardResponseDto> findAll(int pagingCnt){
@@ -96,6 +94,7 @@ public class BoardService {
                 .title(requestDto.getTitle())
                 .build();
         boardRepository.save(board);
+//        List<String> boardImages = uploadBoardImages(requestDto, board);
     }
 
 
@@ -112,6 +111,28 @@ public class BoardService {
             throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
         }
     }
+//    private void validateDeletedImages(BoardUpdateRequestDto requestDto) {
+//        boardImageRepository.findBySavedImageUrl(requestDto.getBoardId()).stream()
+//                .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))
+//                .forEach(url -> {
+//                    boardImageRepository.delete(url);
+//                    s3Uploader.deleteImage(url.getImageUrl());
+//                });
+//    }
+//    private void uploadBoardImages(BoardUpdateRequestDto requestDto, Board board) {
+//        requestDto.getImages()
+//                .stream()
+//                .forEach(file -> {
+//                    String url = s3Uploader.upload(file, "board");
+//                    saveBoardImage(board, url);
+//                });
+//    }
+//    private List<String> getSaveImages(BoardUpdateRequestDto requestDto) {
+//        return boardImageRepository.findBySavedImageUrl(requestDto.getBoardId())
+//                .stream()
+//                .map(image -> image.getImageUrl())
+//                .collect(Collectors.toList());
+//    }
 
 
     @Transactional
