@@ -1,7 +1,9 @@
 package com.hanghae.justpotluck.domain.user.controller;
 
 import com.hanghae.justpotluck.domain.user.dto.response.MyBoardResponse;
+import com.hanghae.justpotluck.domain.user.dto.response.MyCommentResponse;
 import com.hanghae.justpotluck.domain.user.dto.response.MyPostResponse;
+import com.hanghae.justpotluck.domain.user.dto.response.MyReviewResponse;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.domain.user.service.UserService;
@@ -44,6 +46,18 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "내가 쓴 글이 정상적으로 조회된 경우")
     public ResponseEntity<Page<MyPostResponse>> findMyPosts(Pageable pageable) {
         return ResponseEntity.ok(userService.findMyPosts(pageable));
+    }
+
+    @GetMapping("/user/me/review")
+    @ApiResponse(responseCode = "200", description = "내가 쓴 글이 정상적으로 조회된 경우")
+    public ResponseEntity<Page<MyReviewResponse>> findMyReview(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyReview(pageable));
+    }
+
+    @GetMapping("/user/me/comment")
+    @ApiResponse(responseCode = "200", description = "내가 쓴 글이 정상적으로 조회된 경우")
+    public ResponseEntity<Page<MyCommentResponse>> findMyComment(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyComment(pageable));
     }
 
 
