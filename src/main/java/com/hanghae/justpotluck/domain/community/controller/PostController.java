@@ -68,7 +68,7 @@ public class PostController {
     }
 
     //커뮤니티 글 수정
-    @PutMapping("/api/community/{postId}")
+    @PatchMapping("/api/community/{postId}")
     public ResponseEntity<Success> modifyPost(@PathVariable Long postId, @ModelAttribute PostUpdateDto requestDto) {
 //        if (errors.hasErrors()) {
 //            for (FieldError error : errors.getFieldErrors()) {
@@ -81,7 +81,7 @@ public class PostController {
 
 
     //나눔 완료
-    @PatchMapping("/api/post/{postId}")
+    @PutMapping("/api/post/{postId}")
     public ResponseEntity<Success> completedPost(@PathVariable("postId") Long postId, @RequestBody PostUpdateDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {
