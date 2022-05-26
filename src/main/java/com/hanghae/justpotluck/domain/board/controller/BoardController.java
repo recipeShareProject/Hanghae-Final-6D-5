@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.board.controller;
 
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
+import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
@@ -10,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/api")
@@ -37,6 +41,11 @@ public class BoardController {
     public ResponseEntity<BoardResponseDto> saveBoard(@ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
+    }
+
+    @PostMapping("/api/community/search")
+    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto){
+        return boardService.findWantedRecipe(requestDto);
     }
 
     @PatchMapping("/board/{boardId}")
