@@ -51,17 +51,17 @@ public class Image extends Timestamped {
         this.board = board;
     }
 
-    public Image(Board board, String image) {
+    public Image(Board board, String imageUrl) {
         this.board = board;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
-    private String image;
+//    private String image;
 
     public void setBoard(Board board) {
         this.board = board;
-        if (!board.getImageList().contains(this)) {
-            board.getImageList().add(this);
+        if (!board.getProcessImages().contains(this)) {
+            board.getProcessImages().add(this);
         }
     }
 

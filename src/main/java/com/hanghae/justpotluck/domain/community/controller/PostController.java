@@ -45,19 +45,19 @@ public class PostController {
     }
 
     @GetMapping("/api/community/{postId}")
-    public PostResponseDto findPost(@PathVariable Long postId, @AuthenticationPrincipal User user) {
+    public PostResponseDto findPost(@PathVariable Long postId) {
 //        처리방법 생각해보기 (이미 로그인 없으면 못들어오는데 한 번 더 확인을 해야하는가?)
         return postService.findOne(postId);
     }
 
     @PostMapping("/api/community")
-    public ResponseEntity<Success> savePost(@RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
+    public ResponseEntity<Success> savePost(@ModelAttribute @Valid PostRequestDto requestDto, Errors errors) {
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {
                 throw new RestException(HttpStatus.BAD_REQUEST, "잘못된 입력방법입니다.");
             }
         }
-        postService.save(requestDto, user.getName());
+        postService.savePost(requestDto);
         return new ResponseEntity<>(new Success(true, "게시글 저장 성공"), HttpStatus.OK);
     }
 
@@ -67,19 +67,21 @@ public class PostController {
         return new ResponseEntity<>(new Success(true, "게시글 삭제 성공"), HttpStatus.OK);
     }
 
-    @PutMapping("/api/community/{postId}")
-    public ResponseEntity<Success> modifyPost(@PathVariable Long postId, @RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
-        if (errors.hasErrors()) {
-            for (FieldError error : errors.getFieldErrors()) {
-                throw new RestException(HttpStatus.BAD_REQUEST, error.getDefaultMessage());
-            }
-        }
-        postService.modify(postId, requestDto, user.getName());
+    //커뮤니티 글 수정
+    @PatchMapping("/api/community/{postId}")
+    public ResponseEntity<Success> modifyPost(@PathVariable Long postId, @ModelAttribute PostUpdateDto requestDto) {
+//        if (errors.hasErrors()) {
+//            for (FieldError error : errors.getFieldErrors()) {
+//                throw new RestException(HttpStatus.BAD_REQUEST, error.getDefaultMessage());
+//            }
+//        }
+        postService.modify(postId, requestDto);
         return new ResponseEntity<>(new Success(true, "게시글 수정 성공"), HttpStatus.OK);
     }
 
 
-    @PatchMapping("/api/post/{postId}")
+    //나눔 완료
+    @PutMapping("/api/post/{postId}")
     public ResponseEntity<Success> completedPost(@PathVariable("postId") Long postId, @RequestBody PostUpdateDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {

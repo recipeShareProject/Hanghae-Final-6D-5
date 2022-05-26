@@ -1,14 +1,15 @@
 package com.hanghae.justpotluck.domain.community.entity;
 
-import com.hanghae.justpotluck.global.config.Timestamped;
-import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
-import com.hanghae.justpotluck.domain.comment.entity.Comments;
-import com.hanghae.justpotluck.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AllArgsConstructor;
+import com.hanghae.justpotluck.domain.comment.entity.Comments;
+import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
+import com.hanghae.justpotluck.domain.community.dto.request.PostUpdateDto;
+import com.hanghae.justpotluck.domain.user.entity.User;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,7 +17,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +26,14 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Getter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Posts extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "postId")
+    @Column(name = "post_id")
     private Long postId;
 
     @Column(nullable = false)
@@ -43,34 +43,46 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private String image;
+//    @Column
+//    private String image;
 
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "posts",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<PostImage> images = new ArrayList<>();
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String category;
 
-    @OneToMany(mappedBy = "posts")
-    @Column
-    List<Tag> tags = new ArrayList<>();
+//    @OneToMany(mappedBy = "posts")
+//    @Column
+    ArrayList<String> tags = new ArrayList<>();
 
-    @Column(nullable = false)
+    //https 인증 받고 geolcation api
+    //    @Column(nullable = false)
     private Double latitude;
 
-    @Column(nullable = false)
+    //    @Column(nullable = false)
+    private String location;
     private Double longitude;
 
-    @Column(nullable = false)
-    private String location;
+    //    @Column(nullable = false)
+//    @Embedded
+//    private Location location;
+
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @Column(nullable = false)
-    private LocalDateTime expiredAt;
+//    @Column(nullable = false)
+    private LocalDateTime expiredAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
     private List<Comments> commentList = new ArrayList<>();
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public void addComment(Comments comment) {
@@ -79,23 +91,32 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(String title, String content, String image, String category, Double longitude, Double latitude, LocalDateTime expiredAt, List<Tag> tags){
+    public Posts(User user, String title, String content,String category, String location, Double longitude, Double latitude, ArrayList<String> tags){
+        this.user = user;
         this.title = title;
         this.content = content;
-        this.image = image;
         this.category = category;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.expiredAt = expiredAt;
+        this.location = location;
         this.tags = tags;
     }
 
-    public void update(PostRequestDto requestDto){
+    public static Posts createPost(PostRequestDto requestDto) {
+        return Posts.builder()
+                .title(requestDto.getTitle())
+                .category(requestDto.getCategory())
+                .content(requestDto.getContent())
+//                .user(user)
+                .build();
+    }
+
+    public void update(PostUpdateDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.image = requestDto.getImagePath();
         this.category = requestDto.getCategory();
-        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+//        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+//        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
     }
 
     public void update(String category) {
