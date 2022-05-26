@@ -3,6 +3,7 @@ package com.hanghae.justpotluck.domain.board.controller;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
+import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +34,11 @@ public class BoardController {
     @GetMapping("/board/{boardId}")
     public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardService.getBoard(boardId));
+    }
+
+    @GetMapping("/board")
+    public List<BoardListResponse> getAllBoard() {
+        return boardService.getAllBoard();
     }
 
     @ResponseStatus(HttpStatus.CREATED)

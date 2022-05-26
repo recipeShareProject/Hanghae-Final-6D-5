@@ -17,17 +17,14 @@ import java.util.List;
 public class BoardResponseDto extends Timestamped {
     private Long id;
     private String title;
-//    private String contents;
     private List<String> process;
-//    private List<String> images;
     private String category;
-//    private User user;
-//    private String nickname;
+    private String writer;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private String cookTime;
     private List<String> processImageUrl;
     private List<String> completeImageUrl;
-
     private List<Review> reviews;
     private String quantity;
     private int viewCount;
@@ -38,15 +35,26 @@ public class BoardResponseDto extends Timestamped {
         this.title = entity.getTitle();
         this.category = entity.getCategory();
         this.process = entity.getProcess();
+        this.cookTime = entity.getCookTime();
 //        this.user = entity.getUser();
         this.quantity = entity.getQuantity();
         this.viewCount = entity.getViewCount();
-//        this.imageUrl = images;
         this.processImageUrl = processImages;
         this.completeImageUrl = completeImages;
-//        this.bookmarkList = entity.getBookmarkList();
         this.reviews = entity.getReviewList();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
+    }
+
+    public BoardResponseDto(Board board) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.writer = board.getUser().getName();
+        this.viewCount = board.getViewCount();
+//        this.bookmark = entity.isBookmark();
+        this.reviews = board.getReviewList();
+        this.createdAt = board.getCreatedAt();
+        this.modifiedAt = board.getModifiedAt();
+//        this.process = ;
     }
 }

@@ -64,15 +64,14 @@ public class Posts extends Timestamped {
     //https 인증 받고 geolcation api
     //    @Column(nullable = false)
     private Double latitude;
-
+    private Double longitude;
     //    @Column(nullable = false)
     private String location;
-    private Double longitude;
+
 
     //    @Column(nullable = false)
 //    @Embedded
 //    private Location location;
-
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 //    @Column(nullable = false)
@@ -107,6 +106,7 @@ public class Posts extends Timestamped {
                 .title(requestDto.getTitle())
                 .category(requestDto.getCategory())
                 .content(requestDto.getContent())
+                .location(requestDto.getLocation())
 //                .user(user)
                 .build();
     }

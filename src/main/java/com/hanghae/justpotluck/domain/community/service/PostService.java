@@ -65,6 +65,20 @@ public class PostService {
         return responseDto;
     }
 
+    public List<PostResponseDto> getAllPost() {
+        List<PostResponseDto> listPost = new ArrayList<>();
+        List<Posts> posts = postRepository.findAllByOrderByExpiredAtDesc();
+
+        for (Posts post : posts) {
+            List<String> postImages = postImageRepository.findBySavedImageUrl(post.getPostId())
+                    .stream()
+                    .map(image ->image.getImageUrl())
+                    .collect(Collectors.toList());
+            listPost.add(new PostResponseDto(post, postImages));
+        }
+        return listPost;
+    }
+
 
     @Transactional
     public PostResponseDto findOne(Long postId) {

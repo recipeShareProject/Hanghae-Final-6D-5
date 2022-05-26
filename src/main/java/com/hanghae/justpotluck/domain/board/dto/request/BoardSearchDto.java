@@ -2,6 +2,7 @@ package com.hanghae.justpotluck.domain.board.dto.request;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,7 +14,7 @@ public class BoardSearchDto {
 
     private String order;
     private String search;
-    private String nation;
-    private List<String> include;
-    private List<String> exclude;
+    private String category;
+    private ArrayList<String> include;
+    private ArrayList<String> exclude;
 }
