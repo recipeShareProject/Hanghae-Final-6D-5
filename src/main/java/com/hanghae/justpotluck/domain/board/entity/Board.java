@@ -28,14 +28,14 @@ public class Board extends Timestamped {
 //    조리법
 //    private String contents;
     private String quantity;
-
-    //    @ManyToOne
-//    private FoodCategory category;
     private String category;
 //    private String nickname;
     private int viewCount;
     private boolean bookmark;
     private String cookTime;
+
+    //얘를 어떻게 할 건지
+    private ArrayList<String> ingredients;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
