@@ -1,6 +1,9 @@
 package com.hanghae.justpotluck.domain.comment.repository;
 
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
+import com.hanghae.justpotluck.domain.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +23,6 @@ public interface CommentRepository extends JpaRepository<Comments, Long> {
     Optional<Comments> findByCommentId(Long CommentId);
 
     void delete(Comments comment);
+
+    Page<Comments> findByUserOrderByCommentIdDesc(User user, Pageable pageable);
 }

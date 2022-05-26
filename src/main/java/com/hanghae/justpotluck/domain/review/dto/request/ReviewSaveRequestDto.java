@@ -14,7 +14,7 @@ import java.util.List;
 public class ReviewSaveRequestDto {
     private Long boardId;
     private Long reviewId;
-    private String contents;
+    private String comment;
     private String nickname;
     private List<MultipartFile> images = new ArrayList<>();
 

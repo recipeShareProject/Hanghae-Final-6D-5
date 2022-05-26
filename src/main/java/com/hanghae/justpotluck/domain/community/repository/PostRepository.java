@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.community.repository;
 
 import com.hanghae.justpotluck.domain.community.entity.Posts;
+import com.hanghae.justpotluck.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +25,7 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     Page<Posts> findPostsToUser(@Param("longitude") Double longitude, @Param("latitude") Double latitude, Pageable pageable);
 
 
-
+    Page<Posts> findByUserOrderByPostIdDesc(User user, Pageable pageable);
     List<Posts> findAllByExpiredAtBefore(LocalDateTime now);
 
     List<Posts> findAllByOrderByCreatedAtDesc();

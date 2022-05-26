@@ -2,6 +2,7 @@ package com.hanghae.justpotluck.domain.board.repository;
 
 
 import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustom
 
     @Query(value = "select p from Board p where p.ingredients in :include and p.ingredients not in :exclude and p.category = :category and p.title like :title order by (size(:include)/size(p.ingredients)) desc", nativeQuery = true)
     List<Board> findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByMatchDesc(ArrayList<String> include, ArrayList<String> exclude, String category, String title);
+
+    Page<Board> findByUserOrderByIdDesc(User user, Pageable pageable);
 }

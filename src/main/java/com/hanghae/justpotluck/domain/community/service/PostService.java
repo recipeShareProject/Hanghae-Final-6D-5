@@ -22,15 +22,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class PostService {
@@ -41,15 +42,15 @@ public class PostService {
     private final UserUtil userUtil;
     private final S3Uploader s3Uploader;
 
-    @Scheduled(cron="0 0 00 * * *")
-    public void updateExpired(){
+    @Scheduled(cron = "0 0 00 * * *")
+    public void updateExpired() {
         List<Posts> posts = postRepository.findAllByExpiredAtBefore(LocalDateTime.now());
-        for (Posts post : posts){
+        for (Posts post : posts) {
             post.update("나눔완료");
         }
     }
 
-//    반경 쿼리만 작성하면 완료
+    //    반경 쿼리만 작성하면 완료
     @Transactional
     public List<PostThumbnailDto> findPosts(int pagingCnt, Double longitude, Double latitude) {
 
@@ -65,6 +66,7 @@ public class PostService {
         return responseDto;
     }
 
+    @Transactional
     public List<PostResponseDto> getAllPost() {
         List<PostResponseDto> listPost = new ArrayList<>();
         List<Posts> posts = postRepository.findAllByOrderByExpiredAtDesc();
@@ -72,7 +74,7 @@ public class PostService {
         for (Posts post : posts) {
             List<String> postImages = postImageRepository.findBySavedImageUrl(post.getPostId())
                     .stream()
-                    .map(image ->image.getImageUrl())
+                    .map(image -> image.getImageUrl())
                     .collect(Collectors.toList());
             listPost.add(new PostResponseDto(post, postImages));
         }
@@ -87,7 +89,7 @@ public class PostService {
         );
         List<String> postImages = post.getImages()
                 .stream()
-                .map(image ->image.getImageUrl())
+                .map(image -> image.getImageUrl())
                 .collect(Collectors.toList());
         return new PostResponseDto(post, postImages);
     }
@@ -131,6 +133,7 @@ public class PostService {
 //                .posts(posts)
 //                .build());
     }
+
     @Transactional
     public void delete(Long postId) {
         postRepository.deleteByPostId(postId);
@@ -162,12 +165,14 @@ public class PostService {
                     savePostImage(post, url);
                 });
     }
+
     private List<String> getSaveImages(PostUpdateDto requestDto) {
         return postImageRepository.findBySavedImageUrl(requestDto.getPostId())
                 .stream()
                 .map(image -> image.getImageUrl())
                 .collect(Collectors.toList());
     }
+
     private void validateDeletedImages(PostUpdateDto requestDto) {
         postImageRepository.findBySavedImageUrl(requestDto.getPostId()).stream()
                 .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))

@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -117,6 +118,7 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<BoardListResponse> getAllBoard() {
         List<BoardListResponse> listBoard = new ArrayList<>();
         List<Board> boards = boardRepository.findAllByOrderByCreatedAtDesc();
@@ -140,6 +142,7 @@ public class BoardService {
         return board;
     }
 
+    @Transactional
     public BoardResponseDto getBoard(Long boardId) {
 
         Board board = boardRepository.findById(boardId).orElseThrow(

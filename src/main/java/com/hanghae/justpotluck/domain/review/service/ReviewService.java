@@ -36,7 +36,7 @@ public class ReviewService {
         Board board = boardRepository.findById(requestDto.getBoardId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
-        Review review = reviewRepository.save(Review.createReview(requestDto.getContents(), requestDto.getNickname(), board));
+        Review review = reviewRepository.save(Review.createReview(requestDto.getComment(), board));
         List<String> reviewImages = uploadReviewImages(requestDto, review);
         return new ReviewSaveResponse(requestDto.getBoardId(), review.getId(), reviewImages);
     }
@@ -65,7 +65,7 @@ public class ReviewService {
         validateDeletedImages(requestDto);
         uploadReviewImages(requestDto, review);
         List<String> saveImages = getSaveImages(requestDto);
-        review.updateReview(requestDto.getContents());
+        review.updateReview(requestDto.getComment());
         return new ReviewUpdateResponse(review.getBoard().getId(), review.getId(), saveImages);
     }
 

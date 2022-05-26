@@ -23,9 +23,10 @@ public class Review extends Timestamped {
     @Column(name = "review_id")
     private Long id;
 
-    private String contents;
+    private String comment;
+
 //    private User user;
-    private String nickname;
+//    private String nickname;
 
     @JsonBackReference
     @OneToMany(
@@ -41,22 +42,21 @@ public class Review extends Timestamped {
     private Board board;
 
     @Builder
-    public Review(Board board, String contents, String nickname) {
+    public Review(Board board, String comment) {
         this.board = board;
-        this.contents = contents;
-        this.nickname = nickname;
+        this.comment = comment;
+//        this.nickname = nickname;
     }
 
-    public static Review createReview(String contents, String nickname, Board board) {
+    public static Review createReview(String comment, Board board) {
         return Review.builder()
-                .contents(contents)
-                .nickname(nickname)
+                .comment(comment)
                 .board(board)
                 .build();
     }
 
-    public void updateReview(String contents) {
-        this.contents = contents;
+    public void updateReview(String comment) {
+        this.comment = comment;
     }
 
     public void addImage(Image image) {
