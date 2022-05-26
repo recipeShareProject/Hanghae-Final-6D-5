@@ -1,5 +1,6 @@
 package com.hanghae.justpotluck.domain.comment.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hanghae.justpotluck.global.config.Timestamped;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.user.entity.User;
@@ -25,6 +26,7 @@ public class Comments extends Timestamped {
     @Column(name = "comment_id")
     private Long commentId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Posts post;

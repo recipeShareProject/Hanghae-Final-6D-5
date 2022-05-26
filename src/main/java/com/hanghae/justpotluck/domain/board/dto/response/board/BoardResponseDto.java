@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,7 +18,8 @@ public class BoardResponseDto extends Timestamped {
     private Long id;
     private String title;
 //    private String contents;
-    private ArrayList<String> processList;
+    private List<String> process;
+//    private List<String> images;
     private String category;
 //    private User user;
 //    private String nickname;
@@ -37,7 +37,7 @@ public class BoardResponseDto extends Timestamped {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.category = entity.getCategory();
-        this.processList = entity.getProcess();
+        this.process = entity.getProcess();
 //        this.user = entity.getUser();
         this.quantity = entity.getQuantity();
         this.viewCount = entity.getViewCount();

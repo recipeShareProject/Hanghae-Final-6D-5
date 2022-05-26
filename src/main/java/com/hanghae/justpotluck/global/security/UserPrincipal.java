@@ -28,6 +28,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     public User getUser() {
         return user;
     }
+
     public UserPrincipal(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
@@ -60,7 +61,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return user.getEmail();
     }
 
     @Override

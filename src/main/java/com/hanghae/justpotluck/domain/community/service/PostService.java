@@ -1,15 +1,15 @@
 package com.hanghae.justpotluck.domain.community.service;
 
-import com.hanghae.justpotluck.domain.community.entity.PostImage;
 import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
 import com.hanghae.justpotluck.domain.community.dto.request.PostThumbnailDto;
 import com.hanghae.justpotluck.domain.community.dto.request.PostUpdateDto;
 import com.hanghae.justpotluck.domain.community.dto.response.PostResponseDto;
 import com.hanghae.justpotluck.domain.community.dto.response.PostSaveReponse;
+import com.hanghae.justpotluck.domain.community.dto.response.PostUpdateResponse;
+import com.hanghae.justpotluck.domain.community.entity.PostImage;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.community.repository.PostImageRepository;
 import com.hanghae.justpotluck.domain.community.repository.PostRepository;
-import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.global.exception.RestException;
@@ -28,6 +28,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -70,7 +71,11 @@ public class PostService {
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
-        return new PostResponseDto(post);
+        List<String> postImages = post.getImages()
+                .stream()
+                .map(image ->image.getImageUrl())
+                .collect(Collectors.toList());
+        return new PostResponseDto(post, postImages);
     }
 
     @Transactional
@@ -86,24 +91,25 @@ public class PostService {
 //                .expiredAt(LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")))
 //                .title(requestDto.getTitle())
 //                .build();
-        Posts posts = postRepository.save(Posts.createPost(requestDto));
-        List<String> postImages = uploadPostImages(requestDto, posts);
+        Posts post = postRepository.save(Posts.createPost(requestDto));
+        List<String> postImages = uploadPostImages(requestDto, post);
         return new PostSaveReponse(requestDto.getPostId(), postImages);
     }
 
-    private List<String> uploadPostImages(PostRequestDto requestDto, Posts posts) {
+    private List<String> uploadPostImages(PostRequestDto requestDto, Posts post) {
         return requestDto.getImages().stream()
                 .map(image -> s3Uploader.upload(image, "posts"))
-                .map(postUrl -> savePostImage(posts, postUrl))
+                .map(postUrl -> savePostImage(post, postUrl))
                 .map(postImage -> postImage.getImageUrl())
                 .collect(Collectors.toList());
     }
 
-    private PostImage savePostImage(Posts posts, String postUrl) {
+
+    private PostImage savePostImage(Posts post, String postUrl) {
         return postImageRepository.save(PostImage.builder()
                 .imageUrl(postUrl)
                 .storeFileName(StringUtils.getFilename(postUrl))
-                .posts(posts)
+                .posts(post)
                 .build());
 //        return postImageRepository.save(PostImage.builder()
 //                .imageUrl(url)
@@ -117,17 +123,44 @@ public class PostService {
     }
 
     @Transactional
-    public void modify(Long postId, PostRequestDto requestDto, String username) {
+    public PostUpdateResponse modify(Long postId, PostUpdateDto requestDto) {
 
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
+        validateDeletedImages(requestDto);
+        uploadPostImages(requestDto, post);
+        List<String> saveImages = getSaveImages(requestDto);
+        post.update(requestDto);
+        return new PostUpdateResponse(post.getPostId(), saveImages);
+//        if (post.getUser().getName().equals(username)) {
+//            post.update(requestDto);
+//        } else {
+//            throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
+//        }
+    }
 
-        if (post.getUser().getName().equals(username)) {
-            post.update(requestDto);
-        } else {
-            throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
-        }
+    private void uploadPostImages(PostUpdateDto requestDto, Posts post) {
+        requestDto.getImages()
+                .stream()
+                .forEach(file -> {
+                    String url = s3Uploader.upload(file, "posts");
+                    savePostImage(post, url);
+                });
+    }
+    private List<String> getSaveImages(PostUpdateDto requestDto) {
+        return postImageRepository.findBySavedImageUrl(requestDto.getPostId())
+                .stream()
+                .map(image -> image.getImageUrl())
+                .collect(Collectors.toList());
+    }
+    private void validateDeletedImages(PostUpdateDto requestDto) {
+        postImageRepository.findBySavedImageUrl(requestDto.getPostId()).stream()
+                .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))
+                .forEach(url -> {
+                    postImageRepository.delete(url);
+                    s3Uploader.deleteImage(url.getImageUrl());
+                });
     }
 
     @Transactional

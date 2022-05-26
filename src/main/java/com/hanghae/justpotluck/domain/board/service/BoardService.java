@@ -41,6 +41,7 @@ public class BoardService {
     @Transactional
     public BoardResponseDto saveBoard(BoardSaveRequestDto requestDto) throws Exception {
 //        User user = userUtil.findCurrentUser();
+//        User user = userPrincipal.getUser();
         Board board = boardRepository.save(Board.createBoard(requestDto));
         List<String> boardImages = uploadBoardImages(requestDto, board);
         List<String> boardImages2 = uploadBoardImages2(requestDto, board);

@@ -62,6 +62,10 @@ public class User implements Auditable {
     @Embedded
     private TimeEntity timeEntity;
 
+//    @Embedded
+//    @JsonIgnore
+//    private Location location;
+
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Board> boardList;
 

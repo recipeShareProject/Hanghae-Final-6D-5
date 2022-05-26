@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
+import com.hanghae.justpotluck.domain.community.dto.request.PostUpdateDto;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
@@ -16,7 +17,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,18 +63,19 @@ public class Posts extends Timestamped {
 
     //https 인증 받고 geolcation api
     //    @Column(nullable = false)
-    private Double latitude = 0.0;
-
-//    @Column(nullable = false)
-
-    private Double longitude = 0.0;
+    private Double latitude;
 
     //    @Column(nullable = false)
-    private String location = "도화동";
+    private String location;
+    private Double longitude;
+
+    //    @Column(nullable = false)
+//    @Embedded
+//    private Location location;
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private LocalDateTime expiredAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
@@ -90,13 +91,14 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(User user, String title, String content,String category, Double longitude, Double latitude, ArrayList<String> tags){
+    public Posts(User user, String title, String content,String category, String location, Double longitude, Double latitude, ArrayList<String> tags){
         this.user = user;
         this.title = title;
         this.content = content;
         this.category = category;
-//        this.longitude = longitude;
-//        this.latitude = latitude;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.location = location;
         this.tags = tags;
     }
 
@@ -109,11 +111,12 @@ public class Posts extends Timestamped {
                 .build();
     }
 
-    public void update(PostRequestDto requestDto){
+    public void update(PostUpdateDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
-        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+//        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+//        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
     }
 
     public void update(String category) {

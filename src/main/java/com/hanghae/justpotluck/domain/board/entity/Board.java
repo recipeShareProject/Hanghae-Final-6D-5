@@ -54,9 +54,8 @@ public class Board extends Timestamped {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<CompleteImage> completeImages = new ArrayList<>();
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(columnDefinition = "TEXT")
+    private List<Image> completeImages = new ArrayList<>();
+
     private ArrayList<String> process;
 //    private List<Ingredient> ingredientList;
 
@@ -103,7 +102,7 @@ public class Board extends Timestamped {
         this.quantity = requestDto.getQuantity();
         this.category = requestDto.getCategory();
 //        this.ingredientList = requestDto.getIngredient();
-        this.process = requestDto.getProcessList();
+        this.process = requestDto.getProcess();
     }
 
     public void addImage(Image image) {

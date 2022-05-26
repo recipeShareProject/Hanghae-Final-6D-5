@@ -67,18 +67,20 @@ public class PostController {
         return new ResponseEntity<>(new Success(true, "게시글 삭제 성공"), HttpStatus.OK);
     }
 
+    //커뮤니티 글 수정
     @PutMapping("/api/community/{postId}")
-    public ResponseEntity<Success> modifyPost(@PathVariable Long postId, @RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
-        if (errors.hasErrors()) {
-            for (FieldError error : errors.getFieldErrors()) {
-                throw new RestException(HttpStatus.BAD_REQUEST, error.getDefaultMessage());
-            }
-        }
-        postService.modify(postId, requestDto, user.getName());
+    public ResponseEntity<Success> modifyPost(@PathVariable Long postId, @ModelAttribute PostUpdateDto requestDto) {
+//        if (errors.hasErrors()) {
+//            for (FieldError error : errors.getFieldErrors()) {
+//                throw new RestException(HttpStatus.BAD_REQUEST, error.getDefaultMessage());
+//            }
+//        }
+        postService.modify(postId, requestDto);
         return new ResponseEntity<>(new Success(true, "게시글 수정 성공"), HttpStatus.OK);
     }
 
 
+    //나눔 완료
     @PatchMapping("/api/post/{postId}")
     public ResponseEntity<Success> completedPost(@PathVariable("postId") Long postId, @RequestBody PostUpdateDto requestDto, @AuthenticationPrincipal User user, Errors errors) {
         if (errors.hasErrors()) {

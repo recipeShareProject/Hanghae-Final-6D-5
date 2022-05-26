@@ -21,7 +21,7 @@ public class PostThumbnailDto {
         this.communityId = post.getPostId();
         this.title = post.getTitle();
         this.category = post.getCategory();
-        this.location = post.getLocation();
+//        this.location = post.getLocation();
         this.createdAt = post.getCreatedAt();
     }
 }

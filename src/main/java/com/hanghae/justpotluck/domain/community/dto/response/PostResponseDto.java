@@ -23,18 +23,20 @@ public class PostResponseDto {
     private String location;
     private Double longitude;
     private Double latitude;
+    private List<String> images;
 //    private LocalDateTime createdAt;
 //    private LocalDateTime modifiedAt;
     private List<Comments> commentList;
 
-    public PostResponseDto(Posts post) {
+    public PostResponseDto(Posts post, List<String> postImages) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
-        this.location = post.getLocation();
+//        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
+        this.images = postImages;
         this.longitude = post.getLongitude();
         this.latitude = post.getLatitude();
         this.expiredAt = post.getExpiredAt();
