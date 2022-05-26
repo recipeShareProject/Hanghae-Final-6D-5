@@ -84,10 +84,11 @@ public class Comments extends Timestamped {
 
 
     @Builder
-    public Comments(Posts post, Comments parent, String comment) {
+    public Comments(Posts post, Comments parent, String comment, User user) {
         this.post = post;
         this.parent = parent;
         this.comment = comment;
+        this.user = user;
         this.isRemoved = false;
     }
 

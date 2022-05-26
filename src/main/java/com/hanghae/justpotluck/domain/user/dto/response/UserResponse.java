@@ -21,7 +21,6 @@ public class UserResponse {
     @ApiModelProperty(value = "유저 식별자", example = "1")
     private Long id;
 
-
     @ApiModelProperty(value = "유저 닉네임")
     private String name;
 

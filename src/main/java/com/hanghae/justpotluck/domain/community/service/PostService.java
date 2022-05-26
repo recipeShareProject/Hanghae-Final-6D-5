@@ -10,6 +10,7 @@ import com.hanghae.justpotluck.domain.community.entity.PostImage;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.community.repository.PostImageRepository;
 import com.hanghae.justpotluck.domain.community.repository.PostRepository;
+import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.global.exception.RestException;
@@ -97,17 +98,8 @@ public class PostService {
     @Transactional
     public PostSaveReponse savePost(PostRequestDto requestDto) {
 //        유저 DB 확인 후 수정
-//        User user = userUtil.findCurrentUser();
-//        User result = userRepository.findByName(username).orElseThrow(
-//                () -> new RestException(HttpStatus.NOT_FOUND, "해당 username이 존재하지 않습니다.")
-//        );
-//        Posts post = Posts.builder()
-//                .content(requestDto.getContent())
-//                .category(requestDto.getCategory())
-//                .expiredAt(LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")))
-//                .title(requestDto.getTitle())
-//                .build();
-        Posts post = postRepository.save(Posts.createPost(requestDto));
+        User user = userUtil.findCurrentUser();
+        Posts post = postRepository.save(Posts.createPost(requestDto, user));
         List<String> postImages = uploadPostImages(requestDto, post);
         return new PostSaveReponse(requestDto.getPostId(), postImages);
     }

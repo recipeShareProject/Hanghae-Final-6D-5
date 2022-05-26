@@ -101,13 +101,13 @@ public class Posts extends Timestamped {
         this.tags = tags;
     }
 
-    public static Posts createPost(PostRequestDto requestDto) {
+    public static Posts createPost(PostRequestDto requestDto, User user) {
         return Posts.builder()
                 .title(requestDto.getTitle())
                 .category(requestDto.getCategory())
                 .content(requestDto.getContent())
                 .location(requestDto.getLocation())
-//                .user(user)
+                .user(user)
                 .build();
     }
 

@@ -9,6 +9,7 @@ import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.community.repository.PostRepository;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
+import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
 import com.hanghae.justpotluck.domain.user.dto.response.MyBoardResponse;
 import com.hanghae.justpotluck.domain.user.dto.response.MyCommentResponse;
 import com.hanghae.justpotluck.domain.user.dto.response.MyPostResponse;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +68,23 @@ public class UserService {
             return false;
         }
     }
+
+    @Transactional
+    public User update(UserUpdateRequest userUpdateRequest) {
+        User user = userUtil.findCurrentUser();
+        // 닉네임 중복 확인
+        if (userRepository.existsByName(userUpdateRequest.getName())) {
+            throw new CustomException(ErrorCode.ALREADY_NICKNAME_EXISTS);
+        }
+
+        // 이메일 중복 확인
+        if (userRepository.existsByEmail(userUpdateRequest.getEmail())) {
+            throw new CustomException(ErrorCode.ALREADY_EMAIL_EXISTS);
+        }
+        user.update(userUpdateRequest);
+        return user;
+    }
+
 
     public Page<MyPostResponse> findMyPosts(Pageable pageable) {
         User user = userUtil.findCurrentUser();
@@ -114,6 +133,24 @@ public class UserService {
         return new PageImpl<>(reviewResponses, pageable, review.getTotalElements());
     }
 
+    public Boolean logout(HttpServletRequest request) {
+        String accessToken = authenticationFilter.getAccessToken(request);
+
+        if (!tokenProvider.validateToken(accessToken)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        String email = tokenProvider.parseClaims(accessToken).getSubject();
+
+//        if (redisTemplate.opsForValue().get("RT:" + userId) != null) {
+//            redisTemplate.delete("RT:" + userId);
+//        }
+
+        Long expiration = tokenProvider.getExpiration(accessToken);
+//        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
+
+        return true;
+    }
 
 
 

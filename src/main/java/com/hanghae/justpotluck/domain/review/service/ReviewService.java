@@ -1,17 +1,19 @@
 package com.hanghae.justpotluck.domain.review.service;
 
 
-import com.hanghae.justpotluck.global.aws.S3Uploader;
-import com.hanghae.justpotluck.domain.review.dto.request.ReviewSaveRequestDto;
-import com.hanghae.justpotluck.domain.review.dto.response.ReviewSaveResponse;
-import com.hanghae.justpotluck.domain.review.dto.request.ReviewUpdateRequestDto;
-import com.hanghae.justpotluck.domain.review.dto.response.ReviewUpdateResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
+import com.hanghae.justpotluck.domain.review.dto.request.ReviewSaveRequestDto;
+import com.hanghae.justpotluck.domain.review.dto.request.ReviewUpdateRequestDto;
+import com.hanghae.justpotluck.domain.review.dto.response.ReviewSaveResponse;
+import com.hanghae.justpotluck.domain.review.dto.response.ReviewUpdateResponse;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.entity.ReviewImage;
-import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.review.repository.ReviewImageRepository;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
+import com.hanghae.justpotluck.domain.user.entity.User;
+import com.hanghae.justpotluck.global.aws.S3Uploader;
+import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,14 +31,16 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewImageRepository reviewImageRepository;
     private final BoardRepository boardRepository;
+    private final UserUtil userUtil;
     private final S3Uploader s3Uploader;
 
     @Transactional
     public ReviewSaveResponse saveReview(ReviewSaveRequestDto requestDto) {
+        User user = userUtil.findCurrentUser();
         Board board = boardRepository.findById(requestDto.getBoardId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
-        Review review = reviewRepository.save(Review.createReview(requestDto.getComment(), board));
+        Review review = reviewRepository.save(Review.createReview(requestDto.getComment(), board, user));
         List<String> reviewImages = uploadReviewImages(requestDto, review);
         return new ReviewSaveResponse(requestDto.getBoardId(), review.getId(), reviewImages);
     }

@@ -12,6 +12,7 @@ import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
+import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.global.util.UserUtil;
@@ -44,9 +45,9 @@ public class BoardService {
 
     @Transactional
     public BoardResponseDto saveBoard(BoardSaveRequestDto requestDto) throws Exception {
-//        User user = userUtil.findCurrentUser();
+        User user = userUtil.findCurrentUser();
 //        User user = userPrincipal.getUser();
-        Board board = boardRepository.save(Board.createBoard(requestDto));
+        Board board = boardRepository.save(Board.createBoard(requestDto, user));
         List<String> boardImages = uploadBoardImages(requestDto, board);
         List<String> boardImages2 = uploadBoardImages2(requestDto, board);
 

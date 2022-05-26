@@ -22,7 +22,6 @@ public class TokenProvider {
 
     private final AppProperties appProperties;
     private final Long refreshTokenExpiry = 7 * 24 * 60 * 60 * 1000L; // 14 day
-//    private final Key key = appProperties.getAuth().getTokenSecret();
     private static final String AUTHORITIES_KEY = "role";
     private static final String GRANT_TYPE = "Bearer";
     private final CustomUserDetailsService userDetailsService;
@@ -79,24 +78,6 @@ public class TokenProvider {
                 .build();
     }
 
-
-
-//    public Long getUserIdFromToken(String token) {
-//        Claims claims = Jwts.parser()
-//                .setSigningKey(appProperties.getAuth().getTokenSecret())
-//                .parseClaimsJws(token)
-//                .getBody();
-//
-//        return Long.parseLong(claims.getSubject());
-//    }
-//
-//    public String getUserEmailFromToken(String token) {
-//        Claims claims = Jwts.parserBuilder()
-//                .setSigningKey(key)
-//                .build()
-//                .parseClaimsJws(token);
-//    }
-
     public boolean validateToken(String authToken) {
         try {
             Jwts.parserBuilder()
@@ -118,4 +99,11 @@ public class TokenProvider {
         }
         return false;
     }
+
+    public Long getExpiration(String authToken) {
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken).getBody().getExpiration();
+        Long now = new Date().getTime();
+        return (expiration.getTime() - now);
+    }
+
 }

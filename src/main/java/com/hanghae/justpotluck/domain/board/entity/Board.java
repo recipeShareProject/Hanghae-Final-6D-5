@@ -85,14 +85,14 @@ public class Board extends Timestamped {
 //        this.bookmarkList = bookmarkList;
     }
 
-    public static Board createBoard(BoardSaveRequestDto requestDto) {
+    public static Board createBoard(BoardSaveRequestDto requestDto, User user) {
         return Board.builder()
                 .title(requestDto.getTitle())
                 .process(requestDto.getProcess())
                 .category(requestDto.getCategory())
                 .quantity(requestDto.getQuantity())
 //                .ingredientList(requestDto.getIngredientList())
-//                .user(user)
+                .user(user)
                 .cookTime(requestDto.getCookTime())
                 .build();
     }

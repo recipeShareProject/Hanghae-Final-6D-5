@@ -35,7 +35,7 @@ public class BoardResponseDto extends Timestamped {
         this.category = entity.getCategory();
         this.process = entity.getProcess();
         this.cookTime = entity.getCookTime();
-//        this.user = entity.getUser();
+        this.writer = entity.getUser().getEmail();
         this.quantity = entity.getQuantity();
         this.viewCount = entity.getViewCount();
         this.processImageUrl = processImages;

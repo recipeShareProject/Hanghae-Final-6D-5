@@ -45,16 +45,18 @@ public class Review extends Timestamped {
     private Board board;
 
     @Builder
-    public Review(Board board, String comment) {
+    public Review(Board board, String comment, User user) {
         this.board = board;
         this.comment = comment;
+        this.user = user;
 //        this.nickname = nickname;
     }
 
-    public static Review createReview(String comment, Board board) {
+    public static Review createReview(String comment, Board board, User user) {
         return Review.builder()
                 .comment(comment)
                 .board(board)
+                .user(user)
                 .build();
     }
 

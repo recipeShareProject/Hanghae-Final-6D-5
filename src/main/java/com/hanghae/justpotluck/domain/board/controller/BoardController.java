@@ -8,10 +8,12 @@ import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
+import com.hanghae.justpotluck.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +45,7 @@ public class BoardController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/board")
-    public ResponseEntity<BoardResponseDto> saveBoard(@ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
+    public ResponseEntity<BoardResponseDto> saveBoard(@AuthenticationPrincipal UserPrincipal userPrincipal, @ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }
