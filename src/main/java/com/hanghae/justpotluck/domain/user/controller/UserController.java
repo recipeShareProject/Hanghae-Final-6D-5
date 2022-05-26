@@ -41,7 +41,7 @@ public class UserController {
     }
 
 
-    @PatchMapping
+    @PatchMapping("/user/me/update")
     @ApiOperation(value = "개인정보 수정",
             notes = "현재 사용자의 개인정보를 업데이트 합니다. 헤더(Bearer)에 사용자 토큰 주입을 필요로 합니다.")
     @ApiResponse(responseCode = "200", description = "사용자의 개인정보를 정상적으로 수정한 경우")

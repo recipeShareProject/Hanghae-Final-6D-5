@@ -27,6 +27,8 @@ public class UserResponse {
     @ApiModelProperty(value = "유저 이메일")
     private String email;
 
+    private String imageUrl;
+
     @ApiModelProperty(value = "생성 시각", example = "")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
@@ -40,6 +42,7 @@ public class UserResponse {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
+                .imageUrl(user.getImageUrl())
                 .createdDate(user.getTimeEntity().getCreatedDate())
                 .updatedDate(user.getTimeEntity().getUpdatedDate())
                 .build();
