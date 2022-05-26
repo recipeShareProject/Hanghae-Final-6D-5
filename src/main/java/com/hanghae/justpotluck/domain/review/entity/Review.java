@@ -4,6 +4,7 @@ package com.hanghae.justpotluck.domain.review.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.entity.Image;
+import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,10 @@ public class Review extends Timestamped {
 
     private String comment;
 
-//    private User user;
-//    private String nickname;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     @JsonBackReference
     @OneToMany(
