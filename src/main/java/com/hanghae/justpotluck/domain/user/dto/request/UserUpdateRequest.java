@@ -20,7 +20,7 @@ public class UserUpdateRequest {
     private String name;
     
     //현재는 이메일 나중에 닉네임으로
-    private String email;
+//    private String email;
     //프사
     private String imageUrl;
 

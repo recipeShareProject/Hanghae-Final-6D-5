@@ -76,10 +76,10 @@ public class UserService {
         if (userRepository.existsByName(userUpdateRequest.getName())) {
             throw new CustomException(ErrorCode.ALREADY_NICKNAME_EXISTS);
         }
-        // 이메일 중복 확인
-        if (userRepository.existsByEmail(userUpdateRequest.getEmail())) {
-            throw new CustomException(ErrorCode.ALREADY_EMAIL_EXISTS);
-        }
+//        // 이메일 중복 확인
+//        if (userRepository.existsByEmail(userUpdateRequest.getEmail())) {
+//            throw new CustomException(ErrorCode.ALREADY_EMAIL_EXISTS);
+//        }
         user.update(userUpdateRequest);
         return user;
     }
