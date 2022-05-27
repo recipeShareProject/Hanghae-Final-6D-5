@@ -68,6 +68,7 @@ public class Posts extends Timestamped {
     //    @Column(nullable = false)
     private String location;
 
+    private int viewCount;
 
     //    @Column(nullable = false)
 //    @Embedded

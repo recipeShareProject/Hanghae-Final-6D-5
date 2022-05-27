@@ -186,4 +186,9 @@ public class PostService {
             throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
         }
     }
+
+    @Transactional
+    public int updateView(Long id) {
+        return postRepository.updateView(id);
+    }
 }
