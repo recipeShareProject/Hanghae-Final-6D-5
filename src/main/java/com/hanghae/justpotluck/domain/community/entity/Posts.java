@@ -2,6 +2,7 @@ package com.hanghae.justpotluck.domain.community.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
@@ -11,8 +12,6 @@ import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -24,8 +23,8 @@ import static javax.persistence.CascadeType.ALL;
 
 
 @Entity
-@DynamicUpdate
-@DynamicInsert
+//@DynamicUpdate
+//@DynamicInsert
 @Data
 @NoArgsConstructor
 //@AllArgsConstructor
@@ -78,9 +77,11 @@ public class Posts extends Timestamped {
 //    @Column(nullable = false)
     private LocalDateTime expiredAt = LocalDateTime.now();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
     private List<Comments> commentList = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

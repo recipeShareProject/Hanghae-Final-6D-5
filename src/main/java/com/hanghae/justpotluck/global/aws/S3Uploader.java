@@ -74,7 +74,15 @@ public class S3Uploader {
 
     public void deleteImage(String imageUrl) {
         log.info("deleteImage = {}", imageUrl);
-        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket,"/post/" +imageUrl));
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket,"/board/" +imageUrl));
+    }
+    public void deleteReviewImage(String imageUrl) {
+        log.info("deleteImage = {}", imageUrl);
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket,"/review/" +imageUrl));
+    }
+    public void deletePostImage(String imageUrl) {
+        log.info("deleteImage = {}", imageUrl);
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket,"/posts/" +imageUrl));
     }
 }
 

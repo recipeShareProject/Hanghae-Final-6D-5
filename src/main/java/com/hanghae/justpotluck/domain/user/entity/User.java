@@ -43,6 +43,7 @@ public class User implements Auditable {
     @Column(nullable = false)
     private String email;
 
+//    private Image profileImage;
     private String imageUrl;
 
     private Double longitude;
@@ -64,15 +65,21 @@ public class User implements Auditable {
     @Embedded
     private TimeEntity timeEntity;
 
-//    @Embedded
+    //    @Embedded
 //    @JsonIgnore
 //    private Location location;
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+//    private List<Bookmark> bookmarkList;
+
 
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Board> boardList;
 
+
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Review> reviewList;
+
 
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Posts> postList;
@@ -110,9 +117,9 @@ public class User implements Auditable {
 
     public void addPost(Posts post) {this.postList.add(post);}
 
-    public void update(UserUpdateRequest updateRequest) {
+    public void update(UserUpdateRequest updateRequest, String imageUrl) {
 //        this.email = updateRequest.getEmail();
         this.name = updateRequest.getName();
-        this.imageUrl = updateRequest.getImageUrl();
+        this.imageUrl = imageUrl;
     }
 }

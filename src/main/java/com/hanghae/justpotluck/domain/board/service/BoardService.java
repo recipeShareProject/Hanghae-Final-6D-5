@@ -7,11 +7,12 @@ import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
-import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
+import com.hanghae.justpotluck.domain.review.entity.Review;
+import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
@@ -24,7 +25,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -37,6 +37,7 @@ public class BoardService {
     private final BoardImageRepository boardImageRepository;
     private final BookmarkRepository bookmarkRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
     private final S3Uploader s3Uploader;
     private final UserUtil userUtil;
 
@@ -106,7 +107,13 @@ public class BoardService {
                 });
     }
     private void uploadBoardImages(BoardUpdateRequestDto requestDto, Board board) {
-        requestDto.getImages()
+        requestDto.getProcessImages()
+                .stream()
+                .forEach(file -> {
+                    String url = s3Uploader.upload(file, "board");
+                    saveBoardImage(board, url);
+                });
+        requestDto.getCompleteImages()
                 .stream()
                 .forEach(file -> {
                     String url = s3Uploader.upload(file, "board");
@@ -150,6 +157,7 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
+        List<Review> reviews = reviewRepository.findAllByBoardIdOrderByIdDesc(boardId);
         List<String> boardImages = board.getProcessImages()
                 .stream()
                 .map(image ->image.getImageUrl())
@@ -197,20 +205,22 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    @Transactional
-    public boolean bookmarkBoard(Long boardId) {
-        Board board = getOneBoard(boardId);
-
-        Optional<Bookmark> bookmark = bookmarkRepository.findByBoard(board);
-
-        if (bookmark.isEmpty()) {
-            bookmarkRepository.save(Bookmark.createBookmark(board));
-            return true;
-        } else {
-            bookmarkRepository.delete(bookmark.get());
-            return false;
-        }
-    }
+//    @Transactional
+//    public boolean bookmarkBoard(Long boardId) {
+//        Board board = getOneBoard(boardId);
+//        User user = userUtil.findCurrentUser();
+//        Bookmark bookmark = bookmarkRepository.findByBoard(board).orElseThrow(
+//                () -> new IllegalArgumentException("해당 북마크가 없습니다.")
+//        );
+//        user.getBookmarkList().add(bookmark);
+//        if (bookmark == null) {
+//            bookmarkRepository.save(Bookmark.createBookmark(board, user));
+//            return true;
+//        } else {
+//            bookmarkRepository.delete(bookmark);
+//            return false;
+//        }
+//    }
 
     /* Views Counting */
     @Transactional

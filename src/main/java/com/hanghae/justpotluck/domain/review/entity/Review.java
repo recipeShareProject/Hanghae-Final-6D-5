@@ -2,8 +2,9 @@ package com.hanghae.justpotluck.domain.review.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.justpotluck.domain.board.entity.Board;
-import com.hanghae.justpotluck.domain.board.entity.Image;
+import com.hanghae.justpotluck.domain.review.dto.request.ReviewUpdateRequestDto;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
@@ -25,24 +26,25 @@ public class Review extends Timestamped {
     private Long id;
 
     private String comment;
+    private String category;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
-    @JsonBackReference
-    @OneToMany(
-            mappedBy = "review",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private List<Image> images = new ArrayList<>();
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "review",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<ReviewImage> images = new ArrayList<>();
 
     @Builder
     public Review(Board board, String comment, User user) {
@@ -60,16 +62,22 @@ public class Review extends Timestamped {
                 .build();
     }
 
-    public void updateReview(String comment) {
-        this.comment = comment;
+    public void updateReview(ReviewUpdateRequestDto requestDto) {
+        this.comment = requestDto.getComment();
+        this.category = requestDto.getCategory();
     }
 
-    public void addImage(Image image) {
-        this.images.add(image);
-        if (image.getReview() != this) {
-            image.setReview(this);
-        }
-    }
-
+//    public void setImage(ReviewImage image) {
+//        this.images.add(image);
+//        if (image.getReview() != this) {
+//            image.setReview(this);
+//        }
+//    }
+//
+//    public void setBoard(Board board) {
+//        this.board = board;
+//        if (!board.getReviewList().contains(this)) {
+//            board.getReviewList().add(this);
+//        }
 
 }

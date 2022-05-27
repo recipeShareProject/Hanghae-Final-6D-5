@@ -3,6 +3,7 @@ package com.hanghae.justpotluck.domain.user.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
@@ -22,6 +23,6 @@ public class UserUpdateRequest {
     //현재는 이메일 나중에 닉네임으로
 //    private String email;
     //프사
-    private String imageUrl;
+    private MultipartFile profileImage;
 
 }

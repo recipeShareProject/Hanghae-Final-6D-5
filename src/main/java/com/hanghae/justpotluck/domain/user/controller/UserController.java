@@ -1,5 +1,6 @@
 package com.hanghae.justpotluck.domain.user.controller;
 
+import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
 import com.hanghae.justpotluck.domain.user.dto.response.*;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -44,7 +46,7 @@ public class UserController {
 
     @GetMapping("/user/me/board")
     @ApiResponse(responseCode = "200", description = "내가 쓴 글이 정상적으로 조회된 경우")
-    public ResponseEntity<Page<MyBoardResponse>> findMyBoard(Pageable pageable) {
+    public ResponseEntity<List<BoardListResponse>> findMyBoard(Pageable pageable) {
         return ResponseEntity.ok(userService.findMyBoard(pageable));
     }
 
@@ -61,6 +63,11 @@ public class UserController {
     @GetMapping("/user/me/comment")
     public ResponseEntity<Page<MyCommentResponse>> findMyComment(Pageable pageable) {
         return ResponseEntity.ok(userService.findMyComment(pageable));
+    }
+
+    @GetMapping("/user/me/bookmark")
+    public ResponseEntity<Page<MyBookmarkResponse>> findMyBookmark(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyBookmark(pageable));
     }
 
 

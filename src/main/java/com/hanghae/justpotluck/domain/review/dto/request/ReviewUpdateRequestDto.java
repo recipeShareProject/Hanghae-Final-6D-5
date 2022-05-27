@@ -13,6 +13,7 @@ public class ReviewUpdateRequestDto {
 
     private Long reviewId;
     private String comment;
+    private String category;
 
     private List<String> saveImageUrl = new ArrayList<>();
 

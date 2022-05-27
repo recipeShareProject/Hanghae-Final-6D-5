@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Board extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -37,6 +39,7 @@ public class Board extends Timestamped {
     //얘를 어떻게 할 건지
     private ArrayList<String> ingredients;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -48,6 +51,7 @@ public class Board extends Timestamped {
             orphanRemoval = true
     )
     private List<Image> processImages = new ArrayList<>();
+
     @JsonBackReference
     @OneToMany(
             mappedBy = "board",
@@ -60,7 +64,7 @@ public class Board extends Timestamped {
 //    private List<Ingredient> ingredientList;
 
     @JsonIgnoreProperties({"board"})
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Review> reviewList;
 
     //이제 리스트로 받을 필요 없음

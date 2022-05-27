@@ -170,7 +170,7 @@ public class PostService {
                 .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))
                 .forEach(url -> {
                     postImageRepository.delete(url);
-                    s3Uploader.deleteImage(url.getImageUrl());
+                    s3Uploader.deletePostImage(url.getImageUrl());
                 });
     }
 

@@ -1,8 +1,8 @@
 package com.hanghae.justpotluck.domain.board.entity;
 
-import com.hanghae.justpotluck.global.config.Timestamped;
-import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hanghae.justpotluck.domain.review.entity.Review;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,12 +64,12 @@ public class Image extends Timestamped {
             board.getProcessImages().add(this);
         }
     }
+//    public void setReview(Review review) {
+//        this.review = review;
+//        if (!review.getImages().contains(this)) {
+//            review.getImages().add(this);
+//        }
+//    }
 
-    public void setReview(Review review) {
-        this.review = review;
-        if (!review.getImages().contains(this)) {
-            review.getImages().add(this);
-        }
-    }
 
 }

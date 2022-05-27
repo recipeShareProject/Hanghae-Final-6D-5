@@ -13,9 +13,11 @@ import com.hanghae.justpotluck.domain.review.repository.ReviewImageRepository;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
+import com.hanghae.justpotluck.global.exception.RestException;
 import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -65,12 +67,12 @@ public class ReviewService {
     public ReviewUpdateResponse updateReview(ReviewUpdateRequestDto requestDto) {
         User user = userUtil.findCurrentUser();
         Review review = reviewRepository.findById(requestDto.getReviewId()).orElseThrow(
-                () -> new IllegalArgumentException("해당 댓글이 없습니다.")
+                () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
         validateDeletedImages(requestDto);
         uploadReviewImages(requestDto, review);
         List<String> saveImages = getSaveImages(requestDto);
-        review.updateReview(requestDto.getComment());
+        review.updateReview(requestDto);
         return new ReviewUpdateResponse(review.getBoard().getId(), review.getId(), saveImages);
     }
 
@@ -79,7 +81,7 @@ public class ReviewService {
                 .filter(reviewImage -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(reviewImage.getImageUrl())))
                 .forEach(url -> {
                     reviewImageRepository.delete(url);
-                    s3Uploader.deleteImage(url.getImageUrl());
+                    s3Uploader.deleteReviewImage(url.getImageUrl());
                 });
     }
     private void uploadReviewImages(ReviewUpdateRequestDto request, Review review) {

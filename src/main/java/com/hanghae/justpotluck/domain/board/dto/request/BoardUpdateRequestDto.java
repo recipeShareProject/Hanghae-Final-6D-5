@@ -22,7 +22,8 @@ public class BoardUpdateRequestDto {
     private ArrayList<String> process;
     private List<String> ingredients = new ArrayList<>();
     private List<String> saveImageUrl = new ArrayList<>();
-    private List<MultipartFile> images = new ArrayList<>();
+    private List<MultipartFile> processImages = new ArrayList<>();
+    private List<MultipartFile> completeImages = new ArrayList<>();
 //    private List<Ingredient> ingredient;
 //    private LocalDateTime modifiedAt;
 

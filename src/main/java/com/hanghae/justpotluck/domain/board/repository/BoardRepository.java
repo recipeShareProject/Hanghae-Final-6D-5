@@ -28,6 +28,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustom
     List<Board> findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByMatchDesc(ArrayList<String> include, ArrayList<String> exclude, String category, String title);
 
     Page<Board> findByUserOrderByIdDesc(User user, Pageable pageable);
+
+    Page<Board> findByUserAndIsBookmark(User user, Boolean isBookmark, Pageable pageable);
     @Modifying
     @Query("update Board b set b.viewCount = b.viewCount + 1 where b.id = :id")
     int updateView(Long id);

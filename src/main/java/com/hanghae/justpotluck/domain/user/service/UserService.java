@@ -1,6 +1,9 @@
 package com.hanghae.justpotluck.domain.user.service;
 
+import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.board.entity.Bookmark;
+import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
@@ -10,12 +13,13 @@ import com.hanghae.justpotluck.domain.community.repository.PostRepository;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
 import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
-import com.hanghae.justpotluck.domain.user.dto.response.MyBoardResponse;
+import com.hanghae.justpotluck.domain.user.dto.response.MyBookmarkResponse;
 import com.hanghae.justpotluck.domain.user.dto.response.MyCommentResponse;
 import com.hanghae.justpotluck.domain.user.dto.response.MyPostResponse;
 import com.hanghae.justpotluck.domain.user.dto.response.MyReviewResponse;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
+import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.global.exception.CustomException;
 import com.hanghae.justpotluck.global.exception.ErrorCode;
 import com.hanghae.justpotluck.global.security.TokenAuthenticationFilter;
@@ -29,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +50,8 @@ public class UserService {
     private final BookmarkRepository bookmarkRepository;
     private final TokenProvider tokenProvider;
     private final TokenAuthenticationFilter authenticationFilter;
+    private final BoardImageRepository boardImageRepository;
+    private final S3Uploader s3Uploader;
 
 
     public User getUser() {
@@ -76,11 +83,14 @@ public class UserService {
         if (userRepository.existsByName(userUpdateRequest.getName())) {
             throw new CustomException(ErrorCode.ALREADY_NICKNAME_EXISTS);
         }
+
+        String imageUrl = s3Uploader.upload(userUpdateRequest.getProfileImage(), "profile");
+
 //        // 이메일 중복 확인
 //        if (userRepository.existsByEmail(userUpdateRequest.getEmail())) {
 //            throw new CustomException(ErrorCode.ALREADY_EMAIL_EXISTS);
 //        }
-        user.update(userUpdateRequest);
+        user.update(userUpdateRequest, imageUrl);
         return user;
     }
 
@@ -96,17 +106,59 @@ public class UserService {
 
         return new PageImpl<>(postResponses, pageable, post.getTotalElements());
     }
+//    @Transactional
+//    public List<PostListResponse> findMyPost(Pageable pageable) {
+//        User user = userUtil.findCurrentUser();
+//        List<BoardListResponse> listMyBoard = new ArrayList<>();
+//        Page<Board> boards = boardRepository.findByUserOrderByIdDesc(user, pageable);
+//
+//        for (Board board : boards) {
+//            List<String> boardImages = boardImageRepository.findBySavedImageUrl(board.getId())
+//                    .stream()
+//                    .map(image ->image.getImageUrl())
+//                    .collect(Collectors.toList());
+//            listMyBoard.add(new BoardListResponse(board, boardImages));
+//        }
+//        return listMyBoard;
+//    }
 
-    public Page<MyBoardResponse> findMyBoard(Pageable pageable) {
+    @Transactional
+    public List<BoardListResponse> findMyBoard(Pageable pageable) {
         User user = userUtil.findCurrentUser();
-        Page<Board> board = boardRepository.findByUserOrderByIdDesc(user, pageable);
+        List<BoardListResponse> listMyBoard = new ArrayList<>();
+        Page<Board> boards = boardRepository.findByUserOrderByIdDesc(user, pageable);
 
-        List<MyBoardResponse> boardResponses =
-                board.stream()
-                        .map(MyBoardResponse::toMyBoardResponse)
+        for (Board board : boards) {
+            List<String> boardImages = boardImageRepository.findBySavedImageUrl(board.getId())
+                    .stream()
+                    .map(image ->image.getImageUrl())
+                    .collect(Collectors.toList());
+            listMyBoard.add(new BoardListResponse(board, boardImages));
+        }
+        return listMyBoard;
+    }
+//    public Page<MyBoardResponse> findMyBoard(Pageable pageable) {
+//        User user = userUtil.findCurrentUser();
+//        Page<Board> board = boardRepository.findByUserOrderByIdDesc(user, pageable);
+//
+//        List<MyBoardResponse> boardResponses =
+//                board.stream()
+//                        .map(MyBoardResponse::toMyBoardResponse)
+//                        .collect(Collectors.toList());
+//
+//        return new PageImpl<>(boardResponses, pageable, board.getTotalElements());
+//    }
+
+    public Page<MyBookmarkResponse> findMyBookmark(Pageable pageable) {
+        User user = userUtil.findCurrentUser();
+        Page<Bookmark> bookmark = bookmarkRepository.findByUserOrderByIdDesc(user, pageable);
+
+        List<MyBookmarkResponse> bookmarkResponses =
+                bookmark.stream()
+                        .map(MyBookmarkResponse::toMyBookmarkResponse)
                         .collect(Collectors.toList());
 
-        return new PageImpl<>(boardResponses, pageable, board.getTotalElements());
+        return new PageImpl<>(bookmarkResponses, pageable, bookmark.getTotalElements());
     }
 
     public Page<MyCommentResponse> findMyComment(Pageable pageable) {
