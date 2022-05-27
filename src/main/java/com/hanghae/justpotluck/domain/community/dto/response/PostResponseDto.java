@@ -25,6 +25,7 @@ public class PostResponseDto {
     private Double longitude;
     private Double latitude;
     private List<String> images;
+    private int viewCount;
 //    private LocalDateTime createdAt;
 //    private LocalDateTime modifiedAt;
     private List<Comments> commentList;
@@ -36,6 +37,7 @@ public class PostResponseDto {
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
         this.location = post.getLocation();
+        this.viewCount = post.getViewCount();
 //        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
