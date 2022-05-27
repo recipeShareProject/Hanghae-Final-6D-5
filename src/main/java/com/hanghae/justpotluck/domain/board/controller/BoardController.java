@@ -35,6 +35,7 @@ public class BoardController {
 //    }
     @GetMapping("/board/{boardId}")
     public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
+        boardService.updateView(boardId);
         return ResponseEntity.ok(boardService.getBoard(boardId));
     }
 

@@ -35,6 +35,8 @@ public class UserController {
         return ResponseEntity.ok(userService.logout(request));
     }
 
+
+
     @PatchMapping("/user/me/edit")
     public ResponseEntity<UserResponse> update(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
         return ResponseEntity.ok(UserResponse.toUserResponse(userService.update(userUpdateRequest)));

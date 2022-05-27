@@ -212,6 +212,12 @@ public class BoardService {
         }
     }
 
+    /* Views Counting */
+    @Transactional
+    public int updateView(Long id) {
+        return boardRepository.updateView(id);
+    }
+
 
 
 //    @Transactional
