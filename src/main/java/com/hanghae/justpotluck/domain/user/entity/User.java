@@ -3,6 +3,7 @@ package com.hanghae.justpotluck.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.review.entity.Review;
@@ -69,8 +70,8 @@ public class User implements Auditable {
 //    @JsonIgnore
 //    private Location location;
 //    @JsonManagedReference
-//    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
-//    private List<Bookmark> bookmarkList;
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarkList;
 
 
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)

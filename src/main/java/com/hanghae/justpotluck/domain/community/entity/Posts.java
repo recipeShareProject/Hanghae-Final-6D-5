@@ -9,9 +9,12 @@ import com.hanghae.justpotluck.domain.community.dto.request.PostRequestDto;
 import com.hanghae.justpotluck.domain.community.dto.request.PostUpdateDto;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.config.Timestamped;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -23,11 +26,11 @@ import static javax.persistence.CascadeType.ALL;
 
 
 @Entity
-//@DynamicUpdate
-//@DynamicInsert
+@DynamicUpdate
+@DynamicInsert
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Posts extends Timestamped {
     @Id
@@ -42,9 +45,6 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-//    @Column
-//    private String image;
-
     @JsonBackReference
     @OneToMany(
             mappedBy = "posts",
@@ -53,11 +53,8 @@ public class Posts extends Timestamped {
     )
     private List<PostImage> images = new ArrayList<>();
 
-//    @Column(nullable = false)
     private String category;
 
-//    @OneToMany(mappedBy = "posts")
-//    @Column
     ArrayList<String> tags = new ArrayList<>();
 
     //https 인증 받고 geolcation api
@@ -66,6 +63,7 @@ public class Posts extends Timestamped {
     private Double longitude;
     //    @Column(nullable = false)
     private String location;
+//    private Location location;
 
     private int viewCount;
 
@@ -73,9 +71,9 @@ public class Posts extends Timestamped {
 //    @Embedded
 //    private Location location;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 //    @Column(nullable = false)
-    private LocalDateTime expiredAt = LocalDateTime.now();
+    private LocalDateTime expiredAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)

@@ -6,6 +6,7 @@ import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
+import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
 import com.hanghae.justpotluck.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -67,10 +68,10 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-//    @PostMapping("/board/{boardId}/bookmark")
-//    public ResponseEntity<BookmarkResponse> bookmarkBoard(@PathVariable Long boardId) {
-//        return ResponseEntity.ok(new BookmarkResponse(boardService.bookmarkBoard(boardId)));
-//    }
+    @PostMapping("/board/{boardId}/bookmark")
+    public ResponseEntity<BookmarkResponse> bookmarkBoard(@PathVariable Long boardId) {
+        return ResponseEntity.ok(new BookmarkResponse(boardService.bookmarkBoard(boardId)));
+    }
 
 //    @GetMapping("/board/{boardId}")
 //    public ResponseEntity<BoardOneResponse> getOnePost(@PathVariable Long boardId) {

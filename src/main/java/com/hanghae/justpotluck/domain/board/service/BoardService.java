@@ -7,6 +7,7 @@ import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
@@ -25,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -204,6 +206,21 @@ public class BoardService {
 
         boardRepository.delete(board);
     }
+
+    @Transactional
+    public boolean bookmarkBoard(Long boardId) {
+        User user = userUtil.findCurrentUser();
+        Board board = getOneBoard(boardId);
+
+        Optional<Bookmark> bookmark = bookmarkRepository.findByUserAndBoard(user, board);
+        if (bookmark.isEmpty()) {
+            bookmarkRepository.save(Bookmark.createBookmark(board, user));
+            return true;
+        }
+        bookmarkRepository.delete(bookmark.get());
+        return false;
+    }
+
 
 //    @Transactional
 //    public boolean bookmarkBoard(Long boardId) {

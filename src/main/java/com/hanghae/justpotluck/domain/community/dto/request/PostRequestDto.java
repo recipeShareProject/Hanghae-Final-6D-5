@@ -7,12 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,18 +41,19 @@ public class PostRequestDto {
     private String category;
 
     // 이 데이터를 어떻게 받아야하는가? 좀 찾아보자
-//    @NotNull
-    private String expiredAt;
+//  @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime expiredAt;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<String> tags;
     //    좌표를 여기서 받아야하는가
 //    @NotNull
-
+//    private String location;
     private String location;
     private double latitude;
     private double longitude;
-
+    private List<String> saveImageUrl = new ArrayList<>();
     private List<MultipartFile> images = new ArrayList<>();
 
     @Builder
@@ -59,7 +62,7 @@ public class PostRequestDto {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.tags = post.getTags();
-        this.expiredAt = post.getExpiredAt().toString();
+        this.expiredAt = post.getExpiredAt();
         this.category = post.getCategory();
         this.location = post.getLocation();
 //        this.address = post.getLocation().getAddress();

@@ -1,8 +1,9 @@
 package com.hanghae.justpotluck.domain.community.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hanghae.justpotluck.domain.user.entity.User;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public class PostResponseDto {
     private Double latitude;
     private List<String> images;
     private int viewCount;
+    private List<String> tags;
+    private User user;
 //    private LocalDateTime createdAt;
 //    private LocalDateTime modifiedAt;
     private List<Comments> commentList;
@@ -38,6 +41,8 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
         this.location = post.getLocation();
         this.viewCount = post.getViewCount();
+        this.tags = post.getTags();
+        this.user = post.getUser();
 //        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();

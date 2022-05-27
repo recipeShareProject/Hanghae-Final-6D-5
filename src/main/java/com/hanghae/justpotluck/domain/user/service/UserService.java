@@ -26,17 +26,21 @@ import com.hanghae.justpotluck.global.security.TokenAuthenticationFilter;
 import com.hanghae.justpotluck.global.security.TokenProvider;
 import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -52,6 +56,7 @@ public class UserService {
     private final TokenAuthenticationFilter authenticationFilter;
     private final BoardImageRepository boardImageRepository;
     private final S3Uploader s3Uploader;
+    private final RedisTemplate redisTemplate;
 
 
     public User getUser() {
@@ -192,13 +197,14 @@ public class UserService {
         }
 
         String email = tokenProvider.parseClaims(accessToken).getSubject();
-
-//        if (redisTemplate.opsForValue().get("RT:" + userId) != null) {
-//            redisTemplate.delete("RT:" + userId);
-//        }
+        log.info("========" + email + "=========");
+        if (redisTemplate.opsForValue().get("RT:" + email) != null) {
+            redisTemplate.delete("RT:" + email);
+        }
 
         Long expiration = tokenProvider.getExpiration(accessToken);
-//        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
+        log.info("=========" + expiration + "=========");
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
 
         return true;
     }
