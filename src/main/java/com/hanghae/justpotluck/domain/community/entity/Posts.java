@@ -33,6 +33,7 @@ import static javax.persistence.CascadeType.ALL;
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Posts extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
