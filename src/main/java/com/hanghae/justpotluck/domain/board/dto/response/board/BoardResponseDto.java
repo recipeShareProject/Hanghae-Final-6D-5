@@ -35,7 +35,7 @@ public class BoardResponseDto extends Timestamped {
         this.category = entity.getCategory();
         this.process = entity.getProcess();
         this.cookTime = entity.getCookTime();
-        this.writer = entity.getUser().getEmail();
+        this.writer = entity.getUser().getName();
         this.quantity = entity.getQuantity();
         this.viewCount = entity.getViewCount();
         this.processImageUrl = processImages;
@@ -44,6 +44,7 @@ public class BoardResponseDto extends Timestamped {
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
     }
+
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();

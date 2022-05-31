@@ -55,14 +55,14 @@ public class PostController {
     }
 
     @PostMapping("/api/community")
-    public ResponseEntity<Success> savePost(@ModelAttribute @Valid PostRequestDto requestDto, Errors errors) {
+    public PostResponseDto savePost(@ModelAttribute @Valid PostRequestDto requestDto, Errors errors) {
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {
                 throw new RestException(HttpStatus.BAD_REQUEST, "잘못된 입력방법입니다.");
             }
         }
-        postService.savePost(requestDto);
-        return new ResponseEntity<>(new Success(true, "게시글 저장 성공"), HttpStatus.OK);
+        return postService.savePost(requestDto);
+//        return new ResponseEntity<>(new Success(true, "게시글 저장 성공"), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/community/{postId}")

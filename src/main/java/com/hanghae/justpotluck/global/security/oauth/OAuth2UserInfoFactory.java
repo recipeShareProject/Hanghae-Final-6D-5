@@ -7,15 +7,15 @@ import java.util.Map;
 
 public class OAuth2UserInfoFactory {
 
-    public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) {
+    public static OAuth2UserInfo getOAuth2UserInfo(AuthProvider authProvider, Map<String, Object> attributes) {
         System.err.println(attributes);
-        switch (AuthProvider.valueOf(registrationId.toLowerCase())) {
+        switch (authProvider) {
             case kakao:
                 return new KakaoOAuth2UserInfo(attributes);
             case google:
                 return new GoogleOAuth2UserInfo(attributes);
             default:
-                throw new OAuth2AuthenticationProcessingException("Sorry! Login with " + registrationId + " is not supported yet.");
+                throw new OAuth2AuthenticationProcessingException("Invalid Provider");
         }
     }
 }

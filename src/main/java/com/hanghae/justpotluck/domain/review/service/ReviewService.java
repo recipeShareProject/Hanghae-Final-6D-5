@@ -42,9 +42,9 @@ public class ReviewService {
         Board board = boardRepository.findById(requestDto.getBoardId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
-        Review review = reviewRepository.save(Review.createReview(requestDto.getComment(), board, user));
+        Review review = reviewRepository.save(Review.createReview(requestDto, board, user));
         List<String> reviewImages = uploadReviewImages(requestDto, review);
-        return new ReviewSaveResponse(requestDto.getBoardId(), review.getId(), reviewImages);
+        return new ReviewSaveResponse(review, reviewImages);
     }
 
     private List<String> uploadReviewImages(ReviewSaveRequestDto requestDto, Review review) {
