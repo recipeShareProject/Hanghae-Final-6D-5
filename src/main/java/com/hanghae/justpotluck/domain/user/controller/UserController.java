@@ -1,25 +1,82 @@
 package com.hanghae.justpotluck.domain.user.controller;
 
-import com.hanghae.justpotluck.global.exception.ResourceNotFoundException;
-import com.hanghae.justpotluck.domain.user.entity.User;
+import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
+import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
+import com.hanghae.justpotluck.domain.user.dto.response.*;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
-import com.hanghae.justpotluck.global.security.CurrentUser;
+import com.hanghae.justpotluck.domain.user.service.UserService;
 import com.hanghae.justpotluck.global.security.UserPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
+
+@RequiredArgsConstructor
+@RequestMapping("/api")
 @RestController
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @GetMapping("/user/me")
-    @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+    //test controller
+    @GetMapping("/hello")
+    public String hello(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return userPrincipal.getUsername();
     }
+
+    @PostMapping("/user/logout")
+    public ResponseEntity<Boolean> logout(HttpServletRequest request) {
+        return ResponseEntity.ok(userService.logout(request));
+    }
+
+    @PatchMapping("/user/me/edit")
+    public ResponseEntity<UserResponse> update(@ModelAttribute @Valid UserUpdateRequest userUpdateRequest) {
+        return ResponseEntity.ok(UserResponse.toUserResponse(userService.update(userUpdateRequest)));
+    }
+
+    @GetMapping("/user/me/board")
+    @ApiResponse(responseCode = "200", description = "내가 쓴 글이 정상적으로 조회된 경우")
+    public ResponseEntity<List<BoardListResponse>> findMyBoard(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyBoard(pageable));
+    }
+
+    @GetMapping("/user/me/community")
+    public ResponseEntity<Page<MyPostResponse>> findMyPosts(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyPosts(pageable));
+    }
+
+    @GetMapping("/user/me/review")
+    public ResponseEntity<Page<MyReviewResponse>> findMyReview(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyReview(pageable));
+    }
+
+    @GetMapping("/user/me/comment")
+    public ResponseEntity<Page<MyCommentResponse>> findMyComment(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyComment(pageable));
+    }
+
+    @GetMapping("/user/me/bookmark")
+    public ResponseEntity<Page<MyBookmarkResponse>> findMyBookmark(Pageable pageable) {
+        return ResponseEntity.ok(userService.findMyBookmark(pageable));
+    }
+//    //home 관련
+//    @GetMapping("/home")
+//    public ResponseEntity
+
+//    @GetMapping("/user/me/board")
+
+//
+//    @GetMapping("/user/mypage")
+//    public ResponseEntity<UserResponse> update(@RequestBody @Valid UserUpdateRequest updateRequest) {
+//        return ResponseEntity.ok(UserResponse.toUserResponse(userService.update(updateRequest)));
+//    }
+
 }

@@ -14,5 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BoardSaveResponse {
     private Long boardId;
+    private List<String> processList = new ArrayList<>();
+    private String category;
     private List<String> imageUrl = new ArrayList<>();
+    private List<String> completeImageUrl = new ArrayList<>();
 }

@@ -1,12 +1,16 @@
 package com.hanghae.justpotluck.domain.user.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.board.entity.Bookmark;
+import com.hanghae.justpotluck.domain.comment.entity.Comments;
+import com.hanghae.justpotluck.domain.community.entity.Posts;
+import com.hanghae.justpotluck.domain.review.entity.Review;
+import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
 import com.hanghae.justpotluck.global.audit.AuditListener;
 import com.hanghae.justpotluck.global.audit.Auditable;
 import com.hanghae.justpotluck.global.audit.TimeEntity;
-import com.hanghae.justpotluck.domain.comment.entity.Comments;
-import com.hanghae.justpotluck.domain.community.entity.Posts;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +36,7 @@ public class User implements Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //닉네임
     @Column(nullable = false)
     private String name;
 
@@ -39,6 +44,7 @@ public class User implements Auditable {
     @Column(nullable = false)
     private String email;
 
+//    private Image profileImage;
     private String imageUrl;
 
     private Double longitude;
@@ -60,6 +66,22 @@ public class User implements Auditable {
     @Embedded
     private TimeEntity timeEntity;
 
+    //    @Embedded
+//    @JsonIgnore
+//    private Location location;
+//    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarkList;
+
+
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Board> boardList;
+
+
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Review> reviewList;
+
+
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Posts> postList;
 
@@ -75,15 +97,15 @@ public class User implements Auditable {
         this.providerId = providerId;
     }
 
-    @Builder(builderClassName = "local",builderMethodName = "localBuilder")
-    public User(String name, @Email String email, String imageUrl, String password, @NotNull AuthProvider provider, String providerId) {
-        this.name = name;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.password = password;
-        this.provider = provider;
-        this.providerId = providerId;
-    }
+//    @Builder(builderClassName = "local",builderMethodName = "localBuilder")
+//    public User(String name, @Email String email, String imageUrl, String password, @NotNull AuthProvider provider, String providerId) {
+//        this.name = name;
+//        this.email = email;
+//        this.imageUrl = imageUrl;
+//        this.password = password;
+//        this.provider = provider;
+//        this.providerId = providerId;
+//    }
 
     public void updateNameAndImage(String name, String imageUrl) {
         this.name = name;
@@ -95,4 +117,10 @@ public class User implements Auditable {
     }
 
     public void addPost(Posts post) {this.postList.add(post);}
+
+    public void update(UserUpdateRequest updateRequest, String imageUrl) {
+//        this.email = updateRequest.getEmail();
+        this.name = updateRequest.getName();
+        this.imageUrl = imageUrl;
+    }
 }

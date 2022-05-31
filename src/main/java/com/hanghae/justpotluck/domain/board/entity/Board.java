@@ -1,12 +1,13 @@
 package com.hanghae.justpotluck.domain.board.entity;
 
-import com.hanghae.justpotluck.global.config.Timestamped;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.user.entity.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Board extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -28,14 +30,18 @@ public class Board extends Timestamped {
 //    조리법
 //    private String contents;
     private String quantity;
-    private List<RecipeProcess> process;
-    private FoodCategory category;
+    private String category;
 //    private String nickname;
     private int viewCount;
-    private boolean bookmark;
-    private String cookingTime;
+    private Boolean isBookmark;
+    private String cookTime;
 
+    //얘를 어떻게 할 건지
+    private ArrayList<String> ingredients;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @JsonBackReference
@@ -44,54 +50,68 @@ public class Board extends Timestamped {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<Image> imageList = new ArrayList<>();
-    private List<RecipeProcess> processList;
-    private List<Ingredient> ingredientList;
+    private List<Image> processImages = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "board",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Image> completeImages = new ArrayList<>();
+
+    private ArrayList<String> process;
+//    private List<Ingredient> ingredientList;
 
     @JsonIgnoreProperties({"board"})
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Review> reviewList;
 
-    @JsonIgnoreProperties({"board"})
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<Bookmark> bookmarkList = new ArrayList<>();
+    //이제 리스트로 받을 필요 없음
+    //나중에 수정
+//    @JsonIgnoreProperties({"board"})
+//    @OneToMany(mappedBy = "board", orphanRemoval = true)
+//    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @Builder
     public Board(String title, User user,
-                 List<Review> reviewList, FoodCategory category, String cookingTime,
-                 List<RecipeProcess> processList, List<Ingredient> ingredientList, int viewCount, List<Bookmark> bookmarkList) {
+                 List<Review> reviewList, String cookTime, String quantity,
+                 ArrayList<String> ingredients,
+                 ArrayList<String> process, int viewCount, String category) {
         this.title = title;
-        this.cookingTime = cookingTime;
+        this.cookTime = cookTime;
         this.user = user;
         this.reviewList = reviewList;
-        this.processList = processList;
-        this.ingredientList = ingredientList;
+        this.process = process;
+        this.quantity = quantity;
+        this.ingredients = ingredients;
         this.category = category;
         this.viewCount = viewCount;
-        this.bookmarkList = bookmarkList;
+//        this.bookmarkList = bookmarkList;
     }
 
     public static Board createBoard(BoardSaveRequestDto requestDto, User user) {
         return Board.builder()
                 .title(requestDto.getTitle())
-                .processList(requestDto.getProcessList())
-                .ingredientList(requestDto.getIngredientList())
+                .process(requestDto.getProcess())
                 .category(requestDto.getCategory())
-                .cookingTime(requestDto.getCookingTime())
+                .quantity(requestDto.getQuantity())
+                .ingredients(requestDto.getIngredients())
                 .user(user)
+                .cookTime(requestDto.getCookTime())
                 .build();
     }
 
-    public void update(BoardUpdateRequestDto requestDto) {
+    public void update(BoardUpdateRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.quantity = requestDto.getQuantity();
         this.category = requestDto.getCategory();
-        this.ingredientList = requestDto.getIngredient();
-        this.processList = requestDto.getProcessList();
+//        this.ingredientList = requestDto.getIngredient();
+        this.process = requestDto.getProcess();
     }
 
     public void addImage(Image image) {
-        this.imageList.add(image);
+        this.processImages.add(image);
         if (image.getBoard() != this) {
             image.setBoard(this);
         }

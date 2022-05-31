@@ -1,13 +1,14 @@
 package com.hanghae.justpotluck.global.security.oauth;
 
 
-import com.hanghae.justpotluck.global.exception.BadRequestException;
-import com.hanghae.justpotluck.global.config.AppProperties;
 import com.hanghae.justpotluck.domain.user.dto.response.TokenResponse;
+import com.hanghae.justpotluck.global.config.AppProperties;
+import com.hanghae.justpotluck.global.exception.BadRequestException;
 import com.hanghae.justpotluck.global.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.hanghae.justpotluck.global.security.TokenProvider;
 import com.hanghae.justpotluck.global.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     public final static String REFRESH_TOKEN = "refresh_token";
 
+    private final RedisTemplate redisTemplate;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(request, response, authentication);
@@ -54,9 +56,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
-
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         TokenResponse tokenResponse = tokenProvider.createTokenResponse(authentication);
+//        redisTemplate.opsForValue()
+//                .set("RT:" + userInfo.getEmail(), tokenResponse.getRefreshToken(), tokenResponse.getRefreshTokenExpireDate(), TimeUnit.MILLISECONDS);
 //        String accessToken = tokenProvider.createAccessToken(authentication);
 //        String refreshToken = tokenProvider.createRefreshToken(authentication);
 

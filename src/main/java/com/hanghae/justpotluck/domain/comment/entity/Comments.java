@@ -1,5 +1,7 @@
 package com.hanghae.justpotluck.domain.comment.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.justpotluck.global.config.Timestamped;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.user.entity.User;
@@ -25,18 +27,22 @@ public class Comments extends Timestamped {
     @Column(name = "comment_id")
     private Long commentId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Posts post;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comments parent;
 
-    @Column(nullable = false)
-    private String content;
+//    @Column(nullable = false)
+    private String comment;
 
+    @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     private boolean isRemoved= false;
@@ -71,8 +77,8 @@ public class Comments extends Timestamped {
 
 
     //== 수정 ==//
-    public void updateContent(String content) {
-        this.content = content;
+    public void updateContent(String content, User user) {
+        this.comment = content;
     }
     //== 삭제 ==//
     public void remove() {
@@ -81,10 +87,11 @@ public class Comments extends Timestamped {
 
 
     @Builder
-    public Comments(Posts post, Comments parent, String content) {
+    public Comments(Posts post, Comments parent, String comment, User user) {
         this.post = post;
         this.parent = parent;
-        this.content = content;
+        this.comment = comment;
+        this.user = user;
         this.isRemoved = false;
     }
 

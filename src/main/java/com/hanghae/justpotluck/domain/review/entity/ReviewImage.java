@@ -1,7 +1,7 @@
 package com.hanghae.justpotluck.domain.review.entity;
 
-import com.hanghae.justpotluck.global.config.Timestamped;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,19 +55,12 @@ public class ReviewImage extends Timestamped {
     }
 
 //    private String image;
-//
-//    public void setBoard(Board board) {
-//        this.board = board;
-//        if (!board.getImages().contains(this)) {
-//            board.getImages().add(this);
-//        }
-//    }
-//
-//    public void setReview(Review review) {
-//        this.review = review;
-//        if (!review.getImages().contains(this)) {
-//            review.getImages().add(this);
-//        }
-//    }
+
+    public void setReview(Review review) {
+        this.review = review;
+        if (!review.getImages().contains(this)) {
+            review.getImages().add(this);
+        }
+    }
 
 }

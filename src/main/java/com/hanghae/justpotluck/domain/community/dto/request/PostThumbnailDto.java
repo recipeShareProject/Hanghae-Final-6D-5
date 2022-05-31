@@ -20,9 +20,8 @@ public class PostThumbnailDto {
     public PostThumbnailDto(Posts post) {
         this.communityId = post.getPostId();
         this.title = post.getTitle();
-        this.imagePath = post.getImage();
         this.category = post.getCategory();
-        this.location = post.getLocation();
+//        this.location = post.getLocation();
         this.createdAt = post.getCreatedAt();
     }
 }

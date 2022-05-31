@@ -1,10 +1,12 @@
 package com.hanghae.justpotluck.domain.review.entity;
 
 
-import com.hanghae.justpotluck.global.config.Timestamped;
-import com.hanghae.justpotluck.domain.board.entity.Board;
-import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.review.dto.request.ReviewUpdateRequestDto;
+import com.hanghae.justpotluck.domain.user.entity.User;
+import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,47 +25,59 @@ public class Review extends Timestamped {
     @Column(name = "review_id")
     private Long id;
 
-    private String contents;
-    private String nickname;
+    private String comment;
+    private String category;
 
-    @JsonBackReference
-    @OneToMany(
-            mappedBy = "review",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private List<Image> images = new ArrayList<>();
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "review",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<ReviewImage> images = new ArrayList<>();
+
     @Builder
-    public Review(Board board, String contents, String nickname) {
+    public Review(Board board, String comment, User user) {
         this.board = board;
-        this.contents = contents;
-        this.nickname = nickname;
+        this.comment = comment;
+        this.user = user;
+//        this.nickname = nickname;
     }
 
-    public static Review createReview(String contents, String nickname, Board board) {
+    public static Review createReview(String comment, Board board, User user) {
         return Review.builder()
-                .contents(contents)
-                .nickname(nickname)
+                .comment(comment)
                 .board(board)
+                .user(user)
                 .build();
     }
 
-    public void updateReview(String contents) {
-        this.contents = contents;
+    public void updateReview(ReviewUpdateRequestDto requestDto) {
+        this.comment = requestDto.getComment();
+        this.category = requestDto.getCategory();
     }
 
-    public void addImage(Image image) {
-        this.images.add(image);
-        if (image.getReview() != this) {
-            image.setReview(this);
-        }
-    }
-
+//    public void setImage(ReviewImage image) {
+//        this.images.add(image);
+//        if (image.getReview() != this) {
+//            image.setReview(this);
+//        }
+//    }
+//
+//    public void setBoard(Board board) {
+//        this.board = board;
+//        if (!board.getReviewList().contains(this)) {
+//            board.getReviewList().add(this);
+//        }
 
 }

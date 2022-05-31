@@ -12,7 +12,8 @@ import java.util.List;
 public class ReviewUpdateRequestDto {
 
     private Long reviewId;
-    private String contents;
+    private String comment;
+    private String category;
 
     private List<String> saveImageUrl = new ArrayList<>();
 

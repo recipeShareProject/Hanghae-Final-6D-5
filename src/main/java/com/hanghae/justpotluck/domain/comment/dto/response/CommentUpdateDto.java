@@ -7,17 +7,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CommentUpdateDto {
-    private String content;
+    private String comment;
     private boolean deleted;
 
 
-    public CommentUpdateDto(Long id, String content) {
-        this.content = content;
+    public CommentUpdateDto(Long id, String comment) {
+        this.comment = comment;
     }
 
     public static CommentUpdateDto convertCommentToDto(Comments comment) {
         return comment.isRemoved() == true ?
                 new CommentUpdateDto(comment.getCommentId(), "삭제된 댓글입니다.") :
-                new CommentUpdateDto(comment.getCommentId(), comment.getContent());
+                new CommentUpdateDto(comment.getCommentId(), comment.getComment());
     }
 }

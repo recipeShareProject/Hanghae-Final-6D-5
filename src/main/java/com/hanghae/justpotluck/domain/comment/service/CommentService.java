@@ -1,5 +1,6 @@
 package com.hanghae.justpotluck.domain.comment.service;
 
+import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.exception.RestException;
 import com.hanghae.justpotluck.domain.comment.dto.request.CommentRequestDto;
 import com.hanghae.justpotluck.domain.comment.dto.response.CommentUpdateDto;
@@ -7,6 +8,7 @@ import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.comment.repository.CommentRepository;
 import com.hanghae.justpotluck.domain.community.repository.PostRepository;
+import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,42 +21,49 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final UserUtil userUtil;
 
     public void save(Long postId, CommentRequestDto requestDto){
+        User user = userUtil.findCurrentUser();
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
 
         Comments comment = Comments.builder()
-                .content(requestDto.getContent())
+                .comment(requestDto.getComment())
                 .post(post)
                 .parent(null)
+                .user(user)
                 .build();
         comment.confirmPost(post);
         commentRepository.save(comment);
     }
 
     public void saveReComment(Long postId, Long commentId, CommentRequestDto requestDto){
-      Posts post = postRepository.findByPostId(postId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
-      Comments parent = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 commentId가 존재하지 않습니다."));
+        User user = userUtil.findCurrentUser();
+        Posts post = postRepository.findByPostId(postId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
+        Comments parent = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 commentId가 존재하지 않습니다."));
 
-      Comments comment = Comments.builder()
-                .content(requestDto.getContent())
+        Comments comment = Comments.builder()
+                .comment(requestDto.getComment())
                 .post(post)
                 .parent(parent)
+                .user(user)
                 .build();
-      comment.confirmParent(parent);
+        comment.confirmParent(parent);
 
-      commentRepository.save(comment);
+        commentRepository.save(comment);
     }
 
     public void modify(Long postId, Long commentId, CommentUpdateDto requestDto){
+        User user = userUtil.findCurrentUser();
         Comments comment = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
-        comment.updateContent(requestDto.getContent());
+        comment.updateContent(requestDto.getComment(), user);
     }
 
     public void remove(Long id) throws Exception {
+        User user = userUtil.findCurrentUser();
         Comments comment = commentRepository.findByCommentId(id).orElseThrow(() -> new Exception("댓글이 없습니다."));
         comment.remove();
         List<Comments> removableCommentList = comment.findRemovableList();

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class ReviewResponse extends Timestamped {
     private Board board;
     private Long id;
-    private String contents;
+    private String comment;
     private String nickname;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -19,8 +19,7 @@ public class ReviewResponse extends Timestamped {
     public ReviewResponse(Review entity) {
         this.board = entity.getBoard();
         this.id = entity.getId();
-        this.contents = entity.getContents();
-        this.nickname = entity.getNickname();
+        this.comment = entity.getComment();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
     }
