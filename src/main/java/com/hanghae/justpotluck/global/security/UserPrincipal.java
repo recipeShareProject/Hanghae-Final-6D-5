@@ -21,7 +21,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-    private User user;
+    private static User user;
     @Setter
     private Map<String, Object> attributes;
 

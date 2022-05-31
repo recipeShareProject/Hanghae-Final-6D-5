@@ -133,29 +133,29 @@ public class AlarmService {
         }
         return alarmDto;
     }
-    public List<AlarmResponseDto> getAlamList(User user) {
-        String userName = user.getName();
-
-
-        List<Alarm> alarmListPage = alarmRepository
-                .findAllByUserIdOrderByIdDesc(userName).getContent();
-
-        List<AlarmResponseDto> alarmResponseDtoList = new ArrayList<>();
-
-        for (Alarm alarm : alarmListPage) {
-            /* 게시물에 새로운 댓글이 등록되었을 때 */
-            if (alarm.getType().equals(AlarmType.recipe_comment)) {
-                AlarmResponseDto alarmDto = AlarmResponseDto.builder()
-                        .alarmId(alarm.getId())
-                        .type(alarm.getType().toString())
-                        .message(alarm.getAlarmMessage())
-                        .isRead(alarm.getIsRead())
-                        .postId(alarm.getPostId())
-                        .build();
-                alarmResponseDtoList.add(alarmDto);
-            }
-
-        }
-    return alarmResponseDtoList;
-    }
+//    public List<AlarmResponseDto> getAlamList(User user) {
+//        String userName = user.getName();
+//
+//
+//        List<Alarm> alarmListPage = alarmRepository
+//                .findAllByUserIdOrderByIdDesc(userName).getContent();
+//
+//        List<AlarmResponseDto> alarmResponseDtoList = new ArrayList<>();
+//
+//        for (Alarm alarm : alarmListPage) {
+//            /* 게시물에 새로운 댓글이 등록되었을 때 */
+//            if (alarm.getType().equals(AlarmType.recipe_comment)) {
+//                AlarmResponseDto alarmDto = AlarmResponseDto.builder()
+//                        .alarmId(alarm.getId())
+//                        .type(alarm.getType().toString())
+//                        .message(alarm.getAlarmMessage())
+//                        .isRead(alarm.getIsRead())
+//                        .postId(alarm.getPostId())
+//                        .build();
+//                alarmResponseDtoList.add(alarmDto);
+//            }
+//
+//        }
+//    return alarmResponseDtoList;
+//    }
 }

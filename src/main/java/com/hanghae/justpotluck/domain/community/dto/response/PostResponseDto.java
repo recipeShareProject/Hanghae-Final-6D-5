@@ -39,7 +39,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getLocation();
+        this.location = post.getAddress();
         this.viewCount = post.getViewCount();
         this.tags = post.getTags();
         this.user = post.getUser();
@@ -58,7 +58,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getLocation();
+        this.location = post.getAddress();
 //        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();

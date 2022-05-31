@@ -20,13 +20,13 @@ public class AlarmController {
     private final AlarmService alarmService;
 
     /* 회원별 전체 알람 리스트 발송 */
-    @GetMapping("/api/alarm")
-    public List<AlarmResponseDto> getAlarmList(
-            @AuthenticationPrincipal UserPrincipal userDetails) {
-
-        User user = userDetails.getUser();
-        return alarmService.getAlamList(user);
-    }
+//    @GetMapping("/api/alarm")
+//    public List<AlarmResponseDto> getAlarmList(
+//            @AuthenticationPrincipal UserPrincipal userDetails) {
+//
+//        User user = userDetails.getUser();
+//        return alarmService.getAlamList(user);
+//    }
 
     /* 알림 읽음 확인 */
     @PostMapping("/api/alarm/{alarmId}")
