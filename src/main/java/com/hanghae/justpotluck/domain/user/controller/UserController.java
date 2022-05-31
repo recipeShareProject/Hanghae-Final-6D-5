@@ -39,7 +39,7 @@ public class UserController {
 
 
     @PatchMapping("/user/me/edit")
-    public ResponseEntity<UserResponse> update(@ModelAttribute @Valid UserUpdateRequest userUpdateRequest) {
+    public ResponseEntity<UserResponse> update(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
         return ResponseEntity.ok(UserResponse.toUserResponse(userService.update(userUpdateRequest)));
     }
 
