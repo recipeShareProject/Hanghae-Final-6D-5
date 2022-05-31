@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class UserUpdateRequest {
 
     //얘가 닉네임
-    @ApiModelProperty(value = "닉네임", required = true, example = "모아모아")
+    @ApiModelProperty(value = "닉네임", required = true)
     @NotBlank(message = "닉네임을 입력해주세요.")
     private String name;
     
