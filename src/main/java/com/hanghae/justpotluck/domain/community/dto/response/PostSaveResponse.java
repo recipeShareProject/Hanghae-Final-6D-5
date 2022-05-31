@@ -20,7 +20,7 @@ public class PostSaveResponse {
     private String category;
     private LocalDateTime expiredAt;
     private LocalDateTime createdAt;
-    private String location;
+    private String address;
     private Double longitude;
     private Double latitude;
     private List<String> images;
@@ -34,7 +34,8 @@ public class PostSaveResponse {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
-        this.location = post.getLocation();
+//        this.location = post.getLocation();
+        this.address = post.getAddress();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
         this.viewCount = post.getViewCount();
