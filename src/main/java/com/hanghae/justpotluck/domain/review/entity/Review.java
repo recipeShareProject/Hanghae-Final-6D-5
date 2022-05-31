@@ -4,6 +4,7 @@ package com.hanghae.justpotluck.domain.review.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.review.dto.request.ReviewSaveRequestDto;
 import com.hanghae.justpotluck.domain.review.dto.request.ReviewUpdateRequestDto;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.config.Timestamped;
@@ -27,6 +28,7 @@ public class Review extends Timestamped {
 
     private String comment;
     private String category;
+    private String nickname;
 
     @JsonIgnore
     @ManyToOne
@@ -47,18 +49,22 @@ public class Review extends Timestamped {
     private List<ReviewImage> images = new ArrayList<>();
 
     @Builder
-    public Review(Board board, String comment, User user) {
+    public Review(Board board, String comment, String nickname, String category, User user) {
         this.board = board;
         this.comment = comment;
         this.user = user;
+        this.nickname = user.getName();
+        this.category = category;
 //        this.nickname = nickname;
     }
 
-    public static Review createReview(String comment, Board board, User user) {
+    public static Review createReview(ReviewSaveRequestDto requestDto, Board board, User user) {
         return Review.builder()
-                .comment(comment)
+                .comment(requestDto.getComment())
                 .board(board)
+                .category(requestDto.getCategory())
                 .user(user)
+                .nickname(user.getName())
                 .build();
     }
 

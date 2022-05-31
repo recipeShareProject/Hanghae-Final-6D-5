@@ -1,5 +1,6 @@
 package com.hanghae.justpotluck.domain.comment.service;
 
+import com.hanghae.justpotluck.domain.comment.dto.response.CommentResponseDto;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.exception.RestException;
 import com.hanghae.justpotluck.domain.comment.dto.request.CommentRequestDto;
@@ -23,7 +24,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserUtil userUtil;
 
-    public void save(Long postId, CommentRequestDto requestDto){
+    public CommentResponseDto save(Long postId, CommentRequestDto requestDto){
         User user = userUtil.findCurrentUser();
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
@@ -32,10 +33,12 @@ public class CommentService {
                 .comment(requestDto.getComment())
                 .post(post)
                 .parent(null)
+                .nickname(user.getName())
                 .user(user)
                 .build();
         comment.confirmPost(post);
         commentRepository.save(comment);
+        return new CommentResponseDto(comment);
     }
 
     public void saveReComment(Long postId, Long commentId, CommentRequestDto requestDto){
@@ -47,19 +50,22 @@ public class CommentService {
                 .comment(requestDto.getComment())
                 .post(post)
                 .parent(parent)
+                .nickname(user.getName())
                 .user(user)
                 .build();
+
         comment.confirmParent(parent);
 
         commentRepository.save(comment);
     }
 
-    public void modify(Long postId, Long commentId, CommentUpdateDto requestDto){
+    public CommentUpdateDto modify(Long postId, Long commentId, CommentUpdateDto requestDto){
         User user = userUtil.findCurrentUser();
         Comments comment = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
-        comment.updateContent(requestDto.getComment(), user);
+        comment.updateContent(requestDto.getComment());
+        return new CommentUpdateDto(commentId, requestDto.getComment());
     }
 
     public void remove(Long id) throws Exception {

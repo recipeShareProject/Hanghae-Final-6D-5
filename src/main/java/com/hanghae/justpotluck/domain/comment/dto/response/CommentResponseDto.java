@@ -1,8 +1,8 @@
 package com.hanghae.justpotluck.domain.comment.dto.response;
 
-import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,19 +19,13 @@ public class CommentResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private List<CommentResponseDto> children;
     private boolean deleted;
-    private String writer;
+    //    private String writer;
+    private String nickname;
 
-
-    public CommentResponseDto(Long id, String comment, String writer) {
-        this.commentId = id;
-        this.writer = writer;
-        this.comment = comment;
-    }
-
-    public static CommentResponseDto convertCommentToDto(Comments comment) {
-        return comment.isRemoved() == true ?
-                new CommentResponseDto(comment.getCommentId(), "삭제된 댓글입니다.", null) :
-                new CommentResponseDto(comment.getCommentId(), comment.getComment(), comment.getUser().getName());
+    public CommentResponseDto(Comments comment) {
+        this.commentId = comment.getCommentId();
+        this.comment = comment.getComment();
+        this.nickname = comment.getUser().getName();
     }
 
 }
