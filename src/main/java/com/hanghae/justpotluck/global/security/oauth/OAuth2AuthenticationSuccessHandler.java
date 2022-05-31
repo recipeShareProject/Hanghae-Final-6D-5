@@ -2,6 +2,7 @@ package com.hanghae.justpotluck.global.security.oauth;
 
 
 import com.hanghae.justpotluck.domain.user.dto.response.TokenResponse;
+import com.hanghae.justpotluck.domain.user.entity.AuthProvider;
 import com.hanghae.justpotluck.global.config.AppProperties;
 import com.hanghae.justpotluck.global.exception.BadRequestException;
 import com.hanghae.justpotluck.global.security.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -10,6 +11,8 @@ import com.hanghae.justpotluck.global.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -34,6 +38,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     public final static String REFRESH_TOKEN = "refresh_token";
+    public final static String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
+    public final static String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+
+
 
     private final RedisTemplate redisTemplate;
     @Override
@@ -57,9 +65,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-        TokenResponse tokenResponse = tokenProvider.createTokenResponse(authentication);
-//        redisTemplate.opsForValue()
-//                .set("RT:" + userInfo.getEmail(), tokenResponse.getRefreshToken(), tokenResponse.getRefreshTokenExpireDate(), TimeUnit.MILLISECONDS);
+        OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+//        TokenResponse tokenResponse = tokenProvider.createTokenResponse(authentication);
+        AuthProvider authProvider = AuthProvider.valueOf(authToken.getAuthorizedClientRegistrationId().toLowerCase());
+        OidcUser user = ((OidcUser) authentication.getPrincipal());
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, user.getAttributes());
+        TokenResponse tokenResponse = tokenProvider.createTokenResponse(userInfo.getEmail());
+
+
+        redisTemplate.opsForValue()
+                .set("RT:" + userInfo.getEmail(), tokenResponse.getRefreshToken(), tokenResponse.getRefreshTokenExpireDate(), TimeUnit.MILLISECONDS);
 //        String accessToken = tokenProvider.createAccessToken(authentication);
 //        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
@@ -76,7 +91,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+
+//        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+        CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
+        CookieUtils.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {

@@ -46,21 +46,21 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public TokenResponse createTokenResponse(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    public TokenResponse createTokenResponse(String email) {
+//        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
         String accessToken = Jwts.builder()
-                .setSubject(userPrincipal.getEmail())
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS512)
 //                .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
         String refreshToken = Jwts.builder()
-                .setSubject(userPrincipal.getEmail())
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(now.getTime() + refreshTokenExpiry))
                 .signWith(key, SignatureAlgorithm.HS512)

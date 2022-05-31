@@ -7,6 +7,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
@@ -15,17 +18,17 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class UserPrincipal implements OAuth2User, UserDetails {
+public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 //    private User user;
     private Long id;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-    private User user;
+    private static User user;
     @Setter
     private Map<String, Object> attributes;
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 
@@ -98,4 +101,20 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     public String getName() {
         return String.valueOf(id);
     }
+
+    @Override
+    public Map<String, Object> getClaims() {
+        return null;
+    }
+
+    @Override
+    public OidcUserInfo getUserInfo() {
+        return null;
+    }
+
+    @Override
+    public OidcIdToken getIdToken() {
+        return null;
+    }
+
 }

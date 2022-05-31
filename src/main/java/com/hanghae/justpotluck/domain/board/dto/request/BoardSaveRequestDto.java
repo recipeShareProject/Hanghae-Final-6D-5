@@ -17,7 +17,6 @@ public class BoardSaveRequestDto {
     private String quantity;
     private ArrayList<String> ingredients;
     private String category;
-//    private User user;
     private String cookTime;
     private int viewCount;
     private boolean bookmark;

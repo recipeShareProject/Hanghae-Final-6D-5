@@ -40,9 +40,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
 
-        final String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
+//        final String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
 
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, oAuth2User.getAttributes());
+        AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toLowerCase());
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
 
         if(!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
@@ -56,7 +57,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = userOptional.get();
 
             // 가져온 유저의 공급자명과 넘어온 공급자명이 다른 경우
-            if(!user.getProvider().equals(AuthProvider.valueOf(registrationId))) {
+            if(!user.getProvider().equals(authProvider)) {
 
                 // 이미 다른 공급자가 존재하기 때문에 가입할 수 없다
                 throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
