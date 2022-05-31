@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class PostUpdateDto {
     private Long postId;
     private String category;
-    private String expiredAt;
+    private LocalDateTime expiredAt;
 //    private String category;
     private String title;
     private List<String> tags;
