@@ -6,6 +6,7 @@ import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
+import com.hanghae.justpotluck.domain.location.entity.Location;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
 import com.hanghae.justpotluck.global.audit.AuditListener;
@@ -47,6 +48,8 @@ public class User implements Auditable {
 //    private Image profileImage;
     private String imageUrl;
 
+    private String address;
+
     private Double longitude;
 
     private Double latitude;
@@ -66,7 +69,7 @@ public class User implements Auditable {
     @Embedded
     private TimeEntity timeEntity;
 
-    //    @Embedded
+//    @Embedded
 //    @JsonIgnore
 //    private Location location;
 //    @JsonManagedReference
@@ -88,13 +91,19 @@ public class User implements Auditable {
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Comments> commentList;
 
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+//        this.location = new Location("마포구 도화동", 37.49791, 127.027678);
+    }
     @Builder(builderClassName= "social", builderMethodName = "socialBuilder")
-    private User(String name, @Email String email, String imageUrl, @NotNull AuthProvider provider, String providerId) {
+    private User(String name, @Email String email, String imageUrl, Location location, @NotNull AuthProvider provider, String providerId) {
         this.name = name;
         this.email = email;
         this.imageUrl = imageUrl;
         this.provider = provider;
         this.providerId = providerId;
+//        this.location = location;
     }
 
 //    @Builder(builderClassName = "local",builderMethodName = "localBuilder")
@@ -118,9 +127,9 @@ public class User implements Auditable {
 
     public void addPost(Posts post) {this.postList.add(post);}
 
-    public void update(UserUpdateRequest updateRequest, String imageUrl) {
+    public void update(UserUpdateRequest updateRequest) {
 //        this.email = updateRequest.getEmail();
         this.name = updateRequest.getName();
-        this.imageUrl = imageUrl;
+//        this.imageUrl = imageUrl;
     }
 }

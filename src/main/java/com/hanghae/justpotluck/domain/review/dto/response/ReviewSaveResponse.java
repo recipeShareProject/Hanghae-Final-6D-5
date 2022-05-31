@@ -1,5 +1,6 @@
 package com.hanghae.justpotluck.domain.review.dto.response;
 
+import com.hanghae.justpotluck.domain.review.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,15 @@ import java.util.List;
 public class ReviewSaveResponse {
     private Long boardId;
     private Long reviewId;
-    private List<String> imageUrl = new ArrayList<>();
+    private String comment;
+    private String category;
+    private List<String> images = new ArrayList<>();
+
+    public ReviewSaveResponse(Review review, List<String> images) {
+        this.boardId = review.getBoard().getId();
+        this.reviewId = review.getId();
+        this.images = images;
+        this.category = review.getCategory();
+        this.comment = review.getComment();
+    }
 }

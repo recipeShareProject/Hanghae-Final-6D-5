@@ -14,14 +14,14 @@ public class PostThumbnailDto {
     private String category;
     private String imagePath;
     private String title;
-    private String location;
+    private String address;
     private LocalDateTime createdAt;
 
     public PostThumbnailDto(Posts post) {
         this.communityId = post.getPostId();
         this.title = post.getTitle();
         this.category = post.getCategory();
-//        this.location = post.getLocation();
+        this.address= post.getAddress();
         this.createdAt = post.getCreatedAt();
     }
 }

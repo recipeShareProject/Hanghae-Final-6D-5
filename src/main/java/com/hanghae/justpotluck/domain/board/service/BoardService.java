@@ -118,7 +118,7 @@ public class BoardService {
         requestDto.getCompleteImages()
                 .stream()
                 .forEach(file -> {
-                    String url = s3Uploader.upload(file, "board");
+                    String url = s3Uploader.upload(file, "complete");
                     saveBoardImage(board, url);
                 });
     }

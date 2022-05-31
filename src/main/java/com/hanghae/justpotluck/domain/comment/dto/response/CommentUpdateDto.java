@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CommentUpdateDto {
+    private Long commentId;
     private String comment;
     private boolean deleted;
 
