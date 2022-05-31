@@ -39,6 +39,7 @@ public class Comments extends Timestamped {
 
 //    @Column(nullable = false)
     private String comment;
+    private String nickname;
 
     @JsonIgnore
     @ManyToOne
@@ -77,7 +78,7 @@ public class Comments extends Timestamped {
 
 
     //== 수정 ==//
-    public void updateContent(String content, User user) {
+    public void updateContent(String content) {
         this.comment = content;
     }
     //== 삭제 ==//
@@ -87,10 +88,11 @@ public class Comments extends Timestamped {
 
 
     @Builder
-    public Comments(Posts post, Comments parent, String comment, User user) {
+    public Comments(Posts post, Comments parent, String comment, String nickname, User user) {
         this.post = post;
         this.parent = parent;
         this.comment = comment;
+        this.nickname = user.getName();
         this.user = user;
         this.isRemoved = false;
     }

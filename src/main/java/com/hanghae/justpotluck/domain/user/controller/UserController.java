@@ -37,8 +37,9 @@ public class UserController {
         return ResponseEntity.ok(userService.logout(request));
     }
 
+
     @PatchMapping("/user/me/edit")
-    public ResponseEntity<UserResponse> update(@ModelAttribute @Valid UserUpdateRequest userUpdateRequest) {
+    public ResponseEntity<UserResponse> update(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
         return ResponseEntity.ok(UserResponse.toUserResponse(userService.update(userUpdateRequest)));
     }
 
@@ -67,7 +68,9 @@ public class UserController {
     public ResponseEntity<Page<MyBookmarkResponse>> findMyBookmark(Pageable pageable) {
         return ResponseEntity.ok(userService.findMyBookmark(pageable));
     }
-
+//    //home 관련
+//    @GetMapping("/home")
+//    public ResponseEntity
 
 //    @GetMapping("/user/me/board")
 

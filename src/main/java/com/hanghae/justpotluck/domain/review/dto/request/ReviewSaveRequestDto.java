@@ -13,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ReviewSaveRequestDto {
     private Long boardId;
-    private Long reviewId;
     private String comment;
+    private String category;
     private String nickname;
     private List<MultipartFile> images = new ArrayList<>();
 

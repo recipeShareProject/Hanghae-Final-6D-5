@@ -29,6 +29,7 @@ public class PostResponseDto {
     private int viewCount;
     private List<String> tags;
     private User user;
+    private String nickname;
 //    private LocalDateTime createdAt;
 //    private LocalDateTime modifiedAt;
     private List<Comments> commentList;
@@ -39,10 +40,11 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getLocation();
+        this.location = post.getAddress();
         this.viewCount = post.getViewCount();
         this.tags = post.getTags();
-        this.user = post.getUser();
+        this.nickname = post.getUser().getName();
+//        this.user = post.getUser();
 //        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();
@@ -51,6 +53,7 @@ public class PostResponseDto {
         this.latitude = post.getLatitude();
         this.expiredAt = post.getExpiredAt();
         this.commentList = post.getCommentList();
+
     }
     public PostResponseDto(Posts post) {
         this.postId = post.getPostId();
@@ -58,7 +61,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getLocation();
+        this.location = post.getAddress();
 //        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();

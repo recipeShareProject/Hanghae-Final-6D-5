@@ -50,7 +50,7 @@ public class PostRequestDto {
     //    좌표를 여기서 받아야하는가
 //    @NotNull
 //    private String location;
-    private String location;
+    private String address;
     private double latitude;
     private double longitude;
     private List<String> saveImageUrl = new ArrayList<>();
@@ -64,7 +64,7 @@ public class PostRequestDto {
         this.tags = post.getTags();
         this.expiredAt = post.getExpiredAt();
         this.category = post.getCategory();
-        this.location = post.getLocation();
+        this.address = post.getAddress();
 //        this.address = post.getLocation().getAddress();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();

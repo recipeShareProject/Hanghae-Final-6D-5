@@ -1,14 +1,13 @@
 package com.hanghae.justpotluck.domain.comment.controller;
 
-import com.hanghae.justpotluck.global.result.Success;
 import com.hanghae.justpotluck.domain.comment.dto.request.CommentRequestDto;
+import com.hanghae.justpotluck.domain.comment.dto.response.CommentResponseDto;
 import com.hanghae.justpotluck.domain.comment.dto.response.CommentUpdateDto;
-import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.comment.service.CommentService;
+import com.hanghae.justpotluck.global.result.Success;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -19,9 +18,9 @@ public class CommentController {
 
     @PostMapping("/api/comment/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Success> commentSave(@PathVariable("postId") Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal User user){
-        commentService.save(postId, requestDto);
-        return new ResponseEntity<>(new Success(true, "댓글 달기 성공"), HttpStatus.OK);
+    public CommentResponseDto commentSave(@PathVariable("postId") Long postId, @RequestBody CommentRequestDto requestDto){
+       return commentService.save(postId, requestDto);
+//        return new ResponseEntity<>(new Success(true, "댓글 달기 성공"), HttpStatus.OK);
     }
 
     //"/api/comment/{commentId}/recomment"
@@ -36,10 +35,9 @@ public class CommentController {
 
     //"/api/comment/{commentId}/{recommentId}
     @PatchMapping("/api/comment/{postId}/{commentId}")
-    public ResponseEntity<Success>  commentModify(@PathVariable("postId") Long postId,
+    public CommentUpdateDto  commentModify(@PathVariable("postId") Long postId,
                               @PathVariable("commentId") Long commentId, @RequestBody CommentUpdateDto requestDto){
-        commentService.modify(postId, commentId, requestDto);
-        return new ResponseEntity<>(new Success(true, "댓글 수정 완료"), HttpStatus.OK);
+        return commentService.modify(postId, commentId, requestDto);
     }
 
     @DeleteMapping("/api/comment/{commentId}")
