@@ -58,11 +58,14 @@ public class Posts extends Timestamped {
 
     //https 인증 받고 geolcation api
     //    @Column(nullable = false)
+    /* 위도 데이터 / 경도 데이터 / 행정구역 위치 정보 / 데이터 없을 시 경고문 보내주기 */
+
     private Double latitude;
+
     private Double longitude;
-    //    @Column(nullable = false)
-    private String location;
-//    private Location location;
+
+    private String address;
+
 
     private int viewCount;
 
@@ -89,14 +92,15 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(User user, String title, String content,String category, String location, Double longitude, Double latitude, ArrayList<String> tags){
+    public Posts(User user, String title, String content,String category, String address, Double longitude, Double latitude, LocalDateTime expiredAt, ArrayList<String> tags){
         this.user = user;
         this.title = title;
         this.content = content;
         this.category = category;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.location = location;
+        this.address = address;
+        this.expiredAt = expiredAt;
         this.tags = tags;
     }
 
@@ -105,7 +109,11 @@ public class Posts extends Timestamped {
                 .title(requestDto.getTitle())
                 .category(requestDto.getCategory())
                 .content(requestDto.getContent())
-                .location(requestDto.getLocation())
+                .address(requestDto.getAddress())
+                .latitude(requestDto.getLatitude())
+                .longitude(requestDto.getLongitude())
+                .tags(requestDto.getTags())
+                .expiredAt(requestDto.getExpiredAt())
                 .user(user)
                 .build();
     }

@@ -24,11 +24,11 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-    private User user;
+    private static User user;
     @Setter
     private Map<String, Object> attributes;
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 

@@ -38,7 +38,7 @@ public class MyPostResponse {
                 .postId(post.getPostId())
                 .category(post.getCategory())
                 .title(post.getTitle())
-                .location(post.getLocation())
+                .location(post.getAddress())
                 .build();
 
     }

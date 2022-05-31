@@ -41,7 +41,7 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
-    public void saveReComment(Long postId, Long commentId, CommentRequestDto requestDto){
+    public CommentResponseDto saveReComment(Long postId, Long commentId, CommentRequestDto requestDto){
         User user = userUtil.findCurrentUser();
         Posts post = postRepository.findByPostId(postId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
         Comments parent = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 commentId가 존재하지 않습니다."));
@@ -57,6 +57,7 @@ public class CommentService {
         comment.confirmParent(parent);
 
         commentRepository.save(comment);
+        return new CommentResponseDto(comment);
     }
 
     public CommentUpdateDto modify(Long postId, Long commentId, CommentUpdateDto requestDto){

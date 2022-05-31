@@ -2,12 +2,16 @@ package com.hanghae.justpotluck.domain.alarm.controller;
 
 import com.hanghae.justpotluck.domain.alarm.dto.AlarmResponseDto;
 import com.hanghae.justpotluck.domain.alarm.service.AlarmService;
+import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

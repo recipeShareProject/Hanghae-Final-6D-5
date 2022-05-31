@@ -24,7 +24,7 @@ public class Location {
     public Location(PostRequestDto requestDto) {
         this.latitude = requestDto.getLatitude();
         this.longitude = requestDto.getLongitude();
-        this.address = requestDto.getLocation();
+        this.address = requestDto.getAddress();
     }
 
     public Location(String address, double latitude, double longitude) {
