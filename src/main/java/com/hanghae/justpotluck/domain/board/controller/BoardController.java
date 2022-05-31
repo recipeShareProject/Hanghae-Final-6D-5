@@ -11,6 +11,8 @@ import com.hanghae.justpotluck.domain.board.service.BoardService;
 import com.hanghae.justpotluck.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,8 +42,9 @@ public class BoardController {
     }
 
     @GetMapping("/board")
-    public List<BoardListResponse> getAllBoard() {
-        return boardService.getAllBoard();
+    public Page<BoardListResponse> getAllBoard(Pageable pageable) {
+
+        return boardService.getAllBoard(pageable);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +62,7 @@ public class Posts extends Timestamped {
 
     private Double latitude;
 
-
     private Double longitude;
-
-
 
     private String address;
 
@@ -96,7 +92,7 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(User user, String title, String content,String category, String address, Double longitude, Double latitude, ArrayList<String> tags){
+    public Posts(User user, String title, String content,String category, String address, Double longitude, Double latitude, LocalDateTime expiredAt, ArrayList<String> tags){
         this.user = user;
         this.title = title;
         this.content = content;
@@ -104,6 +100,7 @@ public class Posts extends Timestamped {
         this.longitude = longitude;
         this.latitude = latitude;
         this.address = address;
+        this.expiredAt = expiredAt;
         this.tags = tags;
     }
 
@@ -113,6 +110,10 @@ public class Posts extends Timestamped {
                 .category(requestDto.getCategory())
                 .content(requestDto.getContent())
                 .address(requestDto.getAddress())
+                .latitude(requestDto.getLatitude())
+                .longitude(requestDto.getLongitude())
+                .tags(requestDto.getTags())
+                .expiredAt(requestDto.getExpiredAt())
                 .user(user)
                 .build();
     }

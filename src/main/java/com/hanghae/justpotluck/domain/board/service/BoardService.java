@@ -20,6 +20,9 @@ import com.hanghae.justpotluck.global.aws.S3Uploader;
 import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -130,9 +133,10 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardListResponse> getAllBoard() {
+    public Page<BoardListResponse> getAllBoard(Pageable pageable) {
         List<BoardListResponse> listBoard = new ArrayList<>();
-        List<Board> boards = boardRepository.findAllByOrderByCreatedAtDesc();
+        Page<Board> boards = boardRepository.findAllByOrderByViewCountDesc(pageable);
+        Page<Board> boards2 = boardRepository.findAllByOrderByCookTimeAsc(pageable);
 
         for (Board board : boards) {
             List<String> boardImages = boardImageRepository.findBySavedImageUrl(board.getId())
@@ -141,7 +145,7 @@ public class BoardService {
                     .collect(Collectors.toList());
             listBoard.add(new BoardListResponse(board, boardImages));
         }
-        return listBoard;
+        return new PageImpl<>(listBoard, pageable, boards.getTotalElements());
     }
 
 
