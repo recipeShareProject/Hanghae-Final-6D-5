@@ -18,6 +18,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +61,17 @@ public class Posts extends Timestamped {
 
     //https 인증 받고 geolcation api
     //    @Column(nullable = false)
+    /* 위도 데이터 / 경도 데이터 / 행정구역 위치 정보 / 데이터 없을 시 경고문 보내주기 */
+    @NotNull(message = "위도(lat) 정보가 없습니다.")
     private Double latitude;
+
+    @NotNull(message = "경도(lon) 정보가 없습니다.")
     private Double longitude;
-    //    @Column(nullable = false)
-    private String location;
-//    private Location location;
+
+
+    @NotNull(message = "행정구역 정보가 없습니다.")
+    private String address;
+
 
     private int viewCount;
 
@@ -91,14 +98,14 @@ public class Posts extends Timestamped {
 
 
     @Builder
-    public Posts(User user, String title, String content,String category, String location, Double longitude, Double latitude, ArrayList<String> tags){
+    public Posts(User user, String title, String content,String category, String address, Double longitude, Double latitude, ArrayList<String> tags){
         this.user = user;
         this.title = title;
         this.content = content;
         this.category = category;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.location = location;
+        this.address = address;
         this.tags = tags;
     }
 
@@ -107,7 +114,7 @@ public class Posts extends Timestamped {
                 .title(requestDto.getTitle())
                 .category(requestDto.getCategory())
                 .content(requestDto.getContent())
-                .location(requestDto.getLocation())
+                .address(requestDto.getAddress())
                 .user(user)
                 .build();
     }
