@@ -21,7 +21,7 @@ public class ProcessResponseDto {
     private List<String> processImages;
 
     public ProcessResponseDto(RecipeProcess process, List<String> processImages) {
-        this.id = process.getProcessId();
+        this.id = process.getId();
         this.boardId = process.getBoard().getId();
         this.process = process.getProcess();
         this.processImages = processImages;

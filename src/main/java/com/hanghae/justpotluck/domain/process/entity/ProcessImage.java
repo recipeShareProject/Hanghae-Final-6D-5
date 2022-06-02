@@ -19,7 +19,7 @@ public class ProcessImage {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "recipe_process_id")
+    @JoinColumn(name = "process_id")
     private RecipeProcess process;
 
     private String imageUrl;

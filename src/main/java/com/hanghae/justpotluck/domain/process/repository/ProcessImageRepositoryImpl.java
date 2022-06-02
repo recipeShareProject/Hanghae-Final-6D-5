@@ -18,7 +18,7 @@ public class ProcessImageRepositoryImpl implements ProcessImageRepositoryCustom{
         return queryFactory
                 .selectFrom(processImage)
                 .innerJoin(processImage.process, recipeProcess)
-                .where(recipeProcess.processId.eq(processId))
+                .where(recipeProcess.id.eq(processId))
                 .fetch();
     }
 }

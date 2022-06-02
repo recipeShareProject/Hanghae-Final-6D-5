@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
+import com.hanghae.justpotluck.domain.ingredient.entity.Ingredient;
 import com.hanghae.justpotluck.domain.process.entity.RecipeProcess;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.user.entity.User;
@@ -53,13 +54,13 @@ public class Board extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonBackReference
-    @OneToMany(
-            mappedBy = "board",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private List<Image> processImages = new ArrayList<>();
+//    @JsonBackReference
+//    @OneToMany(
+//            mappedBy = "board",
+//            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+//            orphanRemoval = true
+//    )
+//    private List<Image> processImages = new ArrayList<>();
 
     @JsonBackReference
     @OneToMany(
@@ -127,7 +128,7 @@ public class Board extends Timestamped {
     }
 
     public void addImage(Image image) {
-        this.processImages.add(image);
+        this.completeImages.add(image);
         if (image.getBoard() != this) {
             image.setBoard(this);
         }

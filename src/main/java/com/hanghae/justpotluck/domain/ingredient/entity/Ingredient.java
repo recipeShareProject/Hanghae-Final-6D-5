@@ -1,6 +1,7 @@
-package com.hanghae.justpotluck.domain.board.entity;
+package com.hanghae.justpotluck.domain.ingredient.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hanghae.justpotluck.domain.board.entity.Board;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

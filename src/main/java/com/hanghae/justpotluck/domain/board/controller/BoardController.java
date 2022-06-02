@@ -3,11 +3,9 @@ package com.hanghae.justpotluck.domain.board.controller;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
-import com.hanghae.justpotluck.domain.process.dto.ProcessSaveRequest;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
-import com.hanghae.justpotluck.domain.process.dto.ProcessResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
 import com.hanghae.justpotluck.domain.process.service.RecipeProcessService;
@@ -56,11 +54,6 @@ public class BoardController {
     public ResponseEntity<BoardResponseDto> saveBoard(@AuthenticationPrincipal UserPrincipal userPrincipal, @ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
-    }
-
-    @PostMapping("/board/{boardId}/process")
-    public ProcessResponseDto saveProcess(@RequestBody ProcessSaveRequest requestDto, @PathVariable Long boardId) {
-        return processService.saveProcess(requestDto, boardId);
     }
 
     @PostMapping("/community/search")

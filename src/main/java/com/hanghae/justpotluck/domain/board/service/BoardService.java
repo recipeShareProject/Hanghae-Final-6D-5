@@ -67,14 +67,13 @@ public class BoardService {
 //    }
 
     private List<String> uploadBoardImages(BoardSaveRequestDto requestDto, Board board) {
-        return requestDto.getProcessImages().stream()
+        return requestDto.getCompleteImages().stream()
                 .map(image -> s3Uploader.upload(image, "board"))
                 .map(url -> saveBoardImage(board, url))
                 .map(image -> image.getImageUrl())
                 .collect(Collectors.toList());
 
     }
-
 
     private Image saveBoardImage(Board board, String url) {
         return boardImageRepository.save(Image.builder()
@@ -106,7 +105,7 @@ public class BoardService {
                 });
     }
     private void uploadBoardImages(BoardUpdateRequestDto requestDto, Board board) {
-        requestDto.getProcessImages()
+        requestDto.getCompleteImages()
                 .stream()
                 .forEach(file -> {
                     String url = s3Uploader.upload(file, "board");
@@ -124,7 +123,7 @@ public class BoardService {
     public Page<BoardListResponse> getAllBoard(Pageable pageable) {
         List<BoardListResponse> listBoard = new ArrayList<>();
         Page<Board> boards = boardRepository.findAllByOrderByViewCountDesc(pageable);
-        Page<Board> boards2 = boardRepository.findAllByOrderByCookTimeAsc(pageable);
+//        Page<Board> boards2 = boardRepository.findAllByOrderByCookTimeAsc(pageable);
 
         for (Board board : boards) {
             List<String> boardImages = boardImageRepository.findBySavedImageUrl(board.getId())
@@ -152,7 +151,7 @@ public class BoardService {
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
         List<Review> reviews = reviewRepository.findAllByBoardIdOrderByIdDesc(boardId);
-        List<String> boardImages = board.getProcessImages()
+        List<String> boardImages = board.getCompleteImages()
                 .stream()
                 .map(image ->image.getImageUrl())
                 .collect(Collectors.toList());

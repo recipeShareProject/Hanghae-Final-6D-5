@@ -1,6 +1,6 @@
 package com.hanghae.justpotluck.domain.board.dto.request;
 
-import com.hanghae.justpotluck.domain.board.entity.Ingredient;
+import com.hanghae.justpotluck.domain.ingredient.entity.Ingredient;
 import com.hanghae.justpotluck.domain.process.entity.RecipeProcess;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +26,6 @@ public class BoardSaveRequestDto {
     private String cookTime;
     private int viewCount;
     private boolean bookmark;
-    private List<MultipartFile> processImages = new ArrayList<>();
+//    private List<MultipartFile> processImages = new ArrayList<>();
     private List<MultipartFile> completeImages = new ArrayList<>();
 }

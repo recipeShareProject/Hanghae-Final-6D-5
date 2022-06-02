@@ -53,8 +53,8 @@ public class Image extends Timestamped {
 
     public void setBoard(Board board) {
         this.board = board;
-        if (!board.getProcessImages().contains(this)) {
-            board.getProcessImages().add(this);
+        if (!board.getCompleteImages().contains(this)) {
+            board.getCompleteImages().add(this);
         }
     }
 //    public void setReview(Review review) {

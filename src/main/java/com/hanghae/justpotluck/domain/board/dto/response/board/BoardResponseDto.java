@@ -1,7 +1,7 @@
 package com.hanghae.justpotluck.domain.board.dto.response.board;
 
 import com.hanghae.justpotluck.domain.board.entity.Board;
-import com.hanghae.justpotluck.domain.board.entity.Ingredient;
+import com.hanghae.justpotluck.domain.ingredient.entity.Ingredient;
 import com.hanghae.justpotluck.domain.process.entity.RecipeProcess;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.global.config.Timestamped;

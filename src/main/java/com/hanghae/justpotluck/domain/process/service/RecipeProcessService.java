@@ -33,7 +33,7 @@ public class RecipeProcessService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다.")
         );
-        RecipeProcess process = processRepository.save(RecipeProcess.createProcess(requestDto, board, user));
+        RecipeProcess process = processRepository.save(RecipeProcess.createProcess(requestDto, board));
         List<String> processImage = uploadProcessImage(requestDto, process);
 
         return new ProcessResponseDto(process, processImage);
