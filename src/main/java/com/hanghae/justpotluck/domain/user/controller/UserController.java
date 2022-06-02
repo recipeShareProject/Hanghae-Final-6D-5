@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.user.controller;
 
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
+import com.hanghae.justpotluck.domain.user.dto.request.UserLocationUpdateRequestDto;
 import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
 import com.hanghae.justpotluck.domain.user.dto.response.*;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
@@ -36,6 +37,10 @@ public class UserController {
     public ResponseEntity<Boolean> logout(HttpServletRequest request) {
         return ResponseEntity.ok(userService.logout(request));
     }
+    @PostMapping("/user/info")
+    public ResponseEntity<UserResponse> saveLocation(@ModelAttribute @Valid UserLocationUpdateRequestDto userLocationUpdateRequestDto){
+        return ResponseEntity.ok(UserResponse.toUserResponse(userService.locationupdate(userLocationUpdateRequestDto)));
+    }
 
 
     @PatchMapping("/user/me/edit")
@@ -68,6 +73,7 @@ public class UserController {
     public ResponseEntity<Page<MyBookmarkResponse>> findMyBookmark(Pageable pageable) {
         return ResponseEntity.ok(userService.findMyBookmark(pageable));
     }
+
 //    //home 관련
 //    @GetMapping("/home")
 //    public ResponseEntity
