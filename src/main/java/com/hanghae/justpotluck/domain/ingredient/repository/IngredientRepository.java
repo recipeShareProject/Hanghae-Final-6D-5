@@ -1,4 +1,4 @@
-package com.hanghae.justpotluck.domain.board.repository;
+package com.hanghae.justpotluck.domain.ingredient.repository;
 
 import com.hanghae.justpotluck.domain.ingredient.entity.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;

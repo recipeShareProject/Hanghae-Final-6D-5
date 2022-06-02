@@ -1,4 +1,4 @@
-package com.hanghae.justpotluck.domain.process.dto;
+package com.hanghae.justpotluck.domain.process.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,10 +12,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProcessSaveRequest {
-
-    private Long boardId;
+public class ProcessUpdateRequestDto {
+    private Long processId;
     private String process;
+    private List<String> saveImageUrl;
     private List<MultipartFile> processImages;
-
 }

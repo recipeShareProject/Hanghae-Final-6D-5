@@ -1,4 +1,4 @@
-package com.hanghae.justpotluck.domain.process.dto;
+package com.hanghae.justpotluck.domain.process.dto.response;
 
 import com.hanghae.justpotluck.domain.process.entity.RecipeProcess;
 import lombok.AllArgsConstructor;

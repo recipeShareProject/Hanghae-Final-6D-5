@@ -12,6 +12,7 @@ import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
+import com.hanghae.justpotluck.domain.process.service.RecipeProcessService;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
 import com.hanghae.justpotluck.domain.user.entity.User;
@@ -41,6 +42,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardImageRepository boardImageRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final RecipeProcessService processService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final S3Uploader s3Uploader;
@@ -55,6 +57,7 @@ public class BoardService {
 //        User user = userPrincipal.getUser();
         Board board = boardRepository.save(Board.createBoard(requestDto, user));
         List<String> boardImages = uploadBoardImages(requestDto, board);
+
 //        List<String> boardImages2 = uploadBoardImages2(requestDto, board);
 
         return new BoardResponseDto(board, boardImages);
