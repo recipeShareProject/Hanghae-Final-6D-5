@@ -42,4 +42,13 @@ public class IngredientService {
         return new IngredientResponse(ingredient);
     }
 
+    @Transactional
+    public void deleteIngredient(Long ingredientId) {
+        User user = userUtil.findCurrentUser();
+        Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(
+                () -> new IllegalArgumentException("해당 재료가 없습니다.")
+        );
+        ingredientRepository.delete(ingredient);
+    }
+
 }

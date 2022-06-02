@@ -41,6 +41,7 @@ public class Ingredient {
     public static Ingredient createIngredient(IngredientSaveRequest requestDto, Board board) {
         return Ingredient.builder()
                 .ingredient(requestDto.getIngredient())
+                .amount(requestDto.getAmount())
                 .board(board)
                 .build();
     }
@@ -49,8 +50,6 @@ public class Ingredient {
         this.ingredient = requestDto.getIngredient();
         this.amount = requestDto.getAmount();
     }
-
-
 
     public void setBoard(Board board) {
         this.board = board;

@@ -94,4 +94,13 @@ public class RecipeProcessService {
                 .map(image -> image.getImageUrl())
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void deleteProcess(Long processId) {
+        User user = userUtil.findCurrentUser();
+        RecipeProcess process = processRepository.findById(processId).orElseThrow(
+                () -> new IllegalArgumentException("해당 조리과정이 없습니다.")
+        );
+        processRepository.delete(process);
+    }
 }
