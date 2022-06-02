@@ -13,11 +13,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class IngredientResponse {
     private Long ingredientId;
+    private Long boardId;
     private String ingredient;
     private String amount;
 
     public IngredientResponse(Ingredient ingredient) {
         this.ingredientId = ingredient.getIngredientId();
+        this.boardId = ingredient.getBoard().getId();
         this.ingredient = ingredient.getIngredient();
         this.amount = ingredient.getAmount();
     }

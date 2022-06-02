@@ -28,6 +28,9 @@ public class Ingredient {
     @Column
     private String ingredient;
 
+    private String include;
+    private String exclude;
+
     @Column
     private String amount;
 

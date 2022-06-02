@@ -5,7 +5,6 @@ import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
-import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.board.entity.Image;
@@ -87,7 +86,7 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardUpdateResponse updateBoard(Long boardId, BoardUpdateRequestDto requestDto) {
+    public BoardResponseDto updateBoard(Long boardId, BoardUpdateRequestDto requestDto) {
         User user = userUtil.findCurrentUser();
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
@@ -96,7 +95,7 @@ public class BoardService {
         uploadBoardImages(requestDto, board);
         List<String> saveImages = getSaveImages(requestDto);
         board.update(requestDto, user);
-        return new BoardUpdateResponse(board.getId(), saveImages);
+        return new BoardResponseDto(board, saveImages);
     }
 
     private void validateDeletedImages(BoardUpdateRequestDto requestDto) {
