@@ -32,7 +32,7 @@ public class ProcessController {
         return ResponseEntity.ok(processService.updateProcess(processId, requestDto));
     }
 
-    @DeleteMapping("/{boardId}/ingredient/{processId}")
+    @DeleteMapping("/{boardId}/process/{processId}")
     public ResponseEntity<Void> deleteProcess(@PathVariable Long boardId, @PathVariable Long processId) {
         processService.deleteProcess(processId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
