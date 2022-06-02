@@ -28,12 +28,12 @@ public class BoardResponseDto extends Timestamped {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String cookTime;
-    private List<String> boardImages;
+    private List<String> completeImages;
     private List<Review> reviews;
     private String quantity;
     private int viewCount;
 
-    public BoardResponseDto(Board entity, List<String> boardImages) {
+    public BoardResponseDto(Board entity, List<String> completeImages) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.category = entity.getCategory();
@@ -43,7 +43,7 @@ public class BoardResponseDto extends Timestamped {
         this.writer = entity.getUser().getName();
         this.quantity = entity.getQuantity();
         this.viewCount = entity.getViewCount();
-        this.boardImages = boardImages;
+        this.completeImages = completeImages;
         this.reviews = entity.getReviewList();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();

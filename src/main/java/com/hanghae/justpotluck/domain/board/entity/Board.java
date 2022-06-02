@@ -123,8 +123,8 @@ public class Board extends Timestamped {
         this.title = requestDto.getTitle();
         this.quantity = requestDto.getQuantity();
         this.category = requestDto.getCategory();
-        this.ingredients = requestDto.getIngredients();
-        this.processes = requestDto.getProcesses();
+//        this.ingredients = requestDto.getIngredients();
+//        this.processes = requestDto.getProcesses();
     }
 
     public void addImage(Image image) {
