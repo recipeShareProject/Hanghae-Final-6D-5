@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientSaveRequest {
-    private Long ingredientId;
+    private Long boardId;
     private String ingredient;
     private String amount;
 }

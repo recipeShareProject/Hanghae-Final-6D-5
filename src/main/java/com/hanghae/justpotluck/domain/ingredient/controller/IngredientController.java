@@ -17,10 +17,15 @@ import org.springframework.web.bind.annotation.*;
 public class IngredientController {
 
     private final IngredientService ingredientService;
+//
+//    @PostMapping("/{boardId}/ingredient")
+//    public IngredientResponse saveIngredient(@RequestBody IngredientSaveRequest requestDto, @PathVariable Long boardId) {
+//        return ingredientService.saveIngredient(requestDto, boardId);
+//    }
 
-    @PostMapping("/{boardId}/ingredient")
-    public IngredientResponse saveIngredient(@RequestBody IngredientSaveRequest requestDto, @PathVariable Long boardId) {
-        return ingredientService.saveIngredient(requestDto, boardId);
+    @PostMapping("/ingredient")
+    public IngredientResponse saveIngredient(@RequestBody IngredientSaveRequest requestDto) {
+        return ingredientService.saveIngredient(requestDto);
     }
 
     @PatchMapping("/ingredient/{ingredientId}")

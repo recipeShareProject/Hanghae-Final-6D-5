@@ -5,7 +5,6 @@ import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
-import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
 import com.hanghae.justpotluck.domain.process.service.RecipeProcessService;
@@ -63,7 +62,7 @@ public class BoardController {
     }
 
     @PatchMapping("/board/{boardId}")
-    public ResponseEntity<BoardUpdateResponse> updateBoard(@PathVariable Long boardId,
+    public ResponseEntity<BoardResponseDto> updateBoard(@PathVariable Long boardId,
                                                            @ModelAttribute BoardUpdateRequestDto requestDto) {
         return ResponseEntity.ok(boardService.updateBoard(boardId, requestDto));
     }

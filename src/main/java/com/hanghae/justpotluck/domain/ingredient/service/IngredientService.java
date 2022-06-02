@@ -21,9 +21,9 @@ public class IngredientService {
     private final IngredientRepository ingredientRepository;
 
     @Transactional
-    public IngredientResponse saveIngredient(IngredientSaveRequest requestDto, Long boardId) {
+    public IngredientResponse saveIngredient(IngredientSaveRequest requestDto) {
         User user = userUtil.findCurrentUser();
-        Board board = boardRepository.findById(boardId).orElseThrow(
+        Board board = boardRepository.findById(requestDto.getBoardId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다.")
         );
         Ingredient ingredient = ingredientRepository.save(Ingredient.createIngredient(requestDto, board));
