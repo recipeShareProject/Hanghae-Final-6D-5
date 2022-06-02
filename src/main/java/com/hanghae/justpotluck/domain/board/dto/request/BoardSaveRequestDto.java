@@ -26,6 +26,7 @@ public class BoardSaveRequestDto {
     private String cookTime;
     private int viewCount;
     private boolean bookmark;
+    private List<String> saveImageUrl;
 //    private List<MultipartFile> processImages = new ArrayList<>();
     private List<MultipartFile> completeImages = new ArrayList<>();
 }

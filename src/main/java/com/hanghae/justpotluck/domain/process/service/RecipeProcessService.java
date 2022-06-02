@@ -74,10 +74,10 @@ public class RecipeProcessService {
 
     private void validateDeletedImages(ProcessUpdateRequestDto requestDto) {
         processImageRepository.findBySavedImageUrl(requestDto.getProcessId()).stream()
-                .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))
+                .filter(processImage -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(processImage.getImageUrl())))
                 .forEach(url -> {
                     processImageRepository.delete(url);
-                    s3Uploader.deleteImage(url.getImageUrl());
+                    s3Uploader.deleteProcessImage(url.getImageUrl());
                 });
     }
     private void uploadProcessImages(ProcessUpdateRequestDto requestDto, RecipeProcess process) {

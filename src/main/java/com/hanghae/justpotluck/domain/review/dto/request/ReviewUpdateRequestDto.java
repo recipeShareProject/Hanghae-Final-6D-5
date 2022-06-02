@@ -1,13 +1,15 @@
 package com.hanghae.justpotluck.domain.review.dto.request;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ReviewUpdateRequestDto {
 

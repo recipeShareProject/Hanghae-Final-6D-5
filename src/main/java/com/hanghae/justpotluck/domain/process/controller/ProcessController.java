@@ -25,15 +25,14 @@ public class ProcessController {
         return processService.saveProcess(requestDto, boardId);
     }
 
-    @PatchMapping("/{boardId}/process/{processId}")
-    public ResponseEntity<ProcessResponseDto> updateProcess(@PathVariable Long boardId,
-                                                               @ModelAttribute ProcessUpdateRequestDto requestDto,
+    @PatchMapping("/process/{processId}")
+    public ResponseEntity<ProcessResponseDto> updateProcess(@ModelAttribute ProcessUpdateRequestDto requestDto,
                                                                @PathVariable Long processId) {
         return ResponseEntity.ok(processService.updateProcess(processId, requestDto));
     }
 
-    @DeleteMapping("/{boardId}/process/{processId}")
-    public ResponseEntity<Void> deleteProcess(@PathVariable Long boardId, @PathVariable Long processId) {
+    @DeleteMapping("/process/{processId}")
+    public ResponseEntity<Void> deleteProcess(@PathVariable Long processId) {
         processService.deleteProcess(processId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

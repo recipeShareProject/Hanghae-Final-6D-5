@@ -23,14 +23,13 @@ public class IngredientController {
         return ingredientService.saveIngredient(requestDto, boardId);
     }
 
-    @PatchMapping("/{boardId}/ingredient/{ingredientId}")
-    public ResponseEntity<IngredientResponse> updateProcess(@PathVariable Long boardId,
-                                                            @ModelAttribute IngredientUpdateRequestDto requestDto,
+    @PatchMapping("/ingredient/{ingredientId}")
+    public ResponseEntity<IngredientResponse> updateProcess(@RequestBody IngredientUpdateRequestDto requestDto,
                                                             @PathVariable Long ingredientId) {
         return ResponseEntity.ok(ingredientService.updateIngredient(ingredientId, requestDto));
     }
-    @DeleteMapping("/{boardId}/ingredient/{ingredientId}")
-    public ResponseEntity<Void> deleteIngredient(@PathVariable Long boardId, @PathVariable Long ingredientId) {
+    @DeleteMapping("/ingredient/{ingredientId}")
+    public ResponseEntity<Void> deleteIngredient(@PathVariable Long ingredientId) {
         ingredientService.deleteIngredient(ingredientId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
