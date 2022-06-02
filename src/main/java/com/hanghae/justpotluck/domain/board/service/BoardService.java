@@ -55,16 +55,17 @@ public class BoardService {
 //        User user = userPrincipal.getUser();
         Board board = boardRepository.save(Board.createBoard(requestDto, user));
         List<String> boardImages = uploadBoardImages(requestDto, board);
-        List<String> boardImages2 = uploadBoardImages2(requestDto, board);
+//        List<String> boardImages2 = uploadBoardImages2(requestDto, board);
 
-        return new BoardResponseDto(board, boardImages, boardImages2);
+        return new BoardResponseDto(board, boardImages);
     }
 
-//    private List<String> uploadProcessList(BoardSaveRequestDto requestDto, Board board) {
+    //    private List<String> uploadProcessList(BoardSaveRequestDto requestDto, Board board) {
 //        return requestDto.getProcessList().stream()
 //                .map(recipeProcess -> recipeProcess.toString())
 //                .collect(Collectors.toList());
 //    }
+
     private List<String> uploadBoardImages(BoardSaveRequestDto requestDto, Board board) {
         return requestDto.getProcessImages().stream()
                 .map(image -> s3Uploader.upload(image, "board"))
@@ -73,14 +74,7 @@ public class BoardService {
                 .collect(Collectors.toList());
 
     }
-    private List<String> uploadBoardImages2(BoardSaveRequestDto requestDto, Board board) {
-        return requestDto.getCompleteImages().stream()
-                .map(CompleteImage -> s3Uploader.upload(CompleteImage, "complete"))
-                .map(url -> saveBoardImage(board, url))
-                .map(completeImage -> completeImage.getImageUrl())
-                .collect(Collectors.toList());
 
-    }
 
     private Image saveBoardImage(Board board, String url) {
         return boardImageRepository.save(Image.builder()
@@ -116,12 +110,6 @@ public class BoardService {
                 .stream()
                 .forEach(file -> {
                     String url = s3Uploader.upload(file, "board");
-                    saveBoardImage(board, url);
-                });
-        requestDto.getCompleteImages()
-                .stream()
-                .forEach(file -> {
-                    String url = s3Uploader.upload(file, "complete");
                     saveBoardImage(board, url);
                 });
     }
@@ -168,11 +156,9 @@ public class BoardService {
                 .stream()
                 .map(image ->image.getImageUrl())
                 .collect(Collectors.toList());
-        List<String> completeImages = board.getCompleteImages()
-                .stream()
-                .map(completeImage ->completeImage.getImageUrl())
-                .collect(Collectors.toList());
-        return new BoardResponseDto(board, boardImages, completeImages);
+
+
+        return new BoardResponseDto(board, boardImages);
     }
 
 //    원하는 것 검색하는 기능

@@ -1,6 +1,8 @@
 package com.hanghae.justpotluck.domain.board.dto.response.board;
 
 import com.hanghae.justpotluck.domain.board.entity.Board;
+import com.hanghae.justpotluck.domain.board.entity.Ingredient;
+import com.hanghae.justpotluck.domain.process.entity.RecipeProcess;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.AllArgsConstructor;
@@ -17,29 +19,31 @@ import java.util.List;
 public class BoardResponseDto extends Timestamped {
     private Long id;
     private String title;
-    private List<String> process;
+    //    private List<RecipeProcess> process;
+//    private List<String> ingredients;
+    private List<RecipeProcess> processes;
+    private List<Ingredient> ingredients;
     private String category;
     private String writer;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String cookTime;
-    private List<String> processImageUrl;
-    private List<String> completeImageUrl;
+    private List<String> boardImages;
     private List<Review> reviews;
     private String quantity;
     private int viewCount;
 
-    public BoardResponseDto(Board entity, List<String> processImages, List<String> completeImages) {
+    public BoardResponseDto(Board entity, List<String> boardImages) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.category = entity.getCategory();
-        this.process = entity.getProcess();
+        this.processes = entity.getProcesses();
+        this.ingredients = entity.getIngredients();
         this.cookTime = entity.getCookTime();
         this.writer = entity.getUser().getName();
         this.quantity = entity.getQuantity();
         this.viewCount = entity.getViewCount();
-        this.processImageUrl = processImages;
-        this.completeImageUrl = completeImages;
+        this.boardImages = boardImages;
         this.reviews = entity.getReviewList();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
