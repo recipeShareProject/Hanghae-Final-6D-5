@@ -48,6 +48,8 @@ public class User implements Auditable {
 //    private Image profileImage;
     private String imageUrl;
 
+    private String address;
+
     private Double longitude;
 
     private Double latitude;

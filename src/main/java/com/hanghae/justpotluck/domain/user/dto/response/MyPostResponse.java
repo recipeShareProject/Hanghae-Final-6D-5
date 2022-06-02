@@ -26,7 +26,7 @@ public class MyPostResponse {
     @ApiModelProperty(value = "게시글 이름", example = "제목제목제목")
     private String title;
 
-    private String location;
+    private String address;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @ApiModelProperty(value = "게시글 생성 시각")
@@ -38,7 +38,7 @@ public class MyPostResponse {
                 .postId(post.getPostId())
                 .category(post.getCategory())
                 .title(post.getTitle())
-                .location(post.getAddress())
+                .address(post.getAddress())
                 .build();
 
     }

@@ -22,7 +22,7 @@ public class PostResponseDto {
     private String category;
     private LocalDateTime expiredAt;
     private LocalDateTime createdAt;
-    private String location;
+    private String address;
     private Double longitude;
     private Double latitude;
     private List<String> images;
@@ -40,7 +40,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getAddress();
+        this.address = post.getAddress();
         this.viewCount = post.getViewCount();
         this.tags = post.getTags();
         this.nickname = post.getUser().getName();
@@ -61,7 +61,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getAddress();
+        this.address = post.getAddress();
 //        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();

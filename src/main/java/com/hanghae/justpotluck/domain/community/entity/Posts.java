@@ -113,10 +113,11 @@ public class Posts extends Timestamped {
                 .category(requestDto.getCategory())
                 .content(requestDto.getContent())
                 .address(requestDto.getAddress())
+                .longitude(requestDto.getLongitude())
+                .latitude(requestDto.getLatitude())
                 .user(user)
                 .build();
     }
-
     public void update(PostUpdateDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
