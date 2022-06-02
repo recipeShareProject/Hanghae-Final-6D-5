@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
+import com.hanghae.justpotluck.domain.ingredient.entity.Ingredient;
+import com.hanghae.justpotluck.domain.process.entity.RecipeProcess;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.config.Timestamped;
@@ -37,12 +39,7 @@ public class Board extends Timestamped {
     private String cookTime;
 
     //얘를 어떻게 할 건지
-    private ArrayList<String> ingredients;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    private ArrayList<String> ingredients;
 
     @JsonBackReference
     @OneToMany(
@@ -50,7 +47,20 @@ public class Board extends Timestamped {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<Image> processImages = new ArrayList<>();
+    private List<Ingredient> ingredients;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+//    @JsonBackReference
+//    @OneToMany(
+//            mappedBy = "board",
+//            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+//            orphanRemoval = true
+//    )
+//    private List<Image> processImages = new ArrayList<>();
 
     @JsonBackReference
     @OneToMany(
@@ -60,7 +70,14 @@ public class Board extends Timestamped {
     )
     private List<Image> completeImages = new ArrayList<>();
 
-    private ArrayList<String> process;
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "board",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<RecipeProcess> processes;
+//    private ArrayList<String> process;
 //    private List<Ingredient> ingredientList;
 
     @JsonIgnoreProperties({"board"})
@@ -76,13 +93,13 @@ public class Board extends Timestamped {
     @Builder
     public Board(String title, User user,
                  List<Review> reviewList, String cookTime, String quantity,
-                 ArrayList<String> ingredients,
-                 ArrayList<String> process, int viewCount, String category) {
+                 List<Ingredient> ingredients,
+                 List<RecipeProcess> processes, int viewCount, String category) {
         this.title = title;
         this.cookTime = cookTime;
         this.user = user;
         this.reviewList = reviewList;
-        this.process = process;
+        this.processes = processes;
         this.quantity = quantity;
         this.ingredients = ingredients;
         this.category = category;
@@ -93,7 +110,7 @@ public class Board extends Timestamped {
     public static Board createBoard(BoardSaveRequestDto requestDto, User user) {
         return Board.builder()
                 .title(requestDto.getTitle())
-                .process(requestDto.getProcess())
+                .processes(requestDto.getProcesses())
                 .category(requestDto.getCategory())
                 .quantity(requestDto.getQuantity())
                 .ingredients(requestDto.getIngredients())
@@ -106,12 +123,12 @@ public class Board extends Timestamped {
         this.title = requestDto.getTitle();
         this.quantity = requestDto.getQuantity();
         this.category = requestDto.getCategory();
-//        this.ingredientList = requestDto.getIngredient();
-        this.process = requestDto.getProcess();
+        this.ingredients = requestDto.getIngredients();
+        this.processes = requestDto.getProcesses();
     }
 
     public void addImage(Image image) {
-        this.processImages.add(image);
+        this.completeImages.add(image);
         if (image.getBoard() != this) {
             image.setBoard(this);
         }

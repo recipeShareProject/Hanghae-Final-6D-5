@@ -8,6 +8,7 @@ import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
+import com.hanghae.justpotluck.domain.process.service.RecipeProcessService;
 import com.hanghae.justpotluck.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final RecipeProcessService processService;
 
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @PostMapping("/board")
@@ -54,8 +56,9 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }
 
-    @PostMapping("/api/community/search")
-    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto){
+    @PostMapping("/community/search")
+    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto) {
+
         return boardService.findWantedRecipe(requestDto);
     }
 

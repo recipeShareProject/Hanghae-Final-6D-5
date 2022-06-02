@@ -1,5 +1,7 @@
 package com.hanghae.justpotluck.domain.board.dto.request;
 
+import com.hanghae.justpotluck.domain.ingredient.entity.Ingredient;
+import com.hanghae.justpotluck.domain.process.entity.RecipeProcess;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,10 +21,12 @@ public class BoardUpdateRequestDto {
     private String quantity;
     //    private FoodCategory category;
     private String category;
-    private ArrayList<String> process;
-    private List<String> ingredients = new ArrayList<>();
+    //    private ArrayList<String> process;
+    private List<RecipeProcess> processes;
+    //    private List<String> ingredients = new ArrayList<>();
+    private List<Ingredient> ingredients;
     private List<String> saveImageUrl = new ArrayList<>();
-    private List<MultipartFile> processImages = new ArrayList<>();
+//    private List<MultipartFile> processImages = new ArrayList<>();
     private List<MultipartFile> completeImages = new ArrayList<>();
 //    private List<Ingredient> ingredient;
 //    private LocalDateTime modifiedAt;
