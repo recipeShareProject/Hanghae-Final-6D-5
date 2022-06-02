@@ -42,6 +42,7 @@ public class PostRequestDto {
 
     // 이 데이터를 어떻게 받아야하는가? 좀 찾아보자
 //  @NotNull
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime expiredAt;
 
