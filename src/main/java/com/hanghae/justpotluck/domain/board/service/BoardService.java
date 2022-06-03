@@ -5,13 +5,13 @@ import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
-import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
+import com.hanghae.justpotluck.domain.process.service.RecipeProcessService;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
 import com.hanghae.justpotluck.domain.user.entity.User;
@@ -41,6 +41,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardImageRepository boardImageRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final RecipeProcessService processService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final S3Uploader s3Uploader;
@@ -55,29 +56,23 @@ public class BoardService {
 //        User user = userPrincipal.getUser();
         Board board = boardRepository.save(Board.createBoard(requestDto, user));
         List<String> boardImages = uploadBoardImages(requestDto, board);
-        List<String> boardImages2 = uploadBoardImages2(requestDto, board);
 
-        return new BoardResponseDto(board, boardImages, boardImages2);
+//        List<String> boardImages2 = uploadBoardImages2(requestDto, board);
+
+        return new BoardResponseDto(board, boardImages);
     }
 
-//    private List<String> uploadProcessList(BoardSaveRequestDto requestDto, Board board) {
+    //    private List<String> uploadProcessList(BoardSaveRequestDto requestDto, Board board) {
 //        return requestDto.getProcessList().stream()
 //                .map(recipeProcess -> recipeProcess.toString())
 //                .collect(Collectors.toList());
 //    }
+
     private List<String> uploadBoardImages(BoardSaveRequestDto requestDto, Board board) {
-        return requestDto.getProcessImages().stream()
+        return requestDto.getCompleteImages().stream()
                 .map(image -> s3Uploader.upload(image, "board"))
                 .map(url -> saveBoardImage(board, url))
                 .map(image -> image.getImageUrl())
-                .collect(Collectors.toList());
-
-    }
-    private List<String> uploadBoardImages2(BoardSaveRequestDto requestDto, Board board) {
-        return requestDto.getCompleteImages().stream()
-                .map(CompleteImage -> s3Uploader.upload(CompleteImage, "complete"))
-                .map(url -> saveBoardImage(board, url))
-                .map(completeImage -> completeImage.getImageUrl())
                 .collect(Collectors.toList());
 
     }
@@ -91,7 +86,7 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardUpdateResponse updateBoard(Long boardId, BoardUpdateRequestDto requestDto) {
+    public BoardResponseDto updateBoard(Long boardId, BoardUpdateRequestDto requestDto) {
         User user = userUtil.findCurrentUser();
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
@@ -100,7 +95,7 @@ public class BoardService {
         uploadBoardImages(requestDto, board);
         List<String> saveImages = getSaveImages(requestDto);
         board.update(requestDto, user);
-        return new BoardUpdateResponse(board.getId(), saveImages);
+        return new BoardResponseDto(board, saveImages);
     }
 
     private void validateDeletedImages(BoardUpdateRequestDto requestDto) {
@@ -112,16 +107,10 @@ public class BoardService {
                 });
     }
     private void uploadBoardImages(BoardUpdateRequestDto requestDto, Board board) {
-        requestDto.getProcessImages()
-                .stream()
-                .forEach(file -> {
-                    String url = s3Uploader.upload(file, "board");
-                    saveBoardImage(board, url);
-                });
         requestDto.getCompleteImages()
                 .stream()
                 .forEach(file -> {
-                    String url = s3Uploader.upload(file, "complete");
+                    String url = s3Uploader.upload(file, "board");
                     saveBoardImage(board, url);
                 });
     }
@@ -136,7 +125,7 @@ public class BoardService {
     public Page<BoardListResponse> getAllBoard(Pageable pageable) {
         List<BoardListResponse> listBoard = new ArrayList<>();
         Page<Board> boards = boardRepository.findAllByOrderByViewCountDesc(pageable);
-        Page<Board> boards2 = boardRepository.findAllByOrderByCookTimeAsc(pageable);
+//        Page<Board> boards2 = boardRepository.findAllByOrderByCookTimeAsc(pageable);
 
         for (Board board : boards) {
             List<String> boardImages = boardImageRepository.findBySavedImageUrl(board.getId())
@@ -164,15 +153,13 @@ public class BoardService {
                 () -> new IllegalArgumentException("해당 게시글이 없습니다.")
         );
         List<Review> reviews = reviewRepository.findAllByBoardIdOrderByIdDesc(boardId);
-        List<String> boardImages = board.getProcessImages()
+        List<String> boardImages = board.getCompleteImages()
                 .stream()
                 .map(image ->image.getImageUrl())
                 .collect(Collectors.toList());
-        List<String> completeImages = board.getCompleteImages()
-                .stream()
-                .map(completeImage ->completeImage.getImageUrl())
-                .collect(Collectors.toList());
-        return new BoardResponseDto(board, boardImages, completeImages);
+
+
+        return new BoardResponseDto(board, boardImages);
     }
 
 //    원하는 것 검색하는 기능

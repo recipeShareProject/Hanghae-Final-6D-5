@@ -5,8 +5,8 @@ import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.review.dto.request.ReviewSaveRequestDto;
 import com.hanghae.justpotluck.domain.review.dto.request.ReviewUpdateRequestDto;
+import com.hanghae.justpotluck.domain.review.dto.response.ReviewResponse;
 import com.hanghae.justpotluck.domain.review.dto.response.ReviewSaveResponse;
-import com.hanghae.justpotluck.domain.review.dto.response.ReviewUpdateResponse;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.entity.ReviewImage;
 import com.hanghae.justpotluck.domain.review.repository.ReviewImageRepository;
@@ -64,7 +64,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewUpdateResponse updateReview(ReviewUpdateRequestDto requestDto) {
+    public ReviewResponse updateReview(ReviewUpdateRequestDto requestDto) {
         User user = userUtil.findCurrentUser();
         Review review = reviewRepository.findById(requestDto.getReviewId()).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
@@ -73,7 +73,7 @@ public class ReviewService {
         uploadReviewImages(requestDto, review);
         List<String> saveImages = getSaveImages(requestDto);
         review.updateReview(requestDto);
-        return new ReviewUpdateResponse(review.getBoard().getId(), review.getId(), saveImages);
+        return new ReviewResponse(review, saveImages);
     }
 
     private void validateDeletedImages(ReviewUpdateRequestDto requestDto) {

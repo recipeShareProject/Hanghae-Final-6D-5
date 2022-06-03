@@ -13,6 +13,7 @@ import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserUtil userUtil;
 
+    @Transactional
     public CommentResponseDto save(Long postId, CommentRequestDto requestDto){
         User user = userUtil.findCurrentUser();
         Posts post = postRepository.findByPostId(postId).orElseThrow(
@@ -41,6 +43,7 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
+    @Transactional
     public CommentResponseDto saveReComment(Long postId, Long commentId, CommentRequestDto requestDto){
         User user = userUtil.findCurrentUser();
         Posts post = postRepository.findByPostId(postId).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다."));
@@ -60,15 +63,18 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
-    public CommentUpdateDto modify(Long postId, Long commentId, CommentUpdateDto requestDto){
+    @Transactional
+    public CommentResponseDto modify(Long postId, Long commentId, CommentUpdateDto requestDto){
         User user = userUtil.findCurrentUser();
         Comments comment = commentRepository.findByPostIdAndCommentId(postId, commentId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
-        comment.updateContent(requestDto.getComment());
-        return new CommentUpdateDto(commentId, requestDto.getComment());
+
+        comment.updateContent(requestDto);
+        return new CommentResponseDto(comment);
     }
 
+    @Transactional
     public void remove(Long id) throws Exception {
         User user = userUtil.findCurrentUser();
         Comments comment = commentRepository.findByCommentId(id).orElseThrow(() -> new Exception("댓글이 없습니다."));

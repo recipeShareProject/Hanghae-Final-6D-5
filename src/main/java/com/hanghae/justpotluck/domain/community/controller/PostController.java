@@ -73,14 +73,13 @@ public class PostController {
 
     //커뮤니티 글 수정
     @PatchMapping("/api/community/{postId}")
-    public ResponseEntity<Success> modifyPost(@PathVariable Long postId, @ModelAttribute PostUpdateDto requestDto) {
+    public PostResponseDto modifyPost(@PathVariable Long postId, @ModelAttribute PostUpdateDto requestDto) {
 //        if (errors.hasErrors()) {
 //            for (FieldError error : errors.getFieldErrors()) {
 //                throw new RestException(HttpStatus.BAD_REQUEST, error.getDefaultMessage());
 //            }
 //        }
-        postService.modify(postId, requestDto);
-        return new ResponseEntity<>(new Success(true, "게시글 수정 성공"), HttpStatus.OK);
+        return postService.modify(postId, requestDto);
     }
 
 

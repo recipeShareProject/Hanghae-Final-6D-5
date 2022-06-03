@@ -32,7 +32,7 @@ public class CommentController {
 
     //"/api/comment/{commentId}/{recommentId}
     @PatchMapping("/api/comment/{postId}/{commentId}")
-    public CommentUpdateDto  commentModify(@PathVariable("postId") Long postId,
+    public CommentResponseDto  commentModify(@PathVariable("postId") Long postId,
                               @PathVariable("commentId") Long commentId, @RequestBody CommentUpdateDto requestDto){
         return commentService.modify(postId, commentId, requestDto);
     }

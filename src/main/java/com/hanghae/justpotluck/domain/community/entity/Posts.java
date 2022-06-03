@@ -122,6 +122,11 @@ public class Posts extends Timestamped {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
+        this.expiredAt = requestDto.getExpiredAt();
+        this.tags = requestDto.getTags();
+        this.address = requestDto.getAddress();
+        this.latitude = requestDto.getLatitude();
+        this.longitude = requestDto.getLongitude();
 //        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
 //        this.expiredAt = LocalDateTime.parse(requestDto.getExpiredAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
     }
