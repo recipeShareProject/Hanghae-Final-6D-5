@@ -34,7 +34,6 @@ public class PostSaveResponse {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
-//        this.location = post.getLocation();
         this.address = post.getAddress();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();

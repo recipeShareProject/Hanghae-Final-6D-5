@@ -24,8 +24,7 @@ public class PostResponseDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime expiredAt;
     private LocalDateTime createdAt;
-//    private LocalDateTime expiredAt;
-    private String location;
+    private String address;
     private Double longitude;
     private Double latitude;
     private List<String> images;
@@ -44,7 +43,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getAddress();
+        this.address = post.getAddress();
         this.viewCount = post.getViewCount();
         this.tags = post.getTags();
         this.profileUrl = post.getUser().getImageUrl();
@@ -66,7 +65,7 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
-        this.location = post.getAddress();
+        this.address = post.getAddress();
 //        this.location = post.getLocation();
 //        this.createdAt = post.getCreatedAt();
 //        this.modifiedAt = post.getModifiedAt();

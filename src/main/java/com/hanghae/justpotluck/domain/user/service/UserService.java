@@ -10,13 +10,11 @@ import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.comment.repository.CommentRepository;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.community.repository.PostRepository;
+import com.hanghae.justpotluck.domain.user.dto.request.UserLocationUpdateRequestDto;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
 import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
-import com.hanghae.justpotluck.domain.user.dto.response.MyBookmarkResponse;
-import com.hanghae.justpotluck.domain.user.dto.response.MyCommentResponse;
-import com.hanghae.justpotluck.domain.user.dto.response.MyPostResponse;
-import com.hanghae.justpotluck.domain.user.dto.response.MyReviewResponse;
+import com.hanghae.justpotluck.domain.user.dto.response.*;
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.domain.user.repository.UserRepository;
 import com.hanghae.justpotluck.global.aws.S3Uploader;
@@ -72,7 +70,12 @@ public class UserService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_MEMBER)
         );
     }
-
+    @Transactional
+    public User locationupdate(UserLocationUpdateRequestDto updateRequest){
+        User user =userUtil.findCurrentUser();
+        user.locationupdate(updateRequest);
+        return user;
+    }
     public Boolean isDuplicateEmail(String userEmail) {
         if (userRepository.existsByEmail(userEmail)) {
             throw new CustomException(ErrorCode.ALREADY_EMAIL_EXISTS);

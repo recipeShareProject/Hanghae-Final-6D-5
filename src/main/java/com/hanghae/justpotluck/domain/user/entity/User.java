@@ -6,7 +6,7 @@ import com.hanghae.justpotluck.domain.board.entity.Board;
 import com.hanghae.justpotluck.domain.board.entity.Bookmark;
 import com.hanghae.justpotluck.domain.comment.entity.Comments;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
-import com.hanghae.justpotluck.domain.location.entity.Location;
+import com.hanghae.justpotluck.domain.user.dto.request.UserLocationUpdateRequestDto;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.user.dto.request.UserUpdateRequest;
 import com.hanghae.justpotluck.global.audit.AuditListener;
@@ -47,6 +47,8 @@ public class User implements Auditable {
 
 //    private Image profileImage;
     private String imageUrl;
+
+    private String address;
 
     private Double longitude;
 
@@ -95,12 +97,15 @@ public class User implements Auditable {
 //        this.location = new Location("마포구 도화동", 37.49791, 127.027678);
     }
     @Builder(builderClassName= "social", builderMethodName = "socialBuilder")
-    private User(String name, @Email String email, String imageUrl, Location location, @NotNull AuthProvider provider, String providerId) {
+    private User(String name, @Email String email, String imageUrl, @NotNull AuthProvider provider, String providerId, String address, double latitude, double longitude) {
         this.name = name;
         this.email = email;
         this.imageUrl = imageUrl;
         this.provider = provider;
         this.providerId = providerId;
+        this.latitude=latitude;
+        this.longitude=longitude;
+        this.address=address;
 //        this.location = location;
     }
 
@@ -129,5 +134,11 @@ public class User implements Auditable {
 //        this.email = updateRequest.getEmail();
         this.name = updateRequest.getName();
 //        this.imageUrl = imageUrl;
+    }
+    public void locationupdate(UserLocationUpdateRequestDto updateRequest){
+        this.address= updateRequest.getAddress();
+        this.longitude= updateRequest.getLongitude();
+        this.latitude= updateRequest.getLatitude();
+
     }
 }

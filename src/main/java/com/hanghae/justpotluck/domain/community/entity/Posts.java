@@ -117,7 +117,6 @@ public class Posts extends Timestamped {
                 .user(user)
                 .build();
     }
-
     public void update(PostUpdateDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
