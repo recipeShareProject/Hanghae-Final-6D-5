@@ -64,6 +64,7 @@ public class Posts extends Timestamped {
 
     private Double longitude;
 
+    @Column(name = "address")
     private String address;
 
 

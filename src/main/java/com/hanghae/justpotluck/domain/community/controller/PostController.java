@@ -43,8 +43,8 @@ public class PostController {
 //    }
 
     @GetMapping("/api/community")
-    public List<PostResponseDto> getAllPost() {
-        return postService.getAllPost();
+    public List<PostResponseDto> getPostAddress() {
+        return postService.getPostAddress();
     }
 
     @GetMapping("/api/community/{postId}")

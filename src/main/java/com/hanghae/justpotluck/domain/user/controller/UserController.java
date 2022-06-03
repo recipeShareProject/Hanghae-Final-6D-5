@@ -42,10 +42,10 @@ public class UserController {
         return ResponseEntity.ok(UserResponse.toUserResponse(userService.locationupdate(userLocationUpdateRequestDto)));
     }
 
-    @PostMapping("/user/info")
-    public UserResponse userInfo() {
-        return UserResponse.toUserResponse(userService.getUser());
-    }
+//    @PostMapping("/user/info")
+//    public UserResponse userInfo() {
+//        return UserResponse.toUserResponse(userService.getUser());
+//    }
 
 
     @PatchMapping("/user/me/edit")
