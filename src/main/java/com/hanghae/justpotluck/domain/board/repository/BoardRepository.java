@@ -16,7 +16,9 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustomRepository{
     Page<Board> OrderByIdDesc(Pageable pageable);
 
-    List<Board> findAllByOrderByCreatedAtDesc();
+    Page<Board> findAllByOrderByViewCountDesc(Pageable pageable);
+
+    Page<Board> findAllByOrderByCookTimeAsc(Pageable pageable);
 
     @Query(value = "select p from Board p where p.ingredients in :include and p.ingredients not in :exclude and p.category = :category and p.title like :title order by p.cookTime", nativeQuery = true)
     List<Board> findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByCookTimeDesc(@Param("include") ArrayList<String> include, @Param("exclude") ArrayList<String> exclude, @Param("category")String category, @Param("title") String title);

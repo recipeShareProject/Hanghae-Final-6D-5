@@ -4,10 +4,8 @@ import com.hanghae.justpotluck.domain.comment.dto.request.CommentRequestDto;
 import com.hanghae.justpotluck.domain.comment.dto.response.CommentResponseDto;
 import com.hanghae.justpotluck.domain.comment.dto.response.CommentUpdateDto;
 import com.hanghae.justpotluck.domain.comment.service.CommentService;
-import com.hanghae.justpotluck.global.result.Success;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -26,16 +24,15 @@ public class CommentController {
     //"/api/comment/{commentId}/recomment"
     @PostMapping("/api/comment/{postId}/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Success> reCommentSave(@PathVariable("postId") Long postId,
+    public CommentResponseDto reCommentSave(@PathVariable("postId") Long postId,
                               @PathVariable("commentId") Long commentId,
                               @RequestBody CommentRequestDto requestDto){
-        commentService.saveReComment(postId, commentId, requestDto);
-        return new ResponseEntity<>(new Success(true, "답글 달기 성공"), HttpStatus.OK);
+        return commentService.saveReComment(postId, commentId, requestDto);
     }
 
     //"/api/comment/{commentId}/{recommentId}
     @PatchMapping("/api/comment/{postId}/{commentId}")
-    public CommentUpdateDto  commentModify(@PathVariable("postId") Long postId,
+    public CommentResponseDto  commentModify(@PathVariable("postId") Long postId,
                               @PathVariable("commentId") Long commentId, @RequestBody CommentUpdateDto requestDto){
         return commentService.modify(postId, commentId, requestDto);
     }

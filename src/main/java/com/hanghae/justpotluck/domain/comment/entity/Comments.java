@@ -2,6 +2,7 @@ package com.hanghae.justpotluck.domain.comment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hanghae.justpotluck.domain.comment.dto.response.CommentUpdateDto;
 import com.hanghae.justpotluck.global.config.Timestamped;
 import com.hanghae.justpotluck.domain.community.entity.Posts;
 import com.hanghae.justpotluck.domain.user.entity.User;
@@ -78,8 +79,8 @@ public class Comments extends Timestamped {
 
 
     //== 수정 ==//
-    public void updateContent(String content) {
-        this.comment = content;
+    public void updateContent(CommentUpdateDto requestDto) {
+        this.comment = requestDto.getComment();
     }
     //== 삭제 ==//
     public void remove() {
@@ -88,7 +89,7 @@ public class Comments extends Timestamped {
 
 
     @Builder
-    public Comments(Posts post, Comments parent, String comment, String nickname, User user) {
+    public Comments(Posts post, Comments parent, String comment, String profileUrl, String nickname, User user) {
         this.post = post;
         this.parent = parent;
         this.comment = comment;

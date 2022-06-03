@@ -1,7 +1,6 @@
-package com.hanghae.justpotluck.domain.board.entity;
+package com.hanghae.justpotluck.domain.process.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.hanghae.justpotluck.global.config.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,18 +9,18 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "complete_image")
+@Table(name = "process_image")
 @Entity
-public class Image extends Timestamped {
+public class ProcessImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "complete_image_id")
+    @Column(name = "process_image_id")
     private Long id;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "process_id")
+    private RecipeProcess process;
 
     private String imageUrl;
     private String storeFileName;
@@ -38,31 +37,23 @@ public class Image extends Timestamped {
 //    }
 
     @Builder
-    public Image(String imageUrl, String storeFileName, Board board) {
+    public ProcessImage(String imageUrl, String storeFileName, RecipeProcess process) {
         this.imageUrl = imageUrl;
         this.storeFileName = storeFileName;
-        this.board = board;
+        this.process = process;
     }
 
-    public Image(Board board, String imageUrl) {
-        this.board = board;
+    public ProcessImage(RecipeProcess process, String imageUrl) {
+        this.process = process;
         this.imageUrl = imageUrl;
     }
 
 //    private String image;
 
-    public void setBoard(Board board) {
-        this.board = board;
-        if (!board.getCompleteImages().contains(this)) {
-            board.getCompleteImages().add(this);
+    public void setProcess(RecipeProcess process) {
+        this.process = process;
+        if (!process.getProcessImages().contains(this)) {
+            process.getProcessImages().add(this);
         }
     }
-//    public void setReview(Review review) {
-//        this.review = review;
-//        if (!review.getImages().contains(this)) {
-//            review.getImages().add(this);
-//        }
-//    }
-
-
 }

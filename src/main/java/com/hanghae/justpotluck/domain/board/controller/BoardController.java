@@ -5,12 +5,14 @@ import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardResponseDto;
-import com.hanghae.justpotluck.domain.board.dto.response.board.BoardUpdateResponse;
 import com.hanghae.justpotluck.domain.board.dto.response.bookmark.BookmarkResponse;
 import com.hanghae.justpotluck.domain.board.service.BoardService;
+import com.hanghae.justpotluck.domain.process.service.RecipeProcessService;
 import com.hanghae.justpotluck.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +27,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final RecipeProcessService processService;
 
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @PostMapping("/board")
@@ -40,8 +43,9 @@ public class BoardController {
     }
 
     @GetMapping("/board")
-    public List<BoardListResponse> getAllBoard() {
-        return boardService.getAllBoard();
+    public Page<BoardListResponse> getAllBoard(Pageable pageable) {
+
+        return boardService.getAllBoard(pageable);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,13 +55,14 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }
 
-    @PostMapping("/api/community/search")
-    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto){
+    @PostMapping("/community/search")
+    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto) {
+
         return boardService.findWantedRecipe(requestDto);
     }
 
     @PatchMapping("/board/{boardId}")
-    public ResponseEntity<BoardUpdateResponse> updateBoard(@PathVariable Long boardId,
+    public ResponseEntity<BoardResponseDto> updateBoard(@PathVariable Long boardId,
                                                            @ModelAttribute BoardUpdateRequestDto requestDto) {
         return ResponseEntity.ok(boardService.updateBoard(boardId, requestDto));
     }

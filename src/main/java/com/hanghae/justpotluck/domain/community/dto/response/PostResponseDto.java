@@ -7,6 +7,7 @@ import com.hanghae.justpotluck.domain.user.entity.User;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +21,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private String category;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime expiredAt;
     private LocalDateTime createdAt;
     private String address;
@@ -30,6 +32,7 @@ public class PostResponseDto {
     private List<String> tags;
     private User user;
     private String nickname;
+    private String profileUrl;
 //    private LocalDateTime createdAt;
 //    private LocalDateTime modifiedAt;
     private List<Comments> commentList;
@@ -43,6 +46,7 @@ public class PostResponseDto {
         this.address = post.getAddress();
         this.viewCount = post.getViewCount();
         this.tags = post.getTags();
+        this.profileUrl = post.getUser().getImageUrl();
         this.nickname = post.getUser().getName();
 //        this.user = post.getUser();
 //        this.location = post.getLocation();

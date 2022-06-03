@@ -141,6 +141,14 @@ public class PostService {
 //            throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
 //        }
     }
+    private void validateDeletedImages(PostUpdateDto requestDto) {
+        postImageRepository.findBySavedImageUrl(requestDto.getPostId()).stream()
+                .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))
+                .forEach(url -> {
+                    postImageRepository.delete(url);
+                    s3Uploader.deletePostImage(url.getImageUrl());
+                });
+    }
 
     private void uploadPostImages(PostUpdateDto requestDto, Posts post) {
         requestDto.getImages()
@@ -158,14 +166,7 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    private void validateDeletedImages(PostUpdateDto requestDto) {
-        postImageRepository.findBySavedImageUrl(requestDto.getPostId()).stream()
-                .filter(image -> !requestDto.getSaveImageUrl().stream().anyMatch(Predicate.isEqual(image.getImageUrl())))
-                .forEach(url -> {
-                    postImageRepository.delete(url);
-                    s3Uploader.deletePostImage(url.getImageUrl());
-                });
-    }
+
 
     @Transactional
     public void modify(Long postId, PostUpdateDto requestDto, String username) {

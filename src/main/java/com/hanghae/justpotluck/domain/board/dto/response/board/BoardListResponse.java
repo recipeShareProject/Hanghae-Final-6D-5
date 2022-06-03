@@ -26,5 +26,6 @@ public class BoardListResponse {
         this.cookTime = entity.getCookTime();
         this.images = images;
         this.isBookmark = entity.getIsBookmark();
+        this.viewCount = entity.getViewCount();
     }
 }
