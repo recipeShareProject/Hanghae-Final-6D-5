@@ -39,7 +39,7 @@ public class UserController {
     }
     @PostMapping("/user/info")
     public ResponseEntity<UserResponse> saveLocation(@RequestBody @Valid UserLocationUpdateRequestDto userLocationUpdateRequestDto){
-        return ResponseEntity.ok(UserResponse.toUserResponse(userService.locationupdate(userLocationUpdateRequestDto)));
+        return ResponseEntity.ok(UserResponse.toUserResponse(userService.locationUpdate(userLocationUpdateRequestDto)));
     }
 
 //    @PostMapping("/user/info")

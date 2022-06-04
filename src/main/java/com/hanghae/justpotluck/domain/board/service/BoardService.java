@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.board.service;
 
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
+import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchByTitleDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
@@ -11,6 +12,7 @@ import com.hanghae.justpotluck.domain.board.entity.Image;
 import com.hanghae.justpotluck.domain.board.repository.BoardImageRepository;
 import com.hanghae.justpotluck.domain.board.repository.BoardRepository;
 import com.hanghae.justpotluck.domain.board.repository.BookmarkRepository;
+import com.hanghae.justpotluck.domain.ingredient.repository.IngredientRepository;
 import com.hanghae.justpotluck.domain.process.service.RecipeProcessService;
 import com.hanghae.justpotluck.domain.review.entity.Review;
 import com.hanghae.justpotluck.domain.review.repository.ReviewRepository;
@@ -41,6 +43,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardImageRepository boardImageRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final IngredientRepository ingredientRepository;
     private final RecipeProcessService processService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
@@ -137,6 +140,19 @@ public class BoardService {
         return new PageImpl<>(listBoard, pageable, boards.getTotalElements());
     }
 
+    @Transactional
+    public Page<BoardListResponse> getAllBoardByTitle(BoardSearchByTitleDto requestDto, Pageable pageable) {
+        List<BoardListResponse> listBoard = new ArrayList<>();
+        Page<Board> boards = boardRepository.findAllByTitleContaining(requestDto.getTitle(), pageable);
+        for (Board board: boards) {
+            List<String> boardImages = boardImageRepository.findBySavedImageUrl(board.getId()).stream()
+                    .map(image -> image.getImageUrl())
+                    .collect(Collectors.toList());
+            listBoard.add(new BoardListResponse(board, boardImages));
+        }
+        return new PageImpl<>(listBoard, pageable, boards.getTotalElements());
+    }
+
 
     @Transactional
     public Board getOneBoard(Long boardId) {
@@ -165,20 +181,25 @@ public class BoardService {
 //    원하는 것 검색하는 기능
     @Transactional
     public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto){
+//        List<Ingredient> ingredients = ingredientRepository.findAllByIngredients(requestDto.getIngredients());
+//        Ingredient ingredient = ingredientRepository.findByIngredient(requestDto.getIngredient());
+        String order = requestDto.getOrder();
         String category = requestDto.getCategory();
         ArrayList<String> include = requestDto.getInclude();
         ArrayList<String> exclude = requestDto.getExclude();
-        String search = requestDto.getSearch();
+//        List<Ingredient> include = requestDto.getInclude();
+//        List<Ingredient> exclude = requestDto.getExclude();
 
-        List<Board> boards;
+        List<Board> boards = new ArrayList<>();
 
-        if (requestDto.getOrder() == "view"){
-            boards = boardRepository.findAllByIngredientsInAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByViewCountDesc(include, exclude, category, search);
+        if (order.equals("cook_time")){
+            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsOrderByCookTimeAsc(include, exclude, category);
         }
-        else if(requestDto.getOrder() == "cookTime"){
-            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByCookTimeDesc(include, exclude, category, search);}
+        else if(order.equals("view_count")) {
+            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsOrderByViewCountDesc(include, exclude, category);
+        }
         else{
-            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsAndTitleContainsOrderByMatchDesc(include, exclude, category, search);}
+            boards = boardRepository.findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsOrderByMatchDesc(include, exclude, category);}
 
         List<BoardResponseDto> responseDto = new ArrayList<>();
 

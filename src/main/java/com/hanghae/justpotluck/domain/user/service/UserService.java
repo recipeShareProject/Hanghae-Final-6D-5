@@ -71,8 +71,8 @@ public class UserService {
         );
     }
     @Transactional
-    public User locationupdate(UserLocationUpdateRequestDto updateRequest){
-        User user =userUtil.findCurrentUser();
+    public User locationUpdate(UserLocationUpdateRequestDto updateRequest){
+        User user = userUtil.findCurrentUser();
         user.locationupdate(updateRequest);
         return user;
     }
