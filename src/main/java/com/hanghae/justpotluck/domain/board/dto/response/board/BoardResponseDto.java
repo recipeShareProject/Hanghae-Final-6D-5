@@ -50,15 +50,19 @@ public class BoardResponseDto extends Timestamped {
     }
 
 
-    public BoardResponseDto(Board board) {
-        this.id = board.getId();
-        this.title = board.getTitle();
-        this.writer = board.getUser().getName();
-        this.viewCount = board.getViewCount();
-//        this.bookmark = entity.isBookmark();
-        this.reviews = board.getReviewList();
-        this.createdAt = board.getCreatedAt();
-        this.modifiedAt = board.getModifiedAt();
-//        this.process = ;
+    public BoardResponseDto(Board entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.category = entity.getCategory();
+        this.processes = entity.getProcesses();
+        this.ingredients = entity.getIngredients();
+        this.cookTime = entity.getCookTime();
+        this.writer = entity.getUser().getName();
+        this.quantity = entity.getQuantity();
+        this.viewCount = entity.getViewCount();
+//        this.completeImages = completeImages;
+        this.reviews = entity.getReviewList();
+        this.createdAt = entity.getCreatedAt();
+        this.modifiedAt = entity.getModifiedAt();
     }
 }

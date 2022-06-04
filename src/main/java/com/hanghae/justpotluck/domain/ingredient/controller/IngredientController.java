@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@RequestMapping("/api/board")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class IngredientController {
@@ -23,17 +23,26 @@ public class IngredientController {
 //        return ingredientService.saveIngredient(requestDto, boardId);
 //    }
 
-    @PostMapping("/ingredient")
-    public IngredientResponse saveIngredient(@RequestBody IngredientSaveRequest requestDto) {
-        return ingredientService.saveIngredient(requestDto);
+    @PostMapping("/board/{boardId}/ingredient")
+    public IngredientResponse saveIngredient(@RequestBody IngredientSaveRequest requestDto, @PathVariable Long boardId) {
+        return ingredientService.saveIngredient(requestDto, boardId);
     }
+//    @PostMapping("/ingredient/include")
+//    public List<IngredientResponse> saveIngredientSearch(@RequestBody IngredientRequestDto requestDto) {
+//        return ingredientService.saveIngredientSearch(requestDto);
+//    }
+//    @PostMapping("/ingredient/exclude")
+//    public List<IngredientResponse> saveIngredientSearch2(@RequestBody IngredientRequestDto requestDto) {
+//        return ingredientService.saveIngredientSearch(requestDto);
+//    }
 
-    @PatchMapping("/ingredient/{ingredientId}")
+
+    @PatchMapping("/board/ingredient/{ingredientId}")
     public ResponseEntity<IngredientResponse> updateProcess(@RequestBody IngredientUpdateRequestDto requestDto,
                                                             @PathVariable Long ingredientId) {
         return ResponseEntity.ok(ingredientService.updateIngredient(ingredientId, requestDto));
     }
-    @DeleteMapping("/ingredient/{ingredientId}")
+    @DeleteMapping("/board/ingredient/{ingredientId}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable Long ingredientId) {
         ingredientService.deleteIngredient(ingredientId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

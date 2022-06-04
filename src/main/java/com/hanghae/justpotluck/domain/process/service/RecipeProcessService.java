@@ -31,9 +31,9 @@ public class RecipeProcessService {
     private final ProcessImageRepository processImageRepository;
 
     @Transactional
-    public ProcessResponseDto saveProcess(ProcessSaveRequest requestDto) {
+    public ProcessResponseDto saveProcess(ProcessSaveRequest requestDto, Long boardId) {
         User user = userUtil.findCurrentUser();
-        Board board = boardRepository.findById(requestDto.getBoardId()).orElseThrow(
+        Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다.")
         );
         RecipeProcess process = processRepository.save(RecipeProcess.createProcess(requestDto, board));

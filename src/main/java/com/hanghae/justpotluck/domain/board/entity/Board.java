@@ -49,6 +49,23 @@ public class Board extends Timestamped {
     )
     private List<Ingredient> ingredients;
 
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "board",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Ingredient> includes;
+
+
+    @JsonBackReference
+    @OneToMany(
+            mappedBy = "board",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Ingredient> excludes;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -123,6 +140,7 @@ public class Board extends Timestamped {
         this.title = requestDto.getTitle();
         this.quantity = requestDto.getQuantity();
         this.category = requestDto.getCategory();
+        this.cookTime = requestDto.getCookTime();
 //        this.ingredients = requestDto.getIngredients();
 //        this.processes = requestDto.getProcesses();
     }

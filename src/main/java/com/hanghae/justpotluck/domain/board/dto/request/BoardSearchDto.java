@@ -3,7 +3,6 @@ package com.hanghae.justpotluck.domain.board.dto.request;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -11,10 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardSearchDto {
-
     private String order;
-    private String search;
     private String category;
     private ArrayList<String> include;
     private ArrayList<String> exclude;
+//    private List<Ingredient> exclude;
 }

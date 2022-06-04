@@ -10,9 +10,11 @@ import com.hanghae.justpotluck.domain.ingredient.repository.IngredientRepository
 import com.hanghae.justpotluck.domain.user.entity.User;
 import com.hanghae.justpotluck.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class IngredientService {
@@ -21,9 +23,9 @@ public class IngredientService {
     private final IngredientRepository ingredientRepository;
 
     @Transactional
-    public IngredientResponse saveIngredient(IngredientSaveRequest requestDto) {
+    public IngredientResponse saveIngredient(IngredientSaveRequest requestDto, Long boardId) {
         User user = userUtil.findCurrentUser();
-        Board board = boardRepository.findById(requestDto.getBoardId()).orElseThrow(
+        Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다.")
         );
         Ingredient ingredient = ingredientRepository.save(Ingredient.createIngredient(requestDto, board));

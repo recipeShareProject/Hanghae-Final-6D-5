@@ -13,8 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProcessSaveRequest {
-    private Long boardId;
     private String process;
     private List<MultipartFile> processImages;
-
 }
