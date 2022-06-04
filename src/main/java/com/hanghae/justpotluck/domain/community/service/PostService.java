@@ -74,6 +74,21 @@ public class PostService {
         }
         return listPost;
     }
+    @Transactional
+    public List<PostResponseDto> getPostAddress(){
+        User user = userUtil.findCurrentUser();
+        String userAddress = user.getAddress();
+        List<PostResponseDto> listPost = new ArrayList<>();
+        List<Posts> posts = postRepository.findAllByAddress(userAddress);
+        for (Posts post : posts) {
+            List<String> postImages = postImageRepository.findBySavedImageUrl(post.getPostId())
+                    .stream()
+                    .map(image -> image.getImageUrl())
+                    .collect(Collectors.toList());
+            listPost.add(new PostResponseDto(post, postImages));
+        }
+        return listPost;
+    }
 
 
     @Transactional
