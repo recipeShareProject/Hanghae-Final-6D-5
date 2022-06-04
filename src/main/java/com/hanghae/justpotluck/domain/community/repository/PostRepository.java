@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Posts, Long> {
 
-    List<Posts> findAllByAddressContaining(String Address);
+    List<Posts> findAllByAddress(String Address);
     Page<Posts> findByAddress(String Address, Pageable pageable);
 //    위치 반경 내의 게시글 필터링
     String HAVERSINE_FORMULA = "(6371 * acos(cos(radians(:latitude)) * cos(radians(p.latitude)) *" +

@@ -79,7 +79,7 @@ public class PostService {
         User user = userUtil.findCurrentUser();
         String userAddress = user.getAddress();
         List<PostResponseDto> listPost = new ArrayList<>();
-        List<Posts> posts = postRepository.findAllByAddressContaining(userAddress);
+        List<Posts> posts = postRepository.findAllByAddress(userAddress);
         for (Posts post : posts) {
             List<String> postImages = postImageRepository.findBySavedImageUrl(post.getPostId())
                     .stream()
