@@ -38,8 +38,8 @@ public class UserController {
         return ResponseEntity.ok(userService.logout(request));
     }
     @PostMapping("/user/info")
-    public ResponseEntity<UserResponse> saveLocation(@ModelAttribute @Valid UserLocationUpdateRequestDto userLocationUpdateRequestDto){
-        return ResponseEntity.ok(UserResponse.toUserResponse(userService.locationupdate(userLocationUpdateRequestDto)));
+    public ResponseEntity<UserResponse> saveLocation(@RequestBody @Valid UserLocationUpdateRequestDto userLocationUpdateRequestDto){
+        return ResponseEntity.ok(UserResponse.toUserResponse(userService.locationUpdate(userLocationUpdateRequestDto)));
     }
 
 //    @PostMapping("/user/info")

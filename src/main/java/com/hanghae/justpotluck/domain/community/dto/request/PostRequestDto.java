@@ -40,9 +40,6 @@ public class PostRequestDto {
     @NotEmpty(message = "카테고리를 입력해주세요.")
     private String category;
 
-    // 이 데이터를 어떻게 받아야하는가? 좀 찾아보자
-//  @NotNull
-
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime expiredAt;
 
@@ -54,6 +51,7 @@ public class PostRequestDto {
     private String address;
     private double latitude;
     private double longitude;
+
     private List<String> saveImageUrl = new ArrayList<>();
     private List<MultipartFile> images = new ArrayList<>();
 

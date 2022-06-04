@@ -1,6 +1,7 @@
 package com.hanghae.justpotluck.domain.board.controller;
 
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSaveRequestDto;
+import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchByTitleDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardSearchDto;
 import com.hanghae.justpotluck.domain.board.dto.request.BoardUpdateRequestDto;
 import com.hanghae.justpotluck.domain.board.dto.response.board.BoardListResponse;
@@ -48,6 +49,11 @@ public class BoardController {
         return boardService.getAllBoard(pageable);
     }
 
+    @PostMapping("/board/search/title")
+    public Page<BoardListResponse> getAllBoardByTitle(Pageable pageable, @RequestBody BoardSearchByTitleDto requestDto) {
+        return boardService.getAllBoardByTitle(requestDto, pageable);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/board")
     public ResponseEntity<BoardResponseDto> saveBoard(@AuthenticationPrincipal UserPrincipal userPrincipal, @ModelAttribute BoardSaveRequestDto requestDto) throws Exception {
@@ -55,8 +61,8 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }
 
-    @PostMapping("/community/search")
-    public List<BoardResponseDto> findWantedRecipe(BoardSearchDto requestDto) {
+    @PostMapping("/board/search")
+    public List<BoardResponseDto> findWantedRecipe(@RequestBody BoardSearchDto requestDto) {
 
         return boardService.findWantedRecipe(requestDto);
     }
