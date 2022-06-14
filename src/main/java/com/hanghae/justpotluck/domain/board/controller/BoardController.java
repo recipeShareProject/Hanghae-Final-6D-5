@@ -37,16 +37,20 @@ public class BoardController {
 //            @RequestPart BoardSaveRequestDto requestDto) throws Exception {
 //        return boardService.saveBoard(requestDto, images);
 //    }
-    @GetMapping("/board/{boardId}")
-    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
-        boardService.updateView(boardId);
-        return ResponseEntity.ok(boardService.getBoard(boardId));
-    }
+//    @GetMapping("/board/{boardId}")
+//    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
+//        boardService.updateView(boardId);
+//        return ResponseEntity.ok(boardService.getBoard(boardId));
+//    }
 
     @GetMapping("/board")
     public Page<BoardListResponse> getAllBoard(Pageable pageable) {
-
         return boardService.getAllBoard(pageable);
+    }
+
+    @GetMapping("/board/time")
+    public Page<BoardListResponse> getAllBoardByCookTime(Pageable pageable) {
+        return boardService.getAllBoardByCookTime(pageable);
     }
 
     @PostMapping("/board/search/title")
