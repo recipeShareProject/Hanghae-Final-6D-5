@@ -174,7 +174,6 @@ public class BoardService {
                 .map(image ->image.getImageUrl())
                 .collect(Collectors.toList());
 
-
         return new BoardResponseDto(board, boardImages);
     }
 
