@@ -256,8 +256,6 @@ public class BoardService {
         return boardRepository.updateView(id);
     }
 
-
-
 //    @Transactional
 //    public BoardOneResponse getOneBoard(Long boardId) {
 //        return boardRepository.findOneBoardById(boardId).orElseThrow(
