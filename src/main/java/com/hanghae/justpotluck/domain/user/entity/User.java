@@ -124,6 +124,8 @@ public class User implements Auditable {
         this.imageUrl = imageUrl;
     }
 
+
+
     public void addComment(Comments comment){
         this.commentList.add(comment);
     }
