@@ -50,26 +50,15 @@ public class BoardService {
     private final S3Uploader s3Uploader;
     private final UserUtil userUtil;
 
-//    private final FileHandler fileHandler;
-
-
     @Transactional
     public BoardResponseDto saveBoard(BoardSaveRequestDto requestDto) throws Exception {
         User user = userUtil.findCurrentUser();
-//        User user = userPrincipal.getUser();
         Board board = boardRepository.save(Board.createBoard(requestDto, user));
         List<String> boardImages = uploadBoardImages(requestDto, board);
-
-//        List<String> boardImages2 = uploadBoardImages2(requestDto, board);
 
         return new BoardResponseDto(board, boardImages);
     }
 
-    //    private List<String> uploadProcessList(BoardSaveRequestDto requestDto, Board board) {
-//        return requestDto.getProcessList().stream()
-//                .map(recipeProcess -> recipeProcess.toString())
-//                .collect(Collectors.toList());
-//    }
 
     private List<String> uploadBoardImages(BoardSaveRequestDto requestDto, Board board) {
         return requestDto.getCompleteImages().stream()
@@ -141,6 +130,23 @@ public class BoardService {
     }
 
     @Transactional
+    public Page<BoardListResponse> getAllBoardByCookTime(Pageable pageable) {
+        List<BoardListResponse> listBoard = new ArrayList<>();
+//        Page<Board> boards = boardRepository.findAllByOrderByViewCountDesc(pageable);
+        Page<Board> boards = boardRepository.findAllByOrderByCookTimeAsc(pageable);
+
+        for (Board board : boards) {
+            List<String> boardImages = boardImageRepository.findBySavedImageUrl(board.getId())
+                    .stream()
+                    .map(image ->image.getImageUrl())
+                    .collect(Collectors.toList());
+            listBoard.add(new BoardListResponse(board, boardImages));
+        }
+        return new PageImpl<>(listBoard, pageable, boards.getTotalElements());
+    }
+
+
+    @Transactional
     public Page<BoardListResponse> getAllBoardByTitle(BoardSearchByTitleDto requestDto, Pageable pageable) {
         List<BoardListResponse> listBoard = new ArrayList<>();
         Page<Board> boards = boardRepository.findAllByTitleContaining(requestDto.getTitle(), pageable);
@@ -173,6 +179,7 @@ public class BoardService {
                 .stream()
                 .map(image ->image.getImageUrl())
                 .collect(Collectors.toList());
+
 
         return new BoardResponseDto(board, boardImages);
     }

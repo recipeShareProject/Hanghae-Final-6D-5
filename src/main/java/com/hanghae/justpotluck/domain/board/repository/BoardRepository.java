@@ -20,11 +20,11 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustom
 
     Page<Board> findAllByOrderByCookTimeAsc(Pageable pageable);
 
-    @Query(value = "select * from Board b join Ingredient i using (board_id) where i.ingredient in :include and i.ingredient not in :exclude and b.category = :category order by b.cook_time asc", nativeQuery = true)
+    @Query(value = "select * from board b join ingredient i using (board_id) where i.ingredient in :include and i.ingredient not in :exclude and b.category = :category order by b.cook_time asc", nativeQuery = true)
     List<Board> findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsOrderByCookTimeAsc(@Param("include") ArrayList<String> include, @Param("exclude") ArrayList<String> exclude, @Param("category")String category);
-    @Query(value = "select * from Board b join Ingredient i using (board_id) where i.ingredient in :include and i.ingredient not in :exclude and b.category = :category order by b.view_count desc", nativeQuery = true)
+    @Query(value = "select * from board b join ingredient i using (board_id) where i.ingredient in :include and i.ingredient not in :exclude and b.category = :category order by b.view_count desc", nativeQuery = true)
     List<Board> findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsOrderByViewCountDesc(@Param("include") ArrayList<String> include, @Param("exclude") ArrayList<String> exclude, @Param("category")String category);
-    @Query(value = "select * from Board b join Ingredient i using (board_id) where i.ingredient in :include and i.ingredient not in :exclude and b.category = :category order by (size(:include)/size(b.ingredients)) desc", nativeQuery = true)
+    @Query(value = "select * from board b join ingredient i using (board_id) where i.ingredient in :include and i.ingredient not in :exclude and b.category = :category order by (size(:include)/size(b.ingredients)) desc", nativeQuery = true)
     List<Board> findAllByIngredientsContainingAndIngredientsNotLikeAndCategoryIsOrderByMatchDesc(@Param("include") ArrayList<String> include, @Param("exclude") ArrayList<String> exclude, @Param("category")String category);
 
     Page<Board> findAllByTitleContaining(String title, Pageable pageable);
