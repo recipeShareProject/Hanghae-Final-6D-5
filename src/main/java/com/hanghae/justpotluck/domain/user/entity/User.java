@@ -130,6 +130,7 @@ public class User implements Auditable {
 
     public void addPost(Posts post) {this.postList.add(post);}
 
+
     public void update(UserUpdateRequest updateRequest) {
 //        this.email = updateRequest.getEmail();
         this.name = updateRequest.getName();
