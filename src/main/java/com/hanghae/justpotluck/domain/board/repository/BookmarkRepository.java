@@ -14,22 +14,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     Optional<Bookmark> findByBoard(Board board);
 
-//    @Modifying
-//    @Query(value = "INSERT INTO bookmark(board_id, user_id) VALUES(:boardID, :userId)", nativeQuery = true)
-//    void bookmark(Long boardId, Long userId);
-//
-//    @Modifying
-//    @Query(value = "DELETE FROM bookmark WHERE board_id = :boardId AND user_id = :userId", nativeQuery = true)
-//    void cancelbookmark(Long boardId, Long userId);
-
     Optional<Bookmark> findByUserAndBoard(User user, Board board);
 
     Page<Bookmark> findByUserOrderByIdDesc(User user, Pageable pageable);
-//    @Modifying
-//    @Query(value = "INSERT INTO bookmark(board_id) VALUES(:boardId)", nativeQuery = true)
-//    void addBookmark(Long boardId);
-//
-//    @Modifying
-//    @Query(value = "DELETE FROM bookmark where board_id = :boardId", nativeQuery = true)
-//    void removeBookmark(Long boardId);
+
 }
