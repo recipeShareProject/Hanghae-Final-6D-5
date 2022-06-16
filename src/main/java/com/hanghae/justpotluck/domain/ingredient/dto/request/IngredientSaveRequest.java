@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientSaveRequest {
-//    private ArrayList<String> include;
-//    private ArrayList<String> exclude;
     private String ingredient;
     private String amount;
 }

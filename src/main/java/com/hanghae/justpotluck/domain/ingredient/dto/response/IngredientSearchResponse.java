@@ -19,8 +19,6 @@ public class IngredientSearchResponse {
 
     public IngredientSearchResponse(Ingredient ingredient) {
         this.ingredientId = ingredient.getIngredientId();
-//        this.include = ingredient.getInclude();
-//        this.exclude = ingredient.getExclude();
     }
 
 }
