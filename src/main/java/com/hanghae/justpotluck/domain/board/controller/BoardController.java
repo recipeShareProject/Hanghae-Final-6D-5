@@ -75,39 +75,4 @@ public class BoardController {
         return ResponseEntity.ok(new BookmarkResponse(boardService.bookmarkBoard(boardId)));
     }
 
-//    //글, 파일 수정할 때
-//    @PatchMapping("/board/{id}")
-//    public BoardResponseDto updateBoard(@PathVariable Long id, BoardUploadImageRequest boardUploadImageRequest) throws Exception {
-//
-//        //제목, 내용 변경
-//        BoardUpdateRequestDto requestDto = BoardUpdateRequestDto.builder()
-//                .title(boardUploadImageRequest.getTitle())
-//                .contents(boardUploadImageRequest.getContents())
-//                .build();
-//        return boardService.updateBoard(id, requestDto);
-//    }
-//
-//    @PostMapping("/board/{id}/delete")
-//    public void deleteBoard(@PathVariable Long id) {
-//        Board board = boardRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("해당 게시글이 없습니다.")
-//        );
-//        boardService.deleteBoard(id);
-//    }
-//
-//    @GetMapping("/board/{id}")
-//    public BoardResponseDto findBoard(@PathVariable Long id) {
-//        boardService.updateView(id);
-//        return boardService.findBoard(id);
-//    }
-//
-//    @PostMapping("/board/{boardId}/bookmark")
-//    public void addBookmark(@PathVariable Long boardId) {
-//        bookmarkService.saveBookmark(boardId);
-//    }
-//
-//    @PostMapping("/board/{boardId}/bookmark/delete")
-//    public void removeBookmark(@PathVariable Long boardId) {
-//        bookmarkService.removeBookmark(boardId);
-//    }
 }
