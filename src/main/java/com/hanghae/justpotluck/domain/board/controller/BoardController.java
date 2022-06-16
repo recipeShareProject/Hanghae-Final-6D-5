@@ -75,12 +75,6 @@ public class BoardController {
         return ResponseEntity.ok(new BookmarkResponse(boardService.bookmarkBoard(boardId)));
     }
 
-//    @GetMapping("/board/{boardId}")
-//    public ResponseEntity<BoardOneResponse> getOnePost(@PathVariable Long boardId) {
-//        return ResponseEntity.ok(boardService.getOneBoard(boardId));
-//    }
-
-
 //    //글, 파일 수정할 때
 //    @PatchMapping("/board/{id}")
 //    public BoardResponseDto updateBoard(@PathVariable Long id, BoardUploadImageRequest boardUploadImageRequest) throws Exception {
