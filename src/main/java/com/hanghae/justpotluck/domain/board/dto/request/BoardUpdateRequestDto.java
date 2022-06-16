@@ -17,7 +17,6 @@ public class BoardUpdateRequestDto {
     private Long boardId;
     private String title;
     private String quantity;
-    //    private FoodCategory category;
     private String category;
     private List<String> saveImageUrl = new ArrayList<>();
     private List<MultipartFile> completeImages = new ArrayList<>();
