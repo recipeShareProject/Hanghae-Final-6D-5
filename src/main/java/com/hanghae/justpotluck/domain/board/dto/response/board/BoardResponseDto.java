@@ -19,8 +19,6 @@ import java.util.List;
 public class BoardResponseDto extends Timestamped {
     private Long id;
     private String title;
-    //    private List<RecipeProcess> process;
-//    private List<String> ingredients;
     private List<RecipeProcess> processes;
     private List<Ingredient> ingredients;
     private String category;

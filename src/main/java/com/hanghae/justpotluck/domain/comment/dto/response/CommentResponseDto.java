@@ -23,7 +23,6 @@ public class CommentResponseDto {
     private boolean deleted;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    //    private String writer;
     private String nickname;
     private String parentNickname;
 
@@ -37,6 +36,5 @@ public class CommentResponseDto {
         if (comment.getParent() != null) {
             this.parentNickname = comment.getParent().getUser().getName();
         }
-//        this.parentNickname = comment.getParent().getNickname();
     }
 }
