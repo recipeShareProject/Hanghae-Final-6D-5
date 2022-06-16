@@ -22,7 +22,5 @@ public class BoardUpdateRequestDto {
     private List<String> saveImageUrl = new ArrayList<>();
     private List<MultipartFile> completeImages = new ArrayList<>();
     private String cookTime;
-//    private List<Ingredient> ingredient;
-//    private LocalDateTime modifiedAt;
 
 }
