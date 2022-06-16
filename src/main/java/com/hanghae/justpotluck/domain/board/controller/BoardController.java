@@ -30,19 +30,6 @@ public class BoardController {
     private final BoardService boardService;
     private final RecipeProcessService processService;
 
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @PostMapping("/board")
-//    public BoardResponseDto saveBoard(
-//            @RequestPart(value = "image", required = false) List<MultipartFile> images,
-//            @RequestPart BoardSaveRequestDto requestDto) throws Exception {
-//        return boardService.saveBoard(requestDto, images);
-//    }
-//    @GetMapping("/board/{boardId}")
-//    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
-//        boardService.updateView(boardId);
-//        return ResponseEntity.ok(boardService.getBoard(boardId));
-//    }
-
     @GetMapping("/board")
     public Page<BoardListResponse> getAllBoard(Pageable pageable) {
         return boardService.getAllBoard(pageable);
