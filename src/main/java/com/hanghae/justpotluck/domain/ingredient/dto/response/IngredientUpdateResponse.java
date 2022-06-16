@@ -13,5 +13,4 @@ public class IngredientUpdateResponse {
     private Long ingredientId;
     private String ingredient;
     private String amount;
-//    private List<String> saveImages = new ArrayList<>();
 }

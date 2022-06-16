@@ -22,7 +22,6 @@ public class PostUpdateDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime expiredAt;
-//    private String category;
     private String title;
     private ArrayList<String> tags;
     private String content;
@@ -31,8 +30,4 @@ public class PostUpdateDto {
     private double longitude;
     private List<String> saveImageUrl = new ArrayList<>();
     private List<MultipartFile> images = new ArrayList<>();
-//    @Builder
-//    public PostUpdateDto(String category) {
-//        this.category = category;
-//    }
 }
