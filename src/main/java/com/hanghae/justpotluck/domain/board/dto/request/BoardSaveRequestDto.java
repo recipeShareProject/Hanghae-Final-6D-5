@@ -19,8 +19,6 @@ public class BoardSaveRequestDto {
 //    private List<String> process;
     private List<RecipeProcess> processes = new ArrayList<>();
     private String quantity;
-    //    private ArrayList<String> ingredients;
-//    private List<String> ingredients;
     private List<Ingredient> ingredients = new ArrayList<>();
     private String category;
     private String cookTime;
