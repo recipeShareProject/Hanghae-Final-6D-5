@@ -18,7 +18,6 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponseDto commentSave(@PathVariable("postId") Long postId, @RequestBody CommentRequestDto requestDto){
        return commentService.save(postId, requestDto);
-//        return new ResponseEntity<>(new Success(true, "댓글 달기 성공"), HttpStatus.OK);
     }
 
     //"/api/comment/{commentId}/recomment"
@@ -30,7 +29,6 @@ public class CommentController {
         return commentService.saveReComment(postId, commentId, requestDto);
     }
 
-    //"/api/comment/{commentId}/{recommentId}
     @PatchMapping("/api/comment/{postId}/{commentId}")
     public CommentResponseDto  commentModify(@PathVariable("postId") Long postId,
                               @PathVariable("commentId") Long commentId, @RequestBody CommentUpdateDto requestDto){
