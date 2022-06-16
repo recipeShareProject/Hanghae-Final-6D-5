@@ -14,5 +14,4 @@ public class BoardSearchDto {
     private String category;
     private ArrayList<String> include;
     private ArrayList<String> exclude;
-//    private List<Ingredient> exclude;
 }
