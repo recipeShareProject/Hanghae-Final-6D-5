@@ -15,8 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardSaveRequestDto {
     private String title;
-    //    private ArrayList<String> process;
-//    private List<String> process;
     private List<RecipeProcess> processes = new ArrayList<>();
     private String quantity;
     private List<Ingredient> ingredients = new ArrayList<>();
