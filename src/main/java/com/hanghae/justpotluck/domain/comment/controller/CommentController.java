@@ -20,7 +20,6 @@ public class CommentController {
        return commentService.save(postId, requestDto);
     }
 
-    //"/api/comment/{commentId}/recomment"
     @PostMapping("/api/comment/{postId}/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponseDto reCommentSave(@PathVariable("postId") Long postId,
